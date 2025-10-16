@@ -240,7 +240,7 @@ export default function PortfolioClient() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className={`${getCardBgClass()} backdrop-blur-md rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 theme-transition group cursor-pointer`}
-                onClick={() => router.push(`/portfolio/${project.slug}`)}
+                onClick={() => router.push(`/portfolio/${project.slug || slugify(project.title)}`)}
                 whileHover={{ y: -5 }}
               >
                 <div className="relative h-64 overflow-hidden">

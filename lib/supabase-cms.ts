@@ -27,23 +27,46 @@ export class PortfolioCMS {
   }
 
   static async getProjectBySlug(slug: string): Promise<ProjectDetail | null> {
+    // First try to find by exact slug match
     const { data, error } = await supabase
       .from("projects")
       .select("*")
+      .eq("slug", slug)
       .eq("is_published", true)
-      .ilike("title", `%${slug.replace(/-/g, " ")}%`)
       .single()
-    if (error) throw error
-    return data
+    
+    if (!error && data) {
+      return data
+    }
+    
+    if (error && error.code !== 'PGRST116') {
+      throw error
+    }
+    
+    // If not found by slug, try to find all published projects and match by generated slug
+    // This handles projects that don't have slugs saved yet
+    const { data: allProjects, error: allError } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("is_published", true)
+    
+    if (allError) throw allError
+    if (!allProjects || allProjects.length === 0) return null
+    
+    // Find project where generated slug matches
+    const project = allProjects.find(project => slugify(project.title) === slug)
+    return project || null
   }
 
   static async addProject(project: Omit<ProjectDetail, "id" | "created_at" | "updated_at">): Promise<ProjectDetail> {
-    const { data, error } = await supabase.from("projects").insert([project]).select().single()
+    const slug = project.slug || slugify(project.title)
+    const { data, error } = await supabase.from("projects").insert([{ ...project, slug }]).select().single()
     if (error) throw error
     return data
   }
 
   static async updateProject(id: number, updates: Partial<ProjectDetail>): Promise<ProjectDetail> {
+    if (updates.title && !updates.slug) updates.slug = slugify(updates.title)
     const { data, error } = await supabase.from("projects").update(updates).eq("id", id).select().single()
     if (error) throw error
     return data
