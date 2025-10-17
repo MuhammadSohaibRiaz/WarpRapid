@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { supabase } from "./supabase"
-import type { User } from "@supabase/supabase-js"
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { supabase } from '@/lib/supabase'
+import type { User } from '@supabase/supabase-js'
 
 const MAX_ATTEMPTS = 3
 const LOCKOUT_DURATION = 15 * 60 * 1000 // 15 minutes
@@ -10,20 +10,31 @@ const LOCKOUT_DURATION = 15 * 60 * 1000 // 15 minutes
 interface AuthState {
   user: User | null
   isAuthenticated: boolean
+  isLoading: boolean
   failedAttempts: number
   lockoutUntil: number | null
 }
 
-export function useAdminAuth() {
+interface AuthContextType extends AuthState {
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  logout: () => Promise<void>
+  isLockedOut: boolean
+  lockoutTimeRemaining: number
+  formatLockoutTime: (ms: number) => string
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     isAuthenticated: false,
+    isLoading: true,
     failedAttempts: 0,
     lockoutUntil: null,
   })
-  const [isLoading, setIsLoading] = useState(true)
 
-  // Initialize auth state
+  // Initialize auth state - only once
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
@@ -31,11 +42,11 @@ export function useAdminAuth() {
         ...prev,
         user: session?.user ?? null,
         isAuthenticated: !!session?.user,
+        isLoading: false,
       }))
-      setIsLoading(false)
     }).catch(err => {
       console.error('Error getting initial session:', err)
-      setIsLoading(false)
+      setAuthState(prev => ({ ...prev, isLoading: false }))
     })
 
     // Listen for auth changes
@@ -46,8 +57,8 @@ export function useAdminAuth() {
         ...prev,
         user: session?.user ?? null,
         isAuthenticated: !!session?.user,
+        isLoading: false,
       }))
-      setIsLoading(false)
     })
 
     // Load failed attempts from localStorage
@@ -69,8 +80,10 @@ export function useAdminAuth() {
       }
     }
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, []) // Empty dependency array - only run once
 
   // Clear lockout timer
   useEffect(() => {
@@ -108,13 +121,11 @@ export function useAdminAuth() {
         const newFailedAttempts = authState.failedAttempts + 1
         const shouldLockout = newFailedAttempts >= MAX_ATTEMPTS
         
-        const newState = {
-          ...authState,
+        setAuthState(prev => ({
+          ...prev,
           failedAttempts: newFailedAttempts,
           lockoutUntil: shouldLockout ? now + LOCKOUT_DURATION : null,
-        }
-        
-        setAuthState(newState)
+        }))
         
         // Persist to localStorage
         localStorage.setItem("admin_failed_attempts", newFailedAttempts.toString())
@@ -130,11 +141,9 @@ export function useAdminAuth() {
         }
       }
 
-      // Success - clear failed attempts and set authenticated state
+      // Success - clear failed attempts (but don't set auth state manually, let onAuthStateChange handle it)
       setAuthState(prev => ({
         ...prev,
-        user: data.user,
-        isAuthenticated: true,
         failedAttempts: 0,
         lockoutUntil: null,
       }))
@@ -153,18 +162,10 @@ export function useAdminAuth() {
     setAuthState({
       user: null,
       isAuthenticated: false,
+      isLoading: false,
       failedAttempts: 0,
       lockoutUntil: null,
     })
-  }
-
-  const getRemainingAttempts = (): number => {
-    return Math.max(0, MAX_ATTEMPTS - authState.failedAttempts)
-  }
-
-  const getLockoutTimeRemaining = (): number => {
-    if (!authState.lockoutUntil) return 0
-    return Math.max(0, authState.lockoutUntil - Date.now())
   }
 
   const formatTime = (milliseconds: number): string => {
@@ -174,18 +175,28 @@ export function useAdminAuth() {
   }
 
   const isLockedOut = authState.lockoutUntil ? Date.now() < authState.lockoutUntil : false
-  const lockoutTimeRemaining = getLockoutTimeRemaining()
+  const lockoutTimeRemaining = authState.lockoutUntil ? Math.max(0, authState.lockoutUntil - Date.now()) : 0
 
-  return {
-    user: authState.user,
-    isAuthenticated: authState.isAuthenticated,
-    isLoading,
-    failedAttempts: authState.failedAttempts,
-    isLockedOut,
-    lockoutTimeRemaining,
+  const contextValue: AuthContextType = {
+    ...authState,
     login,
     logout,
-    getRemainingAttempts,
+    isLockedOut,
+    lockoutTimeRemaining,
     formatLockoutTime: formatTime,
   }
+
+  return (
+    <AuthContext.Provider value={contextValue}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
 }

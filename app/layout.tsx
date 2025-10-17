@@ -6,6 +6,7 @@ import Header from "./components/Header"
 import {Footer} from "./components/Footer"
 import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
+import { AuthProvider } from "@/context/auth-context"
 import Script from "next/script"
 
 const inter = Inter({
@@ -140,13 +141,15 @@ export default function RootLayout({
       <body className={`${inter.className} theme-transition antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <ThemeContextProvider>
-            <div className="flex flex-col min-h-screen relative overflow-hidden theme-bg theme-transition">
-              <Header />
-              <main className="flex-grow z-10" role="main">
-                {children}
-              </main>
-              <Footer />
-            </div>
+            <AuthProvider>
+              <div className="flex flex-col min-h-screen relative overflow-hidden theme-bg theme-transition">
+                <Header />
+                <main className="flex-grow z-10" role="main">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </AuthProvider>
           </ThemeContextProvider>
         </ThemeProvider>
 

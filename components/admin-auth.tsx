@@ -8,23 +8,30 @@ import { Eye, EyeOff, Lock, Mail, AlertCircle, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useThemeContext } from "@/context/theme-context"
-import { useAdminAuth } from "@/lib/auth"
-
 interface AdminAuthProps {
   onAuthenticated: () => void
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  isLockedOut: boolean
+  lockoutTimeRemaining: number
+  failedAttempts: number
+  formatLockoutTime: (ms: number) => string
 }
 
-export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
+export function AdminAuth({ 
+  onAuthenticated, 
+  login, 
+  isLockedOut, 
+  lockoutTimeRemaining, 
+  failedAttempts, 
+  formatLockoutTime 
+}: AdminAuthProps) {
   const { mode, color } = useThemeContext()
-  const { login, isLockedOut, lockoutTimeRemaining, failedAttempts, formatLockoutTime } = useAdminAuth()
   
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-
-  // All lockout logic is now handled by useAdminAuth hook
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,7 +42,9 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
       const result = await login(email, password)
       
       if (result.success) {
-        // Auth state will be updated by the hook automatically
+        // Auth state will be updated by the context automatically
+        // Call the callback to handle successful login (e.g., redirect)
+        onAuthenticated()
       } else {
         setError(result.error || 'Login failed')
       }

@@ -30,79 +30,13 @@ import { BlogCard } from "@/components/admin/blog/blog-card"
 import { BlogFormModal } from "@/components/admin/blog/blog-form-modal"
 import { TestimonialCard } from "@/components/admin/testimonials/testimonial-card"
 import { TestimonialFormModal } from "@/components/admin/testimonials/testimonial-form-modal"
-
-// Categories and technologies (preserved)
-const categories = ["Web Development", "App Development", "UI/UX Design", "E-commerce", "Enterprise Software"]
-const technologies = [
-  "React",
-  "Next.js",
-  "Vue.js",
-  "Angular",
-  "Node.js",
-  "Express",
-  "Python",
-  "Django",
-  "Flask",
-  "PHP",
-  "Laravel",
-  "Ruby",
-  "Rails",
-  "Java",
-  "Spring",
-  "C#",
-  ".NET",
-  "React Native",
-  "Flutter",
-  "Swift",
-  "Kotlin",
-  "MongoDB",
-  "PostgreSQL",
-  "MySQL",
-  "Redis",
-  "AWS",
-  "Azure",
-  "Google Cloud",
-  "Docker",
-  "Kubernetes",
-  "GraphQL",
-  "REST API",
-  "TypeScript",
-  "JavaScript",
-  "HTML",
-  "CSS",
-  "Sass",
-  "Tailwind CSS",
-  "Material-UI",
-  "Bootstrap",
-  "Figma",
-  "Adobe XD",
-]
-
-const blogTags = [
-  "web development",
-  "mobile development",
-  "UI/UX",
-  "javascript",
-  "react",
-  "nodejs",
-  "python",
-  "database",
-  "cloud computing",
-  "devops",
-  "artificial intelligence",
-  "machine learning",
-  "cybersecurity",
-  "blockchain",
-  "startup",
-  "technology",
-  "programming",
-  "software engineering",
-  "best practices",
-  "tutorials",
-]
+import { AdminControls } from "@/components/admin/shared/AdminControls"
+import { CATEGORIES, TECHNOLOGIES, BLOG_TAGS } from "@/lib/constants"
+import { getThemeClasses } from "@/lib/theme-utils"
 
 export default function AdminDashboard() {
   const { mode, color } = useThemeContext()
+  const theme = getThemeClasses(mode, color)
   const cms = useSupabaseCMS()
 
   // State management
@@ -212,22 +146,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // UI helpers
-  const getCardBgClass = () => {
-    if (mode === "dark" || color === "black") {
-      return "bg-gray-900/40"
-    } else {
-      return "bg-white/40"
-    }
-  }
-
-  const getDropdownBgClass = () => {
-    if (mode === "dark" || color === "black") {
-      return "bg-gray-900/95 border-gray-700"
-    } else {
-      return "bg-white/95 border-gray-300"
-    }
-  }
+  // Theme utility is now used via theme variable
 
   // Filters
   const filteredProjects = projects.filter((project) => {
@@ -613,8 +532,7 @@ export default function AdminDashboard() {
     )
   }
 
-  const allCategories = ["All", ...categories]
-  const statusOptions = ["All", "Published", "Draft"]
+  // Use centralized constants
 
   return (
     <div className="min-h-screen theme-bg theme-transition relative overflow-hidden">
@@ -691,7 +609,7 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className={`${getCardBgClass()} backdrop-blur-md rounded-lg p-6 mb-8 shadow-lg theme-transition`}
+          className={`${theme.cardBg} backdrop-blur-md rounded-lg p-6 mb-8 shadow-lg theme-transition`}
         >
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="flex flex-col md:flex-row gap-4 flex-1">
@@ -732,9 +650,9 @@ export default function AdminDashboard() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className={`absolute top-full left-0 right-0 mt-1 ${getDropdownBgClass()} backdrop-blur-md rounded-md shadow-lg border z-50 max-h-60 overflow-y-auto`}
+                        className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-50 max-h-60 overflow-y-auto`}
                       >
-                        {["All", ...categories].map((category) => (
+                        {["All", ...CATEGORIES].map((category) => (
                           <button
                             key={category}
                             onClick={() => {
@@ -775,7 +693,7 @@ export default function AdminDashboard() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className={`absolute top-full left-0 right-0 mt-1 ${getDropdownBgClass()} backdrop-blur-md rounded-md shadow-lg border z-50`}
+                      className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-50`}
                     >
                       {["All", "Published", "Draft"].map((status) => (
                         <button
@@ -871,7 +789,7 @@ export default function AdminDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`${getCardBgClass()} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition`}
+                className={`${theme.cardBg} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition`}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
@@ -964,7 +882,7 @@ export default function AdminDashboard() {
                 }}
                 onTogglePublish={handleToggleBlogPublish}
                 onDelete={handleDeleteBlogPost}
-                cardBgClass={getCardBgClass()}
+                cardBgClass={theme.cardBg}
                 index={index}
               />
             ))}
@@ -983,7 +901,7 @@ export default function AdminDashboard() {
                 onTogglePublish={handleToggleTestimonialPublish}
                 onToggleFeatured={handleToggleTestimonialFeatured}
                 onDelete={handleDeleteTestimonial}
-                cardBgClass={getCardBgClass()}
+                cardBgClass={theme.cardBg}
                 index={index}
               />
             ))}
@@ -1021,7 +939,7 @@ export default function AdminDashboard() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className={`${getCardBgClass()} backdrop-blur-md rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto theme-transition`}
+              className={`${theme.cardBg} backdrop-blur-md rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto theme-transition`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
@@ -1057,7 +975,7 @@ export default function AdminDashboard() {
                       } theme-text theme-transition`}
                     >
                       <option value="">Select category</option>
-                      {categories.map((category) => (
+                      {CATEGORIES.map((category) => (
                         <option key={category} value={category}>
                           {category}
                         </option>
@@ -1070,7 +988,7 @@ export default function AdminDashboard() {
                 <div>
                   <label className="block text-sm font-medium theme-text mb-2 theme-transition">Technology Stack</label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-32 overflow-y-auto p-2 border rounded-md">
-                    {technologies.map((tech) => (
+                    {TECHNOLOGIES.map((tech) => (
                       <label key={tech} className="flex items-center space-x-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -1364,7 +1282,7 @@ export default function AdminDashboard() {
         editingPost={editingBlogPost}
         formData={blogFormData}
         setFormData={(updater) => setBlogFormData((prev) => updater(prev))}
-        blogTags={blogTags}
+        blogTags={BLOG_TAGS}
         slugify={slugify}
       />
 
@@ -1377,7 +1295,7 @@ export default function AdminDashboard() {
         }}
         onSave={handleSaveTestimonial}
         editingTestimonial={editingTestimonial}
-        categories={categories}
+        categories={CATEGORIES}
         formData={testimonialFormData}
         setFormData={(updater) => setTestimonialFormData((prev) => updater(prev))}
       />

@@ -1,9 +1,11 @@
 "use client"
 
-import { memo, useMemo } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Calendar, Edit, Eye, EyeOff, Trash2, Users } from "lucide-react"
+import { Edit, Trash2, Eye, EyeOff, Calendar, Users } from "lucide-react"
 import type { ProjectDetail } from "@/lib/supabase"
+import { getThemeClasses } from "@/lib/theme-utils"
+import { useThemeContext } from "@/context/theme-context"
 
 type Props = {
   project: ProjectDetail

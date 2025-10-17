@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { LogOut, Clock, AlertTriangle, Shield, RefreshCw } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
-import { useAdminAuth } from "@/lib/auth"
+import { useAuth } from "@/context/auth-context"
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -18,7 +18,7 @@ const WARNING_TIME = 5 * 60 * 1000 // 5 minutes before expiry
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   const { mode, color } = useThemeContext()
-  const { logout } = useAdminAuth()
+  const { logout } = useAuth()
   const [sessionEnd, setSessionEnd] = useState<number | null>(null)
   const [timeRemaining, setTimeRemaining] = useState(0)
   const [showWarning, setShowWarning] = useState(false)
@@ -32,9 +32,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       if (Date.now() < sessionEndTime) {
         setSessionEnd(sessionEndTime)
       } else {
-        // Session expired
-        logout()
-        return
+        // Session expired - create new session instead of logging out
+        const newSessionEnd = Date.now() + SESSION_DURATION
+        setSessionEnd(newSessionEnd)
+        localStorage.setItem("admin_session_end", newSessionEnd.toString())
       }
     } else {
       // New session
