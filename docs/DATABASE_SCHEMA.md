@@ -111,3 +111,52 @@ The database uses snake_case for field names:
 - `updated_at` (not `updatedAt`)
 
 This ensures consistency with PostgreSQL conventions and Supabase auto-generated timestamps.
+
+## Blog Images Management
+
+### Blog Posts Table Schema
+
+The `blog_posts` table now uses the same image management approach as projects:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| images | **jsonb** | **Array of image objects (same format as projects)** |
+
+### Blog Images Format
+
+The `images` field uses the exact same JSONB format as projects:
+
+```json
+[
+  {
+    "id": 1,
+    "alt": "Featured blog image",
+    "url": "https://fmwzrgjfxgxnnislysya.supabase.co/storage/v1/object/public/blog-images/blog-featured.jpg",
+    "caption": "Main blog post illustration"
+  },
+  {
+    "id": 2,
+    "alt": "Content image",
+    "url": "https://fmwzrgjfxgxnnislysya.supabase.co/storage/v1/object/public/blog-images/content-image.jpg",
+    "caption": "Supporting diagram"
+  }
+]
+```
+
+### Blog Image Workflow
+
+1. **Upload images** to the `blog-images` bucket in Supabase Storage
+2. **Copy URLs** from Supabase dashboard
+3. **Add blog post** in CMS with image management UI
+4. **Paste URLs** in the ImageManager component
+5. **First image** is used as featured image for blog cards/previews
+
+### Storage Organization
+
+- **Projects**: `project-images` bucket
+- **Blog Posts**: `blog-images` bucket
+- **Folder structure**: Organized by upload date (YYYY-MM/filename)
+
+### Migration from Old Schema
+
+If you have existing blog posts with the old `image:varchar` field, use the migration script at `scripts/migrate-blog-images.js` to convert them to the new format.

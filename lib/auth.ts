@@ -141,7 +141,6 @@ export function useAdminAuth() {
       
       return { success: true }
     } catch (error) {
-      console.error("Login error:", error)
       return { success: false, error: "An unexpected error occurred" }
     }
   }

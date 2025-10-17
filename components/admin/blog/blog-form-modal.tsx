@@ -6,7 +6,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { AnimatePresence, motion } from "framer-motion"
 import { Save, X } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
-import type { BlogPost } from "@/lib/supabase"
+import type { BlogPost, ProjectImage } from "@/lib/supabase"
+import { ImageManager } from "@/components/admin/shared/ImageManager"
 
 type Props = {
   isOpen: boolean
@@ -103,15 +104,13 @@ export function BlogFormModal({
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium theme-text mb-2 theme-transition">Featured Image URL</label>
-                <Input
-                  value={formData.image || ""}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                  placeholder="https://images.unsplash.com/photo-..."
-                  className="theme-text bg-transparent"
-                />
-              </div>
+              {/* Image Management */}
+              <ImageManager
+                images={formData.images || []}
+                onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
+                bucketName="blog-images"
+                placeholder="https://fmwzrgjfxgxnnislysya.supabase.co/storage/v1/object/public/blog-images/your-blog-image.jpg"
+              />
 
               <div>
                 <label className="block text-sm font-medium theme-text mb-2 theme-transition">Tags</label>

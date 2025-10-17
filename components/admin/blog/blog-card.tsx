@@ -26,8 +26,8 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
     >
       <div className="relative h-48 overflow-hidden">
         <img
-          src={post.image || "/placeholder.svg?height=200&width=300&query=Blog%20post"}
-          alt={post.title}
+          src={post.images[0]?.url || "/placeholder.svg?height=200&width=300&query=Blog%20post"}
+          alt={post.images[0]?.alt || post.title}
           className="w-full h-full object-cover"
           loading="lazy"
         />

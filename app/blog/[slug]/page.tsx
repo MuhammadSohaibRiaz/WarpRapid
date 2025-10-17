@@ -28,13 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime: post.date,
       authors: [post.author],
       tags: post.tags,
-      images: post.image
+      images: post.images?.[0]?.url
         ? [
             {
-              url: post.image,
+              url: post.images[0].url,
               width: 1200,
               height: 600,
-              alt: post.title,
+              alt: post.images[0].alt || post.title,
             },
           ]
         : [],
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: post.image ? [post.image] : [],
+      images: post.images?.[0]?.url ? [post.images[0].url] : [],
     },
   }
 }
@@ -91,8 +91,8 @@ export default async function BlogPost({ params }: Props) {
         >
           <div className="relative h-64 md:h-96">
             <img
-              src={post.image || "/placeholder.svg"}
-              alt={post.title}
+              src={post.images?.[0]?.url || "/placeholder.svg"}
+              alt={post.images?.[0]?.alt || post.title}
               className="w-full h-full object-cover"
               itemProp="image"
             />

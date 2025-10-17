@@ -65,8 +65,8 @@ export default async function Blog() {
               <Link href={`/blog/${post.slug}`}>
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={post.image || "/placeholder.svg?height=200&width=400&text=Blog+Post"}
-                    alt={post.title}
+                    src={post.images?.[0]?.url || "/placeholder.svg?height=200&width=400&text=Blog+Post"}
+                    alt={post.images?.[0]?.alt || post.title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     itemProp="image"
                   />

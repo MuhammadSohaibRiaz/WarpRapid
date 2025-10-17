@@ -82,7 +82,7 @@ export interface Database {
           slug: string
           excerpt: string
           content: string
-          image: string | null
+          images: ProjectImage[]
           tags: string[]
           author: string
           date: string
@@ -97,7 +97,7 @@ export interface Database {
           slug: string
           excerpt: string
           content: string
-          image?: string | null
+          images?: ProjectImage[]
           tags?: string[]
           author?: string
           date?: string
@@ -110,7 +110,7 @@ export interface Database {
           slug?: string
           excerpt?: string
           content?: string
-          image?: string | null
+          images?: ProjectImage[]
           tags?: string[]
           author?: string
           date?: string

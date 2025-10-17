@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { AnimatePresence, motion } from "framer-motion"
-import { Save, X, Plus, Trash2, Image } from "lucide-react"
+import { Save, X } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import type { ProjectDetail, ProjectImage } from "@/lib/supabase"
+import { ImageManager } from "@/components/admin/shared/ImageManager"
 
 type Props = {
   isOpen: boolean
@@ -175,122 +176,11 @@ export function ProjectFormModal({
               </div>
 
               {/* Image Management */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <label className="block text-sm font-medium theme-text theme-transition">
-                    <Image className="inline w-4 h-4 mr-2" />
-                    Project Images
-                  </label>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      const currentImages = formData.images || []
-                      const newImage: ProjectImage = {
-                        id: Math.max(0, ...currentImages.map(img => img.id)) + 1,
-                        url: "",
-                        alt: "",
-                        caption: ""
-                      }
-                      setFormData((prev) => ({
-                        ...prev,
-                        images: [...currentImages, newImage]
-                      }))
-                    }}
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Image
-                  </Button>
-                </div>
-                
-                <div className="space-y-4 max-h-60 overflow-y-auto">
-                  {(formData.images || []).map((image, index) => (
-                    <div key={image.id} className={`p-4 border rounded-lg ${
-                      mode === "dark" || color === "black"
-                        ? "border-gray-600 bg-gray-800/30"
-                        : "border-gray-300 bg-gray-50/30"
-                    }`}>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium theme-text">Image {image.id}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            const updatedImages = (formData.images || []).filter((_, i) => i !== index)
-                            setFormData((prev) => ({ ...prev, images: updatedImages }))
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 gap-3">
-                        <div>
-                          <label className="block text-xs font-medium theme-text mb-1">Image URL *</label>
-                          <Input
-                            value={image.url}
-                            onChange={(e) => {
-                              const updatedImages = [...(formData.images || [])]
-                              updatedImages[index] = { ...image, url: e.target.value }
-                              setFormData((prev) => ({ ...prev, images: updatedImages }))
-                            }}
-                            placeholder="https://fmwzrgjfxgxnnislysya.supabase.co/storage/v1/object/public/project-images/..."
-                            className="theme-text bg-transparent text-sm"
-                          />
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs font-medium theme-text mb-1">Alt Text *</label>
-                            <Input
-                              value={image.alt}
-                              onChange={(e) => {
-                                const updatedImages = [...(formData.images || [])]
-                                updatedImages[index] = { ...image, alt: e.target.value }
-                                setFormData((prev) => ({ ...prev, images: updatedImages }))
-                              }}
-                              placeholder="Describe the image"
-                              className="theme-text bg-transparent text-sm"
-                            />
-                          </div>
-                          
-                          <div>
-                            <label className="block text-xs font-medium theme-text mb-1">Caption</label>
-                            <Input
-                              value={image.caption || ""}
-                              onChange={(e) => {
-                                const updatedImages = [...(formData.images || [])]
-                                updatedImages[index] = { ...image, caption: e.target.value }
-                                setFormData((prev) => ({ ...prev, images: updatedImages }))
-                              }}
-                              placeholder="Optional caption"
-                              className="theme-text bg-transparent text-sm"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {(!formData.images || formData.images.length === 0) && (
-                    <div className={`p-6 border-2 border-dashed rounded-lg text-center ${
-                      mode === "dark" || color === "black"
-                        ? "border-gray-600"
-                        : "border-gray-300"
-                    }`}>
-                      <Image className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm theme-text opacity-70">
-                        No images added yet. Click "Add Image" to start.
-                      </p>
-                      <p className="text-xs theme-text opacity-50 mt-1">
-                        Upload images to Supabase Storage first, then paste the URLs here.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <ImageManager
+                images={formData.images || []}
+                onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
+                bucketName="project-images"
+              />
 
               {/* Publish Status */}
               <div className="flex items-center space-x-2 pt-4">

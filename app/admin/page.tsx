@@ -77,11 +77,6 @@ const blogTags = [
 
 export default function AdminPage() {
   const { isAuthenticated, isLoading } = useAdminAuth()
-  const [showDashboard, setShowDashboard] = useState(false)
-
-  useEffect(() => {
-    setShowDashboard(isAuthenticated)
-  }, [isAuthenticated])
 
   if (isLoading) {
     return (
@@ -94,8 +89,8 @@ export default function AdminPage() {
     )
   }
 
-  if (!showDashboard) {
-    return <AdminAuth onAuthenticated={() => setShowDashboard(true)} />
+  if (!isAuthenticated) {
+    return <AdminAuth onAuthenticated={() => {/* Not needed anymore */}} />
   }
 
   return (

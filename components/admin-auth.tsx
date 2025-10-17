@@ -16,16 +16,7 @@ interface AdminAuthProps {
 
 export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
   const { mode, color } = useThemeContext()
-  const { 
-    isAuthenticated, 
-    isLoading: authLoading, 
-    isLockedOut, 
-    lockoutTimeRemaining, 
-    failedAttempts,
-    login, 
-    getRemainingAttempts, 
-    formatLockoutTime 
-  } = useAdminAuth()
+  const { login, isLockedOut, lockoutTimeRemaining, failedAttempts, formatLockoutTime } = useAdminAuth()
   
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -33,32 +24,26 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated && !authLoading) {
-      onAuthenticated()
-    }
-  }, [isAuthenticated, authLoading, onAuthenticated])
+  // All lockout logic is now handled by useAdminAuth hook
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    if (isLockedOut) {
-      setError(`Account is locked. Try again in ${formatLockoutTime(lockoutTimeRemaining)}.`)
+    try {
+      const result = await login(email, password)
+      
+      if (result.success) {
+        // Auth state will be updated by the hook automatically
+      } else {
+        setError(result.error || 'Login failed')
+      }
+    } catch (error) {
+      setError('An unexpected error occurred during login')
+    } finally {
       setIsLoading(false)
-      return
     }
-
-    const result = await login(email, password)
-    
-    if (!result.success) {
-      setError(result.error || "Login failed")
-    }
-    // No need to handle success case here - useEffect will handle redirect
-
-    setIsLoading(false)
   }
 
   const getCardBgClass = () => {
@@ -85,17 +70,7 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
     }
   }
 
-  // Show loading screen while checking auth status
-  if (authLoading) {
-    return (
-      <div className="min-h-screen theme-bg theme-transition flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="theme-text theme-transition">Checking authentication...</p>
-        </div>
-      </div>
-    )
-  }
+  // No loading screen needed - parent handles auth state
 
   return (
     <div className="min-h-screen theme-bg theme-transition relative overflow-hidden flex items-center justify-center">
