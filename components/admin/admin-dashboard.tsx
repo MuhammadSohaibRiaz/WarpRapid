@@ -33,11 +33,14 @@ import { TestimonialFormModal } from "@/components/admin/testimonials/testimonia
 import { AdminControls } from "@/components/admin/shared/AdminControls"
 import { CATEGORIES, TECHNOLOGIES, BLOG_TAGS } from "@/lib/constants"
 import { getThemeClasses } from "@/lib/theme-utils"
+import { useAdminToast } from "@/hooks/use-admin-toast"
+import { AdminToastContainer } from "@/components/admin/admin-toast"
 
 export default function AdminDashboard() {
   const { mode, color } = useThemeContext()
   const theme = getThemeClasses(mode, color)
   const cms = useSupabaseCMS()
+  const toast = useAdminToast()
 
   // State management
   const [activeTab, setActiveTab] = useState<"projects" | "blog" | "testimonials">("projects")
@@ -100,7 +103,7 @@ export default function AdminDashboard() {
     slug: "",
     excerpt: "",
     content: "",
-    image: "",
+    images: [],
     tags: [],
     author: "RapidXTech Team",
     date: new Date().toISOString().split("T")[0],
@@ -225,22 +228,24 @@ export default function AdminDashboard() {
 
   const handleSaveProject = async () => {
     if (!projectFormData.title || !projectFormData.category || !projectFormData.description) {
-      alert("Please fill in all required fields")
+      toast.warning("Missing Information", "Please fill in all required fields")
       return
     }
     try {
       if (editingProject) {
         const updated = await cms.updateProject(editingProject.id, projectFormData)
         setProjects((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
+        toast.success("Project Updated", "Project has been successfully updated")
       } else {
         const created = await cms.addProject(projectFormData as any)
         setProjects((prev) => [...prev, created])
+        toast.success("Project Created", "New project has been added successfully")
       }
       setIsProjectFormOpen(false)
       setEditingProject(null)
     } catch (error) {
       console.error("Error saving project:", error)
-      alert("Error saving project. Please try again.")
+      toast.error("Save Failed", "Error saving project. Please try again.")
     }
   }
 
@@ -249,9 +254,10 @@ export default function AdminDashboard() {
     try {
       await cms.deleteProject(id)
       setProjects((prev) => prev.filter((p) => p.id !== id))
+      toast.success("Project Deleted", "Project has been successfully removed")
     } catch (error) {
       console.error("Error deleting project:", error)
-      alert("Error deleting project. Please try again.")
+      toast.error("Delete Failed", "Error deleting project. Please try again.")
     }
   }
 
@@ -259,9 +265,13 @@ export default function AdminDashboard() {
     try {
       const updated = await cms.togglePublishStatus(id)
       setProjects((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
+      toast.success(
+        updated.is_published ? "Project Published" : "Project Unpublished",
+        `Project is now ${updated.is_published ? "live" : "hidden from public"}`
+      )
     } catch (error) {
       console.error("Error toggling project publish status:", error)
-      alert("Error updating project status. Please try again.")
+      toast.error("Update Failed", "Error updating project status. Please try again.")
     }
   }
 
@@ -272,7 +282,7 @@ export default function AdminDashboard() {
       slug: "",
       excerpt: "",
       content: "",
-      image: "",
+      images: [],
       tags: [],
       author: "RapidXTech Team",
       date: new Date().toISOString().split("T")[0],
@@ -292,7 +302,7 @@ export default function AdminDashboard() {
 
   const handleSaveBlogPost = async () => {
     if (!blogFormData.title || !blogFormData.excerpt || !blogFormData.content) {
-      alert("Please fill in all required fields")
+      toast.warning("Missing Information", "Please fill in all required fields")
       return
     }
     try {
@@ -301,15 +311,17 @@ export default function AdminDashboard() {
       if (editingBlogPost) {
         const updated = await cms.updateBlogPost(editingBlogPost.id, formDataWithSlug)
         setBlogPosts((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
+        toast.success("Blog Updated", "Blog post has been successfully updated")
       } else {
         const created = await cms.addBlogPost(formDataWithSlug as any)
         setBlogPosts((prev) => [created, ...prev])
+        toast.success("Blog Created", "New blog post has been published successfully")
       }
       setIsBlogFormOpen(false)
       setEditingBlogPost(null)
     } catch (error) {
       console.error("Error saving blog post:", error)
-      alert("Error saving blog post. Please try again.")
+      toast.error("Save Failed", "Error saving blog post. Please try again.")
     }
   }
 
@@ -318,9 +330,10 @@ export default function AdminDashboard() {
     try {
       await cms.deleteBlogPost(id)
       setBlogPosts((prev) => prev.filter((b) => b.id !== id))
+      toast.success("Blog Deleted", "Blog post has been successfully removed")
     } catch (error) {
       console.error("Error deleting blog post:", error)
-      alert("Error deleting blog post. Please try again.")
+      toast.error("Delete Failed", "Error deleting blog post. Please try again.")
     }
   }
 
@@ -328,9 +341,13 @@ export default function AdminDashboard() {
     try {
       const updated = await cms.toggleBlogPublishStatus(id)
       setBlogPosts((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
+      toast.success(
+        updated.is_published ? "Blog Published" : "Blog Unpublished",
+        `Blog post is now ${updated.is_published ? "live" : "hidden from public"}`
+      )
     } catch (error) {
       console.error("Error toggling blog publish status:", error)
-      alert("Error updating blog status. Please try again.")
+      toast.error("Update Failed", "Error updating blog status. Please try again.")
     }
   }
 
@@ -360,13 +377,13 @@ export default function AdminDashboard() {
 
   const handleSaveTestimonial = async () => {
     if (!testimonialFormData.review_text) {
-      alert("Please fill in the review text")
+      toast.warning("Missing Information", "Please fill in the review text")
       return
     }
 
     if (testimonialFormData.testimonial_type === "identified") {
       if (!testimonialFormData.client_name || !testimonialFormData.client_company) {
-        alert("Please fill in client name and company for identified testimonials")
+        toast.warning("Missing Information", "Please fill in client name and company for identified testimonials")
         return
       }
     }
@@ -375,15 +392,17 @@ export default function AdminDashboard() {
       if (editingTestimonial) {
         const updated = await cms.updateReview(editingTestimonial.id, testimonialFormData)
         setTestimonials((prev) => prev.map((t) => (t.id === updated.id ? updated : t)))
+        toast.success("Testimonial Updated", "Testimonial has been successfully updated")
       } else {
         const created = await cms.addReview(testimonialFormData as any)
         setTestimonials((prev) => [created, ...prev])
+        toast.success("Testimonial Created", "New testimonial has been added successfully")
       }
       setIsTestimonialFormOpen(false)
       setEditingTestimonial(null)
     } catch (error) {
       console.error("Error saving testimonial:", error)
-      alert("Error saving testimonial. Please try again.")
+      toast.error("Save Failed", "Error saving testimonial. Please try again.")
     }
   }
 
@@ -392,9 +411,10 @@ export default function AdminDashboard() {
     try {
       await cms.deleteReview(id)
       setTestimonials((prev) => prev.filter((t) => t.id !== id))
+      toast.success("Testimonial Deleted", "Testimonial has been successfully removed")
     } catch (error) {
       console.error("Error deleting testimonial:", error)
-      alert("Error deleting testimonial. Please try again.")
+      toast.error("Delete Failed", "Error deleting testimonial. Please try again.")
     }
   }
 
@@ -402,9 +422,13 @@ export default function AdminDashboard() {
     try {
       const updated = await cms.toggleReviewPublishStatus(id)
       setTestimonials((prev) => prev.map((t) => (t.id === updated.id ? updated : t)))
+      toast.success(
+        updated.is_published ? "Testimonial Published" : "Testimonial Unpublished",
+        `Testimonial is now ${updated.is_published ? "live" : "hidden from public"}`
+      )
     } catch (error) {
       console.error("Error toggling testimonial publish status:", error)
-      alert("Error updating testimonial status. Please try again.")
+      toast.error("Update Failed", "Error updating testimonial status. Please try again.")
     }
   }
 
@@ -412,9 +436,13 @@ export default function AdminDashboard() {
     try {
       const updated = await cms.toggleReviewFeaturedStatus(id)
       setTestimonials((prev) => prev.map((t) => (t.id === updated.id ? updated : t)))
+      toast.success(
+        updated.is_featured ? "Testimonial Featured" : "Testimonial Unfeatured",
+        `Testimonial is now ${updated.is_featured ? "featured" : "not featured"}`
+      )
     } catch (error) {
       console.error("Error toggling testimonial featured status:", error)
-      alert("Error updating testimonial featured status. Please try again.")
+      toast.error("Update Failed", "Error updating testimonial featured status. Please try again.")
     }
   }
 
@@ -650,7 +678,7 @@ export default function AdminDashboard() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-50 max-h-60 overflow-y-auto`}
+                        className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-[100] max-h-60 overflow-y-auto`}
                       >
                         {["All", ...CATEGORIES].map((category) => (
                           <button
@@ -693,7 +721,7 @@ export default function AdminDashboard() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-50`}
+                      className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-[100]`}
                     >
                       {["All", "Published", "Draft"].map((status) => (
                         <button
@@ -789,7 +817,7 @@ export default function AdminDashboard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={`${theme.cardBg} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition`}
+              className={`${theme.cardBg} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col`}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
@@ -816,7 +844,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="p-4">
+                <div className="p-4 flex flex-col h-full">
                   <div className="flex items-center justify-between mb-2">
                     <span className="px-2 py-1 bg-secondary/20 theme-text rounded text-xs theme-transition">
                       {project.category}
@@ -826,9 +854,9 @@ export default function AdminDashboard() {
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-semibold theme-text mb-2 theme-transition">{project.title}</h3>
+                  <h3 className="text-lg font-semibold theme-text mb-2 theme-transition line-clamp-1">{project.title}</h3>
 
-                  <p className="text-sm theme-text opacity-70 mb-4 line-clamp-2 theme-transition">
+                  <p className="text-sm theme-text opacity-70 mb-4 line-clamp-3 theme-transition flex-grow">
                     {project.description}
                   </p>
 
@@ -843,7 +871,7 @@ export default function AdminDashboard() {
                     </span>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mt-auto">
                     <Button size="sm" variant="outline" onClick={() => handleEditProject(project)} className="flex-1">
                       <Edit className="w-3 h-3 mr-1" />
                       Edit
@@ -1299,6 +1327,9 @@ export default function AdminDashboard() {
         formData={testimonialFormData}
         setFormData={(updater) => setTestimonialFormData((prev) => updater(prev))}
       />
+
+      {/* Toast Notifications */}
+      <AdminToastContainer toasts={toast.toasts} onClose={toast.removeToast} />
     </div>
   )
 }

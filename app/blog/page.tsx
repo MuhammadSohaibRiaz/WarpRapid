@@ -73,7 +73,8 @@ export default async function Blog() {
                 </div>
               </Link>
 
-              <div className="p-6 flex-grow">
+              <div className="p-6 flex flex-col h-full">
+                {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-3">
                   {post.tags.slice(0, 3).map((tag, i) => (
                     <span key={i} className="text-xs bg-primary/30 theme-text px-2 py-1 rounded theme-transition">
@@ -82,20 +83,23 @@ export default async function Blog() {
                   ))}
                 </div>
 
+                {/* Title - Fixed 2 lines */}
                 <Link href={`/blog/${post.slug}`}>
                   <h2
-                    className="text-xl font-semibold mb-2 theme-text hover:opacity-80 transition-colors theme-transition"
+                    className="text-xl font-semibold mb-3 theme-text hover:opacity-80 transition-colors theme-transition line-clamp-2 min-h-[3.5rem] leading-tight"
                     itemProp="headline"
                   >
                     {post.title}
                   </h2>
                 </Link>
 
-                <p className="theme-text opacity-80 mb-4 theme-transition" itemProp="description">
+                {/* Excerpt - Flexible height */}
+                <p className="theme-text opacity-80 mb-4 theme-transition flex-grow line-clamp-3" itemProp="description">
                   {post.excerpt}
                 </p>
 
-                <div className="flex justify-between items-center text-sm text-muted-foreground mt-auto">
+                {/* Date and Author - Fixed position above button */}
+                <div className="flex justify-between items-center text-sm opacity-60 theme-text mb-4 mt-auto">
                   <time dateTime={post.date} itemProp="datePublished">
                     {formatDate(post.date)}
                   </time>
@@ -103,13 +107,12 @@ export default async function Blog() {
                     <span itemProp="name">{post.author}</span>
                   </span>
                 </div>
-              </div>
 
-              <div className="px-6 pb-6 mt-auto">
+                {/* Read More Button - Fixed at bottom */}
                 <Link href={`/blog/${post.slug}`} className="block w-full">
-                  <button className="w-full bg-primary hover:bg-primary/90 theme-text py-2 px-4 rounded transition-colors theme-transition">
+                  <div className="w-full bg-gray-900 dark:bg-gray-800 hover:bg-gray-800 dark:hover:bg-gray-700 text-white py-3 px-4 rounded-lg transition-all duration-200 text-center font-medium shadow-sm">
                     Read More
-                  </button>
+                  </div>
                 </Link>
               </div>
             </article>

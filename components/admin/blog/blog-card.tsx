@@ -19,7 +19,7 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
   const delay = useMemo(() => index * 0.1, [index])
   return (
     <motion.div
-      className={`${cardBgClass} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition`}
+      className={`${cardBgClass} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.3, ease: "easeOut" }}
@@ -40,7 +40,7 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 flex flex-col h-full">
         <div className="flex items-center justify-between mb-2">
           <div className="flex flex-wrap gap-1">
             {(post.tags || []).slice(0, 2).map((tag, i) => (
@@ -57,15 +57,15 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
           </span>
         </div>
 
-        <h3 className="text-lg font-semibold theme-text mb-2 theme-transition">{post.title}</h3>
-        <p className="text-sm theme-text opacity-70 mb-4 line-clamp-2 theme-transition">{post.excerpt}</p>
+        <h3 className="text-lg font-semibold theme-text mb-2 theme-transition line-clamp-2">{post.title}</h3>
+        <p className="text-sm theme-text opacity-70 mb-4 line-clamp-3 theme-transition flex-grow">{post.excerpt}</p>
 
         <div className="flex items-center justify-between text-xs theme-text opacity-60 mb-4 theme-transition">
-          <span>{post.author}</span>
-          <span>{post.slug}</span>
+          <span className="truncate">{post.author}</span>
+          <span className="truncate ml-2">{post.slug}</span>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-auto">
           <Button size="sm" variant="outline" onClick={() => onEdit(post)} className="flex-1">
             <Edit className="w-3 h-3 mr-1" /> Edit
           </Button>

@@ -29,31 +29,31 @@ function TestimonialCardImpl({
 
   return (
     <motion.div
-      className={`${cardBgClass} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition`}
+      className={`${cardBgClass} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.3, ease: "easeOut" }}
     >
-      <div className="p-4">
+      <div className="p-4 flex flex-col h-full">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 min-w-0 flex-1">
             {testimonial.testimonial_type === "identified" && testimonial.client_name ? (
               <>
                 <img
                   src={testimonial.client_image || "/placeholder.svg?height=50&width=50&query=Client"}
                   alt={testimonial.client_name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                 />
-                <div>
-                  <h3 className="font-semibold theme-text theme-transition">{testimonial.client_name}</h3>
-                  <p className="text-sm theme-text opacity-70 theme-transition">
+                <div className="min-w-0">
+                  <h3 className="font-semibold theme-text theme-transition truncate">{testimonial.client_name}</h3>
+                  <p className="text-sm theme-text opacity-70 theme-transition truncate">
                     {testimonial.client_position} {testimonial.client_company ? `at ${testimonial.client_company}` : ""}
                   </p>
                 </div>
               </>
             ) : (
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center flex-shrink-0">
                   <UserX className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -63,7 +63,7 @@ function TestimonialCardImpl({
               </div>
             )}
           </div>
-          <div className="flex flex-col items-end space-y-1">
+          <div className="flex flex-col items-end space-y-1 flex-shrink-0">
             <span
               className={`px-2 py-1 rounded-full text-xs font-medium ${testimonial.is_published ? "bg-green-500 text-white" : "bg-yellow-500 text-black"}`}
             >
@@ -98,7 +98,7 @@ function TestimonialCardImpl({
           ))}
         </div>
 
-        <p className="text-sm theme-text opacity-80 mb-4 line-clamp-3 theme-transition">
+        <p className="text-sm theme-text opacity-80 mb-4 line-clamp-4 theme-transition flex-grow">
           {'"' + testimonial.review_text + '"'}
         </p>
 
@@ -108,7 +108,7 @@ function TestimonialCardImpl({
           </div>
         )}
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-auto">
           <Button size="sm" variant="outline" onClick={() => onEdit(testimonial)} className="flex-1">
             <Edit className="w-3 h-3 mr-1" /> Edit
           </Button>
