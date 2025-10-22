@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import Header from "./components/Header"
 import {Footer} from "./components/Footer"
+import ProgressBar from "./components/ProgressBar"
 import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
 import { AuthProvider } from "@/context/auth-context"
@@ -143,7 +144,9 @@ export default function RootLayout({
           <ThemeContextProvider>
             <AuthProvider>
               <div className="flex flex-col min-h-screen relative overflow-hidden theme-bg theme-transition">
+                <ProgressBar />
                 <Header />
+                <div aria-hidden className="h-12 md:h-16" />
                 <main className="flex-grow z-10" role="main">
                   {children}
                 </main>

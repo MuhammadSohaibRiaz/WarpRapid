@@ -10,6 +10,7 @@ import { useThemeContext } from "@/context/theme-context"
 import { PortfolioCMS } from "@/lib/supabase-cms"
 import type { ProjectDetail } from "@/lib/supabase"
 import { OptimizedImage } from "@/components/optimized-image"
+import { slugify } from "@/lib/utils"
 
 const categories = ["All", "Web Development", "App Development", "UI/UX Design", "E-commerce", "Enterprise Software"]
 
@@ -240,7 +241,22 @@ export default function PortfolioClient() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className={`${getCardBgClass()} backdrop-blur-md rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 theme-transition group cursor-pointer`}
-                onClick={() => router.push(`/portfolio/${project.slug || slugify(project.title)}`)}
+                onClick={(e) => {
+                  const href = `/portfolio/${project.slug || slugify(project.title)}`
+                  if ((e as React.MouseEvent).ctrlKey || (e as React.MouseEvent).metaKey) {
+                    window.open(href, "_blank", "noopener,noreferrer")
+                  } else {
+                    router.push(href)
+                  }
+                }}
+                onAuxClick={(e) => {
+                  const href = `/portfolio/${project.slug || slugify(project.title)}`
+                  if (e.button === 1) {
+                    window.open(href, "_blank", "noopener,noreferrer")
+                  }
+                }}
+                role="link"
+                tabIndex={0}
                 whileHover={{ y: -5 }}
               >
                 <div className="relative h-64 overflow-hidden">
@@ -303,7 +319,8 @@ export default function PortfolioClient() {
                         className="flex-1 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold"
                         onClick={(e) => {
                           e.stopPropagation()
-                          window.open(project.live_url!, "_blank")
+                          e.preventDefault()
+                          window.open(project.live_url!, "_blank", "noopener,noreferrer")
                         }}
                       >
                         <ExternalLink className="w-3 h-3 mr-1" />
@@ -316,7 +333,8 @@ export default function PortfolioClient() {
                         className="flex-1 bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-800 hover:to-black text-white font-semibold"
                         onClick={(e) => {
                           e.stopPropagation()
-                          window.open(project.github_url!, "_blank")
+                          e.preventDefault()
+                          window.open(project.github_url!, "_blank", "noopener,noreferrer")
                         }}
                       >
                         <Github className="w-3 h-3 mr-1" />

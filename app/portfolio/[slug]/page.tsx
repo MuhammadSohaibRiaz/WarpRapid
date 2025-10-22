@@ -118,16 +118,16 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         />
       </div>
 
-      <div className="container mx-auto px-6 py-12 relative z-10">
+      <div className="container mx-auto px-4 md:px-6 pt-6 md:pt-8 pb-12 relative z-10">
         {/* Back Button */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-8"
+          className="mb-6 md:mb-8 -ml-2 md:ml-0"
         >
           <Link href="/portfolio">
-            <Button variant="ghost" className={`${getTextClass()} hover:bg-primary/20 theme-transition`}>
+<Button variant="ghost" className={`theme-text ${getTextClass()} hover:bg-primary/20 theme-transition`}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Portfolio
             </Button>
