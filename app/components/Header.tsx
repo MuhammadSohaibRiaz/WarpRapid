@@ -8,7 +8,6 @@ import { Button } from "../../components/ui/button"
 import { usePathname } from "next/navigation"
 import { ThemeSwitcher } from "@/components/theme-switcher"
 import { useThemeContext } from "@/context/theme-context"
-
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)

@@ -24,7 +24,9 @@ import {
 } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { useSupabaseCMS } from "@/lib/supabase-cms"
-import type { ProjectDetail, BlogPost, ClientReview, ProjectImage } from "@/lib/supabase"
+import type { ProjectDetail, BlogPost, ClientReview, ProjectImage, TrustedPartner } from "@/lib/supabase"
+import { PartnerFormModal } from "@/components/admin/partners/partner-form-modal"
+import { PartnerCard } from "@/components/admin/partners/partner-card"
 import { slugify } from "@/lib/utils"
 import { BlogCard } from "@/components/admin/blog/blog-card"
 import { BlogFormModal } from "@/components/admin/blog/blog-form-modal"
@@ -43,19 +45,22 @@ export default function AdminDashboard() {
   const toast = useAdminToast()
 
   // State management
-  const [activeTab, setActiveTab] = useState<"projects" | "blog" | "testimonials">("projects")
+const [activeTab, setActiveTab] = useState<"projects" | "blog" | "testimonials" | "partners">("projects")
   const [projects, setProjects] = useState<ProjectDetail[]>([])
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
-  const [testimonials, setTestimonials] = useState<ClientReview[]>([])
+const [testimonials, setTestimonials] = useState<ClientReview[]>([])
+const [partners, setPartners] = useState<TrustedPartner[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   // Form states
   const [isProjectFormOpen, setIsProjectFormOpen] = useState(false)
   const [isBlogFormOpen, setIsBlogFormOpen] = useState(false)
-  const [isTestimonialFormOpen, setIsTestimonialFormOpen] = useState(false)
+const [isTestimonialFormOpen, setIsTestimonialFormOpen] = useState(false)
+const [isPartnerFormOpen, setIsPartnerFormOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<ProjectDetail | null>(null)
   const [editingBlogPost, setEditingBlogPost] = useState<BlogPost | null>(null)
-  const [editingTestimonial, setEditingTestimonial] = useState<ClientReview | null>(null)
+const [editingTestimonial, setEditingTestimonial] = useState<ClientReview | null>(null)
+const [editingPartner, setEditingPartner] = useState<TrustedPartner | null>(null)
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState("")
@@ -112,7 +117,7 @@ export default function AdminDashboard() {
     seo_description: "",
   })
 
-  // Testimonial form data
+// Testimonial form data
   const [testimonialFormData, setTestimonialFormData] = useState<Partial<ClientReview>>({
     client_name: "",
     client_position: "",
@@ -124,9 +129,21 @@ export default function AdminDashboard() {
     testimonial_type: "identified",
     is_featured: false,
     is_published: false,
-  })
+})
 
-  // Load data
+// Partners form data
+const [partnerFormData, setPartnerFormData] = useState<Partial<TrustedPartner>>({
+  company_name: "",
+  company_logo: "",
+  company_website: "",
+  partnership_type: "",
+  description: "",
+  is_featured: false,
+  is_published: false,
+  display_order: 0,
+})
+
+// Load data
   useEffect(() => {
     loadData()
   }, [])
@@ -134,14 +151,16 @@ export default function AdminDashboard() {
   const loadData = async () => {
     try {
       setIsLoading(true)
-      const [projectsData, blogData, testimonialsData] = await Promise.all([
+const [projectsData, blogData, testimonialsData, partnersData] = await Promise.all([
         cms.getAllProjects(),
         cms.getAllBlogPosts(),
         cms.getAllReviews(),
+        cms.getAllPartners(),
       ])
       setProjects(projectsData)
       setBlogPosts(blogData)
       setTestimonials(testimonialsData)
+      setPartners(partnersData)
     } catch (error) {
       console.error("Error loading data:", error)
     } finally {
@@ -177,7 +196,7 @@ export default function AdminDashboard() {
     return matchesSearch && matchesStatus
   })
 
-  const filteredTestimonials = testimonials.filter((testimonial) => {
+const filteredTestimonials = testimonials.filter((testimonial) => {
     const matchesSearch =
       (testimonial.client_name && testimonial.client_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (testimonial.client_company && testimonial.client_company.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -187,10 +206,21 @@ export default function AdminDashboard() {
       (filterStatus === "Published" && testimonial.is_published) ||
       (filterStatus === "Draft" && !testimonial.is_published)
 
-    return matchesSearch && matchesStatus
-  })
+return matchesSearch && matchesStatus
+})
 
-  // Project handlers
+const filteredPartners = partners.filter((p) => {
+  const matchesSearch =
+    p.company_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (p.partnership_type || "").toLowerCase().includes(searchTerm.toLowerCase())
+  const matchesStatus =
+    filterStatus === "All" ||
+    (filterStatus === "Published" && p.is_published) ||
+    (filterStatus === "Draft" && !p.is_published)
+  return matchesSearch && matchesStatus
+})
+
+// Project handlers
   const resetProjectForm = () => {
     setProjectFormData({
       title: "",
@@ -351,7 +381,7 @@ export default function AdminDashboard() {
     }
   }
 
-  // Testimonial handlers
+// Testimonial handlers
   const resetTestimonialForm = () => {
     setTestimonialFormData({
       client_name: "",
@@ -468,7 +498,7 @@ export default function AdminDashboard() {
     }))
   }
 
-  // Images helpers
+// Images helpers
   const addImage = () => {
     const newId = Math.max(...(projectFormData.images?.map((img) => img.id) || [0])) + 1
     setProjectFormData((prev) => ({
@@ -581,7 +611,7 @@ export default function AdminDashboard() {
           </h1>
           <p className="theme-text opacity-80 theme-transition">
             Manage your portfolio projects, blog posts, and client testimonials - add, edit, delete, and control
-            visibility
+visibility
           </p>
         </motion.div>
 
@@ -628,6 +658,17 @@ export default function AdminDashboard() {
               <MessageSquare className="w-4 h-4" />
               <span>Testimonials</span>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs">{testimonials.length}</span>
+</button>
+            <button
+              onClick={() => setActiveTab("partners")}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${
+                activeTab === "partners"
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              }`}
+            >
+              <span>Partners</span>
+              <span className="bg-white/20 px-2 py-1 rounded-full text-xs">{partners.length}</span>
             </button>
           </div>
         </motion.div>
@@ -746,7 +787,8 @@ export default function AdminDashboard() {
               onClick={() => {
                 if (activeTab === "projects") setIsProjectFormOpen(true)
                 else if (activeTab === "blog") setIsBlogFormOpen(true)
-                else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
+else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
+                else if (activeTab === "partners") setIsPartnerFormOpen(true)
               }}
               className="bg-primary hover:bg-primary/90 text-white"
             >
@@ -763,10 +805,10 @@ export default function AdminDashboard() {
                   ? projects.length
                   : activeTab === "blog"
                     ? blogPosts.length
-                    : testimonials.length}
+: activeTab === "testimonials" ? testimonials.length : partners.length}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition">
-                Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : "Testimonials"}
+Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : activeTab === "testimonials" ? "Testimonials" : "Partners"}
               </div>
             </div>
             <div className="text-center">
@@ -775,7 +817,9 @@ export default function AdminDashboard() {
                   ? projects.filter((p) => p.is_published).length
                   : activeTab === "blog"
                     ? blogPosts.filter((p) => p.is_published).length
-                    : testimonials.filter((p) => p.is_published).length}
+                    : activeTab === "testimonials"
+                      ? testimonials.filter((p) => p.is_published).length
+                      : partners.filter((p) => p.is_published).length}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition">Published</div>
             </div>
@@ -785,7 +829,9 @@ export default function AdminDashboard() {
                   ? projects.filter((p) => !p.is_published).length
                   : activeTab === "blog"
                     ? blogPosts.filter((p) => !p.is_published).length
-                    : testimonials.filter((p) => !p.is_published).length}
+                    : activeTab === "testimonials"
+                      ? testimonials.filter((p) => !p.is_published).length
+                      : partners.filter((p) => !p.is_published).length}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition">Drafts</div>
             </div>
@@ -795,7 +841,9 @@ export default function AdminDashboard() {
                   ? filteredProjects.length
                   : activeTab === "blog"
                     ? filteredBlogPosts.length
-                    : filteredTestimonials.length}
+                    : activeTab === "testimonials"
+                      ? filteredTestimonials.length
+                      : filteredPartners.length}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition">Filtered</div>
             </div>
@@ -915,7 +963,7 @@ export default function AdminDashboard() {
               />
             ))}
 
-          {/* Testimonials Grid (modularized) */}
+{/* Testimonials Grid (modularized) */}
           {activeTab === "testimonials" &&
             filteredTestimonials.map((t, index) => (
               <TestimonialCard
@@ -933,21 +981,51 @@ export default function AdminDashboard() {
                 index={index}
               />
             ))}
+
+          {/* Partners Grid */}
+          {activeTab === "partners" &&
+            filteredPartners.map((p, index) => (
+              <PartnerCard
+                key={p.id}
+                partner={p}
+                onEdit={(item) => {
+                  setEditingPartner(item)
+                  setPartnerFormData(item)
+                  setIsPartnerFormOpen(true)
+                }}
+                onTogglePublish={async (id) => {
+                  const updated = await cms.togglePartnerPublishStatus(id)
+                  setPartners((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
+                }}
+                onToggleFeatured={async (id) => {
+                  const updated = await cms.togglePartnerFeaturedStatus(id)
+                  setPartners((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
+                }}
+                onDelete={async (id) => {
+                  if (!confirm("Delete this partner?")) return
+                  await cms.deletePartner(id)
+                  setPartners((prev) => prev.filter((x) => x.id !== id))
+                }}
+                cardBgClass={theme.cardBg}
+                index={index}
+              />
+            ))}
         </motion.div>
 
         {/* Empty State */}
         {((activeTab === "projects" && filteredProjects.length === 0) ||
           (activeTab === "blog" && filteredBlogPosts.length === 0) ||
-          (activeTab === "testimonials" && filteredTestimonials.length === 0)) && (
+          (activeTab === "testimonials" && filteredTestimonials.length === 0) ||
+          (activeTab === "partners" && filteredPartners.length === 0)) && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
             <div className="text-6xl mb-4">{activeTab === "projects" ? "📁" : activeTab === "blog" ? "📝" : "💬"}</div>
             <h3 className="text-xl font-semibold theme-text mb-2 theme-transition">
-              No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" : "testimonials"} found
+No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" : activeTab === "testimonials" ? "testimonials" : "partners"} found
             </h3>
             <p className="theme-text opacity-70 theme-transition">
               {searchTerm || filterCategory !== "All" || filterStatus !== "All"
                 ? "Try adjusting your filters"
-                : `Create your first ${activeTab === "projects" ? "project" : activeTab === "blog" ? "blog post" : "testimonial"} to get started`}
+: `Create your first ${activeTab === "projects" ? "project" : activeTab === "blog" ? "blog post" : activeTab === "testimonials" ? "testimonial" : "partner"} to get started`}
             </p>
           </motion.div>
         )}
@@ -1314,7 +1392,7 @@ export default function AdminDashboard() {
         slugify={slugify}
       />
 
-      {/* Testimonial Form Modal (modularized) */}
+{/* Testimonial Form Modal (modularized) */}
       <TestimonialFormModal
         isOpen={isTestimonialFormOpen}
         onClose={() => {
@@ -1330,6 +1408,40 @@ export default function AdminDashboard() {
 
       {/* Toast Notifications */}
       <AdminToastContainer toasts={toast.toasts} onClose={toast.removeToast} />
+
+      {/* Partner Form Modal */}
+      <PartnerFormModal
+        isOpen={isPartnerFormOpen}
+        onClose={() => {
+          setIsPartnerFormOpen(false)
+          setEditingPartner(null)
+        }}
+        onSave={async () => {
+          try {
+            if (!partnerFormData.company_name || !partnerFormData.company_logo) {
+              toast.warning("Missing Information", "Name and logo are required")
+              return
+            }
+            if (editingPartner) {
+              const updated = await cms.updatePartner(editingPartner.id, partnerFormData)
+              setPartners((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
+              toast.success("Partner Updated", "Partner has been successfully updated")
+            } else {
+              const created = await cms.addPartner(partnerFormData as any)
+              setPartners((prev) => [created, ...prev])
+              toast.success("Partner Added", "New partner has been added successfully")
+            }
+            setIsPartnerFormOpen(false)
+            setEditingPartner(null)
+          } catch (e) {
+            console.error(e)
+            toast.error("Save Failed", "Error saving partner. Please try again.")
+          }
+        }}
+        editingPartner={editingPartner}
+        formData={partnerFormData}
+        setFormData={(updater) => setPartnerFormData((prev) => updater(prev))}
+      />
     </div>
   )
 }

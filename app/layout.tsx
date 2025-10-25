@@ -114,7 +114,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="light-mode" data-theme-color="blue">
       <head>
         {/* Preload critical resources */}
         <link rel="preload" href="/grid.svg" as="image" type="image/svg+xml" />
@@ -140,7 +140,7 @@ export default function RootLayout({
         <meta httpEquiv="x-dns-prefetch-control" content="on" />
       </head>
       <body className={`${inter.className} theme-transition antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <ThemeContextProvider>
             <AuthProvider>
               <div className="flex flex-col min-h-screen relative overflow-hidden theme-bg theme-transition">

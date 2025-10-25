@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Save, X, User, UserX } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import type { ClientReview } from "@/lib/supabase"
+import { useSafeOverlayClose } from "@/hooks/use-safe-overlay-close"
 
 type Props = {
   isOpen: boolean
@@ -30,6 +31,8 @@ export function TestimonialFormModal({
   const { mode, color } = useThemeContext()
   const cardBgClass = mode === "dark" || color === "black" ? "bg-gray-900/40" : "bg-white/40"
 
+  const overlay = useSafeOverlayClose(onClose)
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -38,7 +41,8 @@ export function TestimonialFormModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto"
-          onClick={onClose}
+          onMouseDown={overlay.onMouseDown}
+          onClick={overlay.onClick}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}

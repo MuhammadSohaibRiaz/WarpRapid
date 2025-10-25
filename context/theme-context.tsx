@@ -165,7 +165,7 @@ const themeConfig = {
 }
 
 export function ThemeContextProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>("dark")
+  const [mode, setMode] = useState<ThemeMode>("light")
   const [color, setColor] = useState<ThemeColor>("blue")
 
   useEffect(() => {
