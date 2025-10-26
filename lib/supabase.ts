@@ -30,6 +30,7 @@ export interface Database {
           live_url: string | null
           github_url: string | null
           is_published: boolean
+          is_featured: boolean
           created_at: string
           updated_at: string
           testimonial: ProjectTestimonial | null
@@ -52,6 +53,7 @@ export interface Database {
           live_url?: string | null
           github_url?: string | null
           is_published?: boolean
+          is_featured?: boolean
           testimonial?: ProjectTestimonial | null
         }
         Update: {
@@ -72,6 +74,7 @@ export interface Database {
           live_url?: string | null
           github_url?: string | null
           is_published?: boolean
+          is_featured?: boolean
           testimonial?: ProjectTestimonial | null
         }
       }

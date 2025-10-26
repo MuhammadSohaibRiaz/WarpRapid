@@ -60,11 +60,8 @@ export function CompanyCarousel() {
           transition={{ duration: 0.8 }}
           className="text-center mb-10"
         >
-          <p className="text-sm uppercase tracking-wider theme-text opacity-60 mb-2 theme-transition">
-            Our Clients
-          </p>
-          <h2 className="text-xl md:text-2xl font-medium theme-text opacity-80 theme-transition">
-            Brands that trust us
+          <h2 className="text-base md:text-lg font-medium theme-text opacity-80 theme-transition">
+            Trusted by startups and enterprises worldwide
           </h2>
         </motion.div>
 

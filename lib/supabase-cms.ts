@@ -20,6 +20,17 @@ export class PortfolioCMS {
     return data || []
   }
 
+  static async getFeaturedProjects(): Promise<ProjectDetail[]> {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("is_published", true)
+      .eq("is_featured", true)
+      .order("updated_at", { ascending: false })
+    if (error) throw error
+    return data || []
+  }
+
   static async getProjectById(id: number): Promise<ProjectDetail | null> {
     const { data, error } = await supabase.from("projects").select("*").eq("id", id).single()
     if (error) throw error
@@ -88,6 +99,23 @@ export class PortfolioCMS {
     const { data, error } = await supabase
       .from("projects")
       .update({ is_published: !current.is_published })
+      .eq("id", id)
+      .select()
+      .single()
+    if (error) throw error
+    return data
+  }
+
+  static async toggleProjectFeaturedStatus(id: number): Promise<ProjectDetail> {
+    const { data: current, error: fetchError } = await supabase
+      .from("projects")
+      .select("is_featured")
+      .eq("id", id)
+      .single()
+    if (fetchError) throw fetchError
+    const { data, error } = await supabase
+      .from("projects")
+      .update({ is_featured: !current.is_featured })
       .eq("id", id)
       .select()
       .single()
@@ -349,12 +377,14 @@ export function useSupabaseCMS() {
     // Portfolio
     getAllProjects: PortfolioCMS.getAllProjects,
     getPublishedProjects: PortfolioCMS.getPublishedProjects,
+    getFeaturedProjects: PortfolioCMS.getFeaturedProjects,
     getProjectById: PortfolioCMS.getProjectById,
     getProjectBySlug: PortfolioCMS.getProjectBySlug,
     addProject: PortfolioCMS.addProject,
     updateProject: PortfolioCMS.updateProject,
     deleteProject: PortfolioCMS.deleteProject,
     togglePublishStatus: PortfolioCMS.togglePublishStatus,
+    toggleProjectFeaturedStatus: PortfolioCMS.toggleProjectFeaturedStatus,
 
     // Blog
     getAllBlogPosts: BlogCMS.getAllBlogPosts,

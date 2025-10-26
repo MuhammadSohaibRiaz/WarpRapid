@@ -21,6 +21,7 @@ import {
   Briefcase,
   MessageSquare,
   UploadCloud,
+  Star,
 } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { useSupabaseCMS } from "@/lib/supabase-cms"
@@ -100,6 +101,7 @@ const [editingPartner, setEditingPartner] = useState<TrustedPartner | null>(null
       position: "",
       company: "",
     },
+    is_featured: false,
   })
 
   // Blog form data
@@ -935,6 +937,17 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
                     <Button
                       size="sm"
                       variant="outline"
+                      onClick={async () => {
+                        const updated = await cms.toggleProjectFeaturedStatus(project.id)
+                        setProjects((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
+                      }}
+                      className={project.is_featured ? "text-blue-600" : "text-gray-600"}
+                    >
+                      <Star className="w-3 h-3" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
                       onClick={() => handleDeleteProject(project.id)}
                       className="text-red-600 hover:text-red-700"
                     >
@@ -1347,19 +1360,31 @@ No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" 
                   </div>
                 </div>
 
-                {/* Publish Status */}
-                <div className="flex items-center space-x-2">
+              {/* Publish & Featured Status */}
+              <div className="flex items-center gap-6">
+                <label className="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    id="isPublished"
+                    id="isProjectPublished"
                     checked={projectFormData.is_published || false}
                     onChange={(e) => setProjectFormData((prev) => ({ ...prev, is_published: e.target.checked }))}
                     className="rounded"
                   />
-                  <label htmlFor="isPublished" className="text-sm font-medium theme-text theme-transition">
-                    Publish immediately
-                  </label>
-                </div>
+                  <span className="text-sm font-medium theme-text theme-transition">Publish immediately</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="isProjectFeatured"
+                    checked={projectFormData.is_featured || false}
+                    onChange={(e) => setProjectFormData((prev) => ({ ...prev, is_featured: e.target.checked }))}
+                    className="rounded"
+                  />
+                  <span className="text-sm font-medium theme-text theme-transition flex items-center">
+                    <Star className="w-3 h-3 mr-1" /> Featured Project
+                  </span>
+                </label>
+              </div>
               </div>
 
               {/* Form Actions */}

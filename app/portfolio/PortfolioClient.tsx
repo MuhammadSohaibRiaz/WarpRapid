@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { useRouter } from "next/navigation"
 import { ExternalLink, Github, Calendar, Users, Filter, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,7 +15,6 @@ const categories = ["All", "Web Development", "App Development", "UI/UX Design",
 
 export default function PortfolioClient() {
   const { mode, color } = useThemeContext()
-  const router = useRouter()
   const [projects, setProjects] = useState<ProjectDetail[]>([])
   const [filteredProjects, setFilteredProjects] = useState<ProjectDetail[]>([])
   const [selectedCategory, setSelectedCategory] = useState("All")
@@ -235,115 +233,104 @@ export default function PortfolioClient() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredProjects.map((project, index) => (
-              <motion.div
+              <motion.article
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`${getCardBgClass()} backdrop-blur-md rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 theme-transition group cursor-pointer`}
-                onClick={(e) => {
-                  const href = `/portfolio/${project.slug || slugify(project.title)}`
-                  if ((e as React.MouseEvent).ctrlKey || (e as React.MouseEvent).metaKey) {
-                    window.open(href, "_blank", "noopener,noreferrer")
-                  } else {
-                    router.push(href)
-                  }
-                }}
-                onAuxClick={(e) => {
-                  const href = `/portfolio/${project.slug || slugify(project.title)}`
-                  if (e.button === 1) {
-                    window.open(href, "_blank", "noopener,noreferrer")
-                  }
-                }}
-                role="link"
-                tabIndex={0}
+                className="group h-full"
                 whileHover={{ y: -5 }}
               >
-                <div className="relative h-64 overflow-hidden">
-                  <OptimizedImage
-                    src={project.images[0]?.url || "/placeholder.svg?height=300&width=400&text=Project+Image"}
-                    alt={project.images[0]?.alt || project.title}
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1 bg-primary text-white rounded-full text-sm font-medium">
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className={`text-xl font-bold ${getTextClass()} mb-2 theme-transition group-hover:text-primary`}>
-                    {project.title}
-                  </h3>
-                  <p className={`${getSecondaryTextClass()} mb-4 line-clamp-2 theme-transition`}>
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technology.slice(0, 3).map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full text-xs font-medium"
-                      >
-                        {tech}
+                <a
+                  href={`/portfolio/${project.slug || slugify(project.title)}`}
+                  className={`${getCardBgClass()} block h-full flex flex-col backdrop-blur-md rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 theme-transition`}
+                >
+                  <div className="relative h-64 overflow-hidden">
+                    <OptimizedImage
+                      src={project.images[0]?.url || "/placeholder.svg?height=300&width=400&text=Project+Image"}
+                      alt={project.images[0]?.alt || project.title}
+                      width={400}
+                      height={300}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute top-4 right-4">
+                      <span className="px-3 py-1 bg-primary text-white rounded-full text-sm font-medium">
+                        {project.category}
                       </span>
-                    ))}
-                    {project.technology.length > 3 && (
-                      <span className="px-3 py-1 bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-full text-xs font-medium">
-                        +{project.technology.length - 3} more
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className={`text-xl font-bold ${getTextClass()} mb-2 theme-transition group-hover:text-primary`}>
+                      {project.title}
+                    </h3>
+                    <p className={`${getSecondaryTextClass()} mb-4 line-clamp-2 theme-transition`}>
+                      {project.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technology.slice(0, 3).map((tech, i) => (
+                        <span
+                          key={i}
+                          className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full text-xs font-medium"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technology.length > 3 && (
+                        <span className="px-3 py-1 bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-full text-xs font-medium">
+                          +{project.technology.length - 3} more
+                        </span>
+                      )}
+                    </div>
+
+                    <div
+                      className={`flex items-center justify-between text-sm ${getMutedTextClass()} mb-4 theme-transition`}
+                    >
+                      <span className="flex items-center">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        {project.duration}
                       </span>
-                    )}
-                  </div>
+                      <span className="flex items-center">
+                        <Users className="w-3 h-3 mr-1" />
+                        {project.team_size} {project.team_size === 1 ? "person" : "people"}
+                      </span>
+                    </div>
 
-                  <div
-                    className={`flex items-center justify-between text-sm ${getMutedTextClass()} mb-4 theme-transition`}
-                  >
-                    <span className="flex items-center">
-                      <Calendar className="w-3 h-3 mr-1" />
-                      {project.duration}
-                    </span>
-                    <span className="flex items-center">
-                      <Users className="w-3 h-3 mr-1" />
-                      {project.team_size} {project.team_size === 1 ? "person" : "people"}
-                    </span>
+                    <div className="flex gap-2 mt-auto min-h-[40px]">
+                      {project.live_url && (
+                        <Button
+                          size="sm"
+                          className="flex-1 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            window.open(project.live_url!, "_blank", "noopener,noreferrer")
+                          }}
+                        >
+                          <ExternalLink className="w-3 h-3 mr-1" />
+                          Live Demo
+                        </Button>
+                      )}
+                      {project.github_url && (
+                        <Button
+                          size="sm"
+                          className="flex-1 bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-800 hover:to-black text-white font-semibold"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            window.open(project.github_url!, "_blank", "noopener,noreferrer")
+                          }}
+                        >
+                          <Github className="w-3 h-3 mr-1" />
+                          Code
+                        </Button>
+                      )}
+                    </div>
                   </div>
-
-                  <div className="flex gap-2">
-                    {project.live_url && (
-                      <Button
-                        size="sm"
-                        className="flex-1 bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-semibold"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          e.preventDefault()
-                          window.open(project.live_url!, "_blank", "noopener,noreferrer")
-                        }}
-                      >
-                        <ExternalLink className="w-3 h-3 mr-1" />
-                        Live Demo
-                      </Button>
-                    )}
-                    {project.github_url && (
-                      <Button
-                        size="sm"
-                        className="flex-1 bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-800 hover:to-black text-white font-semibold"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          e.preventDefault()
-                          window.open(project.github_url!, "_blank", "noopener,noreferrer")
-                        }}
-                      >
-                        <Github className="w-3 h-3 mr-1" />
-                        Code
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
+                </a>
+              </motion.article>
             ))}
           </motion.div>
         ) : (

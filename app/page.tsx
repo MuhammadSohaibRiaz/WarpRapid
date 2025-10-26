@@ -7,6 +7,8 @@ import { CompanyCarousel } from "../components/company-carousel"
 import { FloatingCards } from "../components/floating-cards"
 import { ScrollSection } from "../components/scroll-section"
 import { TestimonialsSection } from "../components/testimonials-section"
+import { ProcessSection } from "../components/process-section"
+import { FeaturedWorkSection } from "../components/featured-work"
 import Link from "next/link"
 import { useRef } from "react"
 
@@ -80,16 +82,28 @@ export default function Home() {
         </motion.div>
       </section>
 
-      <StatsSection />
-
-      <FloatingCards />
-
-      <ScrollSection />
-
-      <TestimonialsSection />
-
+      {/* 2. Trusted By / Client Carousel */}
       <CompanyCarousel />
 
+      {/* 3. Key Achievements / Metrics */}
+      <StatsSection />
+
+      {/* 4. Our Services */}
+      <FloatingCards />
+
+      {/* 5. Why Choose RapidXTech */}
+      <ScrollSection />
+
+      {/* 6. Featured Work / Portfolio Preview */}
+      <FeaturedWorkSection />
+
+      {/* 7. Client Testimonials */}
+      <TestimonialsSection />
+
+      {/* 8. Our Process */}
+      <ProcessSection />
+
+      {/* 8. Final CTA */}
       <section className="py-32 theme-bg relative theme-transition">
         <div className="container mx-auto px-4 text-center relative z-10">
           <motion.div
