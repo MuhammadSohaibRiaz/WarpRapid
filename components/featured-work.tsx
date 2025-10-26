@@ -47,7 +47,7 @@ export function FeaturedWorkSection() {
             </p>
           </div>
           <Link href="/portfolio" className="text-primary text-sm hover:underline">
-            View Full Portfolio →
+            View All Case Studies →
           </Link>
         </motion.div>
 
@@ -94,7 +94,7 @@ export function FeaturedWorkSection() {
         {/* Bottom CTA for mobile */}
         <div className="mt-8 text-center md:hidden">
           <Link href="/portfolio" className="inline-block text-primary text-sm hover:underline">
-            View Full Portfolio →
+            View All Case Studies →
           </Link>
         </div>
       </div>

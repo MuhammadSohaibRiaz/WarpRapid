@@ -108,7 +108,7 @@ export function Footer() {
               {[
                 { name: "Home", href: "/" },
                 { name: "About", href: "/about" },
-                { name: "Portfolio", href: "/portfolio" },
+                { name: "Case Studies", href: "/portfolio" },
                 { name: "Blog", href: "/blog" },
                 { name: "Contact", href: "/contact" },
               ].map((link) => (

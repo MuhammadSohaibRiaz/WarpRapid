@@ -170,11 +170,10 @@ export default function PortfolioClient() {
           className="text-center mb-16"
         >
           <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent theme-gradient-text theme-transition mb-6">
-            Our Portfolio
+            Explore Our Case Studies
           </h1>
           <p className={`text-xl ${getSecondaryTextClass()} max-w-3xl mx-auto theme-transition`}>
-            Explore our collection of successful projects that showcase our expertise in web development, mobile apps,
-            and digital solutions.
+            Real-world software projects demonstrating innovation, scalability, and measurable impact across web and mobile.
           </p>
         </motion.div>
 

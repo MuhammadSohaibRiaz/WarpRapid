@@ -43,7 +43,7 @@ export default function ProjectDetailClient({ project }: { project: ProjectDetai
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="mb-6 md:mb-8 -ml-2 md:ml-0">
           <Link href="/portfolio">
             <Button variant="ghost" className={`theme-text ${classes.text} hover:bg-primary/20 theme-transition`}>
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portfolio
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Case Studies
             </Button>
           </Link>
         </motion.div>
