@@ -154,12 +154,13 @@ export default function AboutClient() {
         {/* Why Choose */}
         <section className="container mx-auto px-6 py-14">
           <SectionHeading title="Why Choose RapidXTech" subtitle="Values that shape how we build" />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             {[
-              { Icon: Handshake, t: "Transparency", d: "Open communication and honest collaboration." },
-              { Icon: BrainCircuit, t: "Innovation", d: "We push boundaries to find better, faster solutions." },
-              { Icon: ShieldCheck, t: "Quality", d: "Clean, reusable code built for longevity." },
-              { Icon: Users, t: "Partnership", d: "We’re long‑term collaborators, not just vendors." },
+              { Icon: Handshake, t: "Transparency", d: "We keep communication open — no surprises, no silos." },
+              { Icon: BrainCircuit, t: "Innovation", d: "We experiment boldly, but ship with discipline." },
+              { Icon: ShieldCheck, t: "Quality", d: "Every line of code reflects our obsession with excellence." },
+              { Icon: Users, t: "Partnership", d: "We grow with our clients, not just alongside them." },
+              { Icon: LineChart, t: "Scalability", d: "We design today with tomorrow’s growth in mind." },
             ].map(({ Icon, t, d }, i) => (
               <motion.div key={t} initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.06 }} className={`rounded-2xl border ${surface} p-6 text-center relative`}>
                 <div className={`w-12 h-12 rounded-xl ${chip} mx-auto flex items-center justify-center mb-3`}>
@@ -211,6 +212,11 @@ export default function AboutClient() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Brand Statement */}
+        <section className="container mx-auto px-6 py-12">
+          <p className="max-w-3xl mx-auto text-center theme-text opacity-80 text-lg">At RapidXTech, we believe technology isn’t just about code — it’s about confidence. The confidence that your product will perform under pressure, scale as you grow, and evolve with your vision.</p>
         </section>
 
         {/* Final CTA */}
