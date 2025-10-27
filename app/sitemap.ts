@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/portfolio`,
+      url: `${baseUrl}/case-studies`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.9,
@@ -48,9 +48,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  // Dynamic portfolio pages
+  // Dynamic case studies pages
   const portfolioPages: MetadataRoute.Sitemap = portfolioProjects.map((project) => ({
-    url: `${baseUrl}/portfolio/${project.slug}`,
+    url: `${baseUrl}/case-studies/${project.slug}`,
     lastModified: currentDate,
     changeFrequency: "monthly" as const,
     priority: 0.7,

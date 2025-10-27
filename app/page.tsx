@@ -52,7 +52,7 @@ export default function Home() {
               We build cutting-edge applications that transform businesses and deliver exceptional user experiences
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link href="/portfolio">
+<Link href="/case-studies">
                 <Button
                   size="lg"
                   className="bg-gradient-to-r theme-gradient-text text-white hover:opacity-90 transform hover:-translate-y-1 transition-all duration-200 theme-transition"

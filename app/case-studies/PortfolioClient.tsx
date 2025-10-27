@@ -241,7 +241,7 @@ export default function PortfolioClient() {
                 whileHover={{ y: -5 }}
               >
                 <a
-                  href={`/portfolio/${project.slug || slugify(project.title)}`}
+href={`/case-studies/${project.slug || slugify(project.title)}`}
                   className={`${getCardBgClass()} block h-full flex flex-col backdrop-blur-md rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 theme-transition`}
                 >
                   <div className="relative h-64 overflow-hidden">

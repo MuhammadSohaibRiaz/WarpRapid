@@ -46,7 +46,7 @@ export function FeaturedWorkSection() {
               A glimpse of projects we loved building
             </p>
           </div>
-          <Link href="/portfolio" className="text-primary text-sm hover:underline">
+<Link href="/case-studies" className="text-primary text-sm hover:underline">
             View All Case Studies →
           </Link>
         </motion.div>
@@ -62,7 +62,7 @@ export function FeaturedWorkSection() {
               transition={{ duration: 0.5, delay: i * 0.06 }}
               className="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 dark:bg-white/5 backdrop-blur-md"
             >
-              <Link href={`/portfolio/${p.slug ?? ''}`} className="block">
+<Link href={`/case-studies/${p.slug ?? ''}`} className="block">
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <img
                     src={p.images?.[0]?.url || "/placeholder.svg?height=300&width=400&text=Project"}
@@ -93,7 +93,7 @@ export function FeaturedWorkSection() {
 
         {/* Bottom CTA for mobile */}
         <div className="mt-8 text-center md:hidden">
-          <Link href="/portfolio" className="inline-block text-primary text-sm hover:underline">
+<Link href="/case-studies" className="inline-block text-primary text-sm hover:underline">
             View All Case Studies →
           </Link>
         </div>

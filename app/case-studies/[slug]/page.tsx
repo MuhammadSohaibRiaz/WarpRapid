@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!project) return { title: "Case Study | RapidXTech" }
   const title = `${project.title} Case Study | RapidXTech`
   const description = project.long_description || project.description || "Software case study by RapidXTech"
-  const url = `https://rapidxtech.com/portfolio/${params.slug}`
+const url = `https://rapidxtech.com/case-studies/${params.slug}`
   const image = project.images?.[0]?.url || "https://rapidxtech.com/og-image.jpg"
   return {
     title,
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default async function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const data = await PortfolioCMS.getProjectBySlug(params.slug)
   if (!data) return notFound()
-  const url = `https://rapidxtech.com/portfolio/${params.slug}`
+const url = `https://rapidxtech.com/case-studies/${params.slug}`
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CaseStudy",

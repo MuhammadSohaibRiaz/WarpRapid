@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "Software Case Studies | RapidXTech",
     description:
       "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidXTech delivers performance and innovation.",
-    url: "https://rapidxtech.com/portfolio",
+url: "https://rapidxtech.com/case-studies",
     siteName: "RapidXTech",
     images: [
       {
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     images: ["https://rapidxtech.com/og-image.jpg"],
   },
   alternates: {
-    canonical: "https://rapidxtech.com/portfolio",
+canonical: "https://rapidxtech.com/case-studies",
   },
 }
 
@@ -40,7 +40,7 @@ export default async function Portfolio() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "Software Case Studies | RapidXTech",
-    url: "https://rapidxtech.com/portfolio",
+url: "https://rapidxtech.com/case-studies",
     description:
       "Explore RapidXTech’s software case studies — real-world projects that showcase innovation, scalability, and measurable impact.",
     about: { "@type": "Organization", name: "RapidXTech" },
