@@ -9,6 +9,7 @@ import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
 import { AuthProvider } from "@/context/auth-context"
 import Script from "next/script"
+import { Suspense } from "react"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -144,7 +145,9 @@ export default function RootLayout({
           <ThemeContextProvider>
             <AuthProvider>
               <div className="flex flex-col min-h-screen relative overflow-hidden theme-bg theme-transition">
-                <ProgressBar />
+                <Suspense fallback={null}>
+                  <ProgressBar />
+                </Suspense>
                 <Header />
                 <div aria-hidden className="h-12 md:h-16" />
                 <main className="flex-grow z-10" role="main">
