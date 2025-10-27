@@ -9,6 +9,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    // Silence build-time CSR bailout rule for useSearchParams on Next 14.x
+    missingSuspenseWithCSRBailout: false,
+  },
   async redirects() {
     return [
       {
