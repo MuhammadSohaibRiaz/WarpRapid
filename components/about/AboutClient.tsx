@@ -1,10 +1,11 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useInView } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useThemeContext } from "@/context/theme-context"
 import { Bolt, ShieldCheck, Clock, Rocket, Code2, Users, BrainCircuit, Layers, Cloud, Palette, Lock, Cog, LineChart, Handshake, Search } from "lucide-react"
+import { useRef } from "react"
 
 function SectionHeading({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
@@ -39,6 +40,10 @@ export default function AboutClient() {
   const { mode, color } = useThemeContext()
   const surface = mode === "dark" || color === "black" ? "bg-gray-900/40 border-white/10" : "bg-white/60 border-white/20"
   const chip = mode === "dark" || color === "black" ? "bg-white/10" : "bg-black/5"
+
+  // in-view refs for Who We Are illustration
+  const illRef = useRef<HTMLDivElement | null>(null)
+  const illInView = useInView(illRef, { once: true, margin: "0px 0px -10% 0px" })
 
   return (
     <main className="min-h-screen theme-bg theme-transition relative overflow-hidden">

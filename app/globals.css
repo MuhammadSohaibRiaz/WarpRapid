@@ -539,3 +539,14 @@
     color: black !important;
   }
 }
+
+.animate-paused img,
+.animate-paused svg {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.animate-active img,
+.animate-active svg {
+  opacity: 1;
+}
