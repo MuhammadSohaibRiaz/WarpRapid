@@ -550,3 +550,11 @@
 .animate-active svg {
   opacity: 1;
 }
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg bg-primary text-white px-5 py-2.5 font-medium hover:bg-primary/90 transition;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center rounded-lg border border-foreground/30 text-foreground px-5 py-2.5 font-medium hover:bg-foreground/10 transition;
+}
