@@ -246,13 +246,13 @@ export default function CareersClient() {
           </div>
 
           {/* Between steps 2 & 3 illustrations */}
-          <div className="hidden md:block absolute -top-10 left-1/3 w-56">
+          <div className="hidden md:block absolute -top-10 left-1/2 -translate-x-1/2 w-56 pointer-events-none">
             <AnimatedSVG
               src="/careers-hiringprocess-interview.svg"
               alt="Interview stage illustration"
             />
           </div>
-          <div className="hidden md:block absolute top-20 right-1/5 w-56">
+          <div className="hidden md:block absolute top-20 right-8 w-56 pointer-events-none">
             <AnimatedSVG
               src="/careers-hiringprocess-handshake.svg"
               alt="Handshake illustration"

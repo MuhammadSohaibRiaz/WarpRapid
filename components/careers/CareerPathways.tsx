@@ -12,32 +12,36 @@ const pathways = [
 
 export default function CareerPathways() {
   return (
-    <FadeInSection className="container mx-auto px-6 py-24 md:py-32 relative overflow-hidden">
+    <FadeInSection className="container mx-auto px-6 py-24 md:py-32 relative overflow-visible">
       <SectionHeader title="Your Growth Journey" />
-      <div className="relative">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {pathways.map((p, i) => (
-            <div key={p.title} className="rounded-2xl border p-6 bg-background/60">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                  <p.icon className="w-5 h-5" />
-                </div>
-                <div className="font-medium">{p.title}</div>
-              </div>
-              {i < pathways.length - 1 && (
-                <div
-                  className="hidden md:block mt-4 h-0.5 w-10 bg-muted-foreground/20"
-                  aria-hidden
-                />
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-center md:absolute md:-bottom-10 md:right-0">
+
+      {/* Flex container for svg + cards */}
+      <div className="flex flex-col md:flex-row items-center gap-12 mt-12">
+        
+        {/* SVG Container (Left side now) */}
+        <div className="flex-shrink-0 w-80 h-[32rem] md:h-[32rem] relative">
           <AnimatedSVG
             src="/careers-pathways-dev.svg"
             alt="Developer growth pathway illustration"
+            className="w-full h-full object-contain"
           />
+        </div>
+
+        {/* Cards Grid: 2 columns, 2 rows (Right side now) */}
+        <div className="grid grid-cols-2 gap-10 flex-grow md:max-w-4xl">
+          {pathways.map((p) => (
+            <div
+              key={p.title}
+              className="rounded-2xl border p-8 bg-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out"
+            >
+              <div className="flex items-center gap-5 mb-5">
+                <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                  <p.icon className="w-7 h-7" />
+                </div>
+                <div className="font-semibold text-xl">{p.title}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </FadeInSection>
