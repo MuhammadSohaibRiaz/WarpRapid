@@ -23,7 +23,7 @@ export default function FeaturesGrid() {
           title="Why Work With Us"
           subtitle="We believe growth happens when people collaborate, learn, and build together."
         />
-        <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-stretch">
+        <div className="grid md:grid-cols-[3fr_2fr] gap-10 items-start">
           <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {features.map((f) => (
@@ -36,12 +36,12 @@ export default function FeaturesGrid() {
               ))}
             </div>
           </div>
-          <div className="md:pl-6 flex justify-center md:justify-end items-stretch">
-            <div className="w-full h-full flex items-stretch justify-end">
+          <div className="md:pl-6 flex justify-center md:justify-end items-start">
+            <div className="w-full max-h-full flex items-center justify-end overflow-hidden">
               <AnimatedSVG
                 src="/careers-why-teams.svg"
                 alt="Team collaboration illustration"
-                className="h-full w-auto object-contain"
+                className="w-full h-auto max-h-[500px] object-contain object-center"
               />
             </div>
           </div>
