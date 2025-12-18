@@ -9,16 +9,21 @@ import { createAuthHelper } from './helpers/auth.helper';
 test.describe('Testimonials CMS - Simplified Tests', () => {
 
     test.beforeEach(async ({ page }) => {
-        // Login and navigate to Testimonials tab
+        // Login to admin panel
         const auth = createAuthHelper(page);
         await auth.login();
-        await auth.navigateToSection('testimonials');
+        // Wait for dashboard to load
+        await page.waitForTimeout(3000);
     });
 
     /**
      * TEST 1: Verify Testimonials tab loads
      */
     test('TC-TEST-001: Testimonials tab loads successfully', async ({ page }) => {
+        // Click Testimonials tab
+        await page.click('button:has-text("Testimonials")');
+        await page.waitForTimeout(2000);
+
         // Verify we're on the Testimonials tab
         await expect(page.locator('button:has-text("Testimonials")').first()).toHaveClass(/bg-primary/);
 
@@ -32,6 +37,10 @@ test.describe('Testimonials CMS - Simplified Tests', () => {
      * TEST 2: Open create testimonial modal
      */
     test('TC-TEST-002: Open create testimonial modal', async ({ page }) => {
+        // Click Testimonials tab
+        await page.click('button:has-text("Testimonials")');
+        await page.waitForTimeout(2000);
+
         // Click "Add" button
         const addButton = page.locator('button').filter({ hasText: /add/i }).first();
         await addButton.click();
@@ -53,6 +62,10 @@ test.describe('Testimonials CMS - Simplified Tests', () => {
      * TEST 3: Create a testimonial
      */
     test('TC-TEST-003: Create a simple testimonial', async ({ page }) => {
+        // Click Testimonials tab
+        await page.click('button:has-text("Testimonials")');
+        await page.waitForTimeout(2000);
+
         // Click Add button
         const addButton = page.locator('button').filter({ hasText: /add/i }).first();
         await addButton.click();
@@ -84,6 +97,10 @@ test.describe('Testimonials CMS - Simplified Tests', () => {
      * TEST 4: Search functionality
      */
     test('TC-TEST-004: Search for testimonials', async ({ page }) => {
+        // Click Testimonials tab
+        await page.click('button:has-text("Testimonials")');
+        await page.waitForTimeout(2000);
+
         // Find search input
         const searchInput = page.locator('input[placeholder*="Search" i]').first();
 
@@ -100,6 +117,10 @@ test.describe('Testimonials CMS - Simplified Tests', () => {
      * TEST 5: Filter by status
      */
     test('TC-TEST-005: Filter testimonials by status', async ({ page }) => {
+        // Click Testimonials tab
+        await page.click('button:has-text("Testimonials")');
+        await page.waitForTimeout(2000);
+
         // Look for status filter
         const statusFilter = page.locator('button').filter({ hasText: /all|published|draft/i }).first();
 

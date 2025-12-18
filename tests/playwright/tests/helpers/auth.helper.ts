@@ -74,9 +74,14 @@ export class AuthHelper {
             partners: 'Partners'
         };
 
-        // Click on the tab button
+        // Check if tab is already active
         const tabButton = this.page.locator(`button:has-text("${sectionMap[section]}")`).first();
-        await tabButton.click();
+        const isActive = await tabButton.evaluate((el) => el.classList.contains('bg-primary')).catch(() => false);
+
+        // Only click if not already active
+        if (!isActive) {
+            await tabButton.click();
+        }
 
         // Wait for content to load
         await this.page.waitForTimeout(2000);

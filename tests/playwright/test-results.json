@@ -65,6 +65,435 @@
   },
   "suites": [
     {
+      "title": "blog-cms.spec.ts",
+      "file": "blog-cms.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Blog CMS - Simplified Tests",
+          "file": "blog-cms.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "TC-BLOG-001: Blog tab loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 26436,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Blog tab loaded successfully\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:16:56.868Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "54f72b45d1f73d2a6be8-2dff9a91cde010225510",
+              "file": "blog-cms.spec.ts",
+              "line": 23,
+              "column": 7
+            },
+            {
+              "title": "TC-BLOG-002: Open create blog post modal",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 31962,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Blog post creation modal opened\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:16:56.806Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "54f72b45d1f73d2a6be8-beef6b2b2002bdc30810",
+              "file": "blog-cms.spec.ts",
+              "line": 40,
+              "column": 7
+            },
+            {
+              "title": "TC-BLOG-003: Create a simple blog post",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 32600,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Filled title\n"
+                        },
+                        {
+                          "text": "✅ Clicked save\n"
+                        },
+                        {
+                          "text": "✅ Blog post creation attempted\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:16:56.805Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "54f72b45d1f73d2a6be8-6c3b9e933a9db6019ab6",
+              "file": "blog-cms.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "TC-BLOG-004: Search for blog posts",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 31764,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Search functionality works\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:16:56.964Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "54f72b45d1f73d2a6be8-6fb41c255acd1536b146",
+              "file": "blog-cms.spec.ts",
+              "line": 102,
+              "column": 7
+            },
+            {
+              "title": "TC-BLOG-005: Filter blog posts by status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 35993,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Status filter works\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:17:23.950Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "54f72b45d1f73d2a6be8-c182d2cd751cdb475f0a",
+              "file": "blog-cms.spec.ts",
+              "line": 122,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "portfolio-cms.spec.ts",
+      "file": "portfolio-cms.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Portfolio CMS - Simplified Tests",
+          "file": "portfolio-cms.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "TC-PORT-001: Projects tab loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 34006,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Projects tab loaded successfully\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:17:29.281Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9c4dddada317210b9ad8-ea303e4ebe875d169826",
+              "file": "portfolio-cms.spec.ts",
+              "line": 23,
+              "column": 9
+            },
+            {
+              "title": "TC-PORT-002: Open create project modal",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 30587,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Project creation modal opened\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:17:29.556Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9c4dddada317210b9ad8-c5f1bbff94820712f557",
+              "file": "portfolio-cms.spec.ts",
+              "line": 40,
+              "column": 9
+            },
+            {
+              "title": "TC-PORT-003: Create a simple project",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 34552,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Filled title\n"
+                        },
+                        {
+                          "text": "✅ Filled description\n"
+                        },
+                        {
+                          "text": "✅ Clicked save\n"
+                        },
+                        {
+                          "text": "✅ Project creation attempted\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:17:29.845Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9c4dddada317210b9ad8-dc18e651d6b762e26f4a",
+              "file": "portfolio-cms.spec.ts",
+              "line": 62,
+              "column": 9
+            },
+            {
+              "title": "TC-PORT-004: Search for projects",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 22237,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Search functionality works\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:18:00.077Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9c4dddada317210b9ad8-80a66c54bc9fc6a8b54a",
+              "file": "portfolio-cms.spec.ts",
+              "line": 105,
+              "column": 9
+            },
+            {
+              "title": "TC-PORT-005: Filter projects by category",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 19613,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Category filter works\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T22:18:00.251Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9c4dddada317210b9ad8-0d360de1ed1a25c76d50",
+              "file": "portfolio-cms.spec.ts",
+              "line": 125,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "testimonials-cms.spec.ts",
       "file": "testimonials-cms.spec.ts",
       "column": 0,
@@ -90,10 +519,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 36309,
+                      "duration": 27979,
                       "errors": [],
                       "stdout": [
                         {
@@ -102,7 +531,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-12-18T20:54:02.849Z",
+                      "startTime": "2025-12-18T22:18:03.435Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -112,7 +541,7 @@
               ],
               "id": "56c1565fed2d1699cb9f-be8634ca456d26516c06",
               "file": "testimonials-cms.spec.ts",
-              "line": 21,
+              "line": 22,
               "column": 9
             },
             {
@@ -128,10 +557,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 38902,
+                      "duration": 18702,
                       "errors": [],
                       "stdout": [
                         {
@@ -140,7 +569,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-12-18T20:54:02.831Z",
+                      "startTime": "2025-12-18T22:18:04.534Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -150,7 +579,7 @@
               ],
               "id": "56c1565fed2d1699cb9f-417bb3f4afb3c54a54d3",
               "file": "testimonials-cms.spec.ts",
-              "line": 34,
+              "line": 39,
               "column": 9
             },
             {
@@ -166,10 +595,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 41813,
+                      "duration": 23067,
                       "errors": [],
                       "stdout": [
                         {
@@ -184,7 +613,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-12-18T20:54:02.838Z",
+                      "startTime": "2025-12-18T22:18:20.285Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -194,7 +623,7 @@
               ],
               "id": "56c1565fed2d1699cb9f-2235cbae01cf660c09e5",
               "file": "testimonials-cms.spec.ts",
-              "line": 55,
+              "line": 64,
               "column": 9
             },
             {
@@ -210,10 +639,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 35508,
+                      "duration": 21438,
                       "errors": [],
                       "stdout": [
                         {
@@ -222,7 +651,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-12-18T20:54:02.868Z",
+                      "startTime": "2025-12-18T22:18:22.421Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -232,7 +661,7 @@
               ],
               "id": "56c1565fed2d1699cb9f-bd3922516b6ca5ea879d",
               "file": "testimonials-cms.spec.ts",
-              "line": 86,
+              "line": 99,
               "column": 9
             },
             {
@@ -248,10 +677,10 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 29124,
+                      "duration": 21712,
                       "errors": [],
                       "stdout": [
                         {
@@ -260,7 +689,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-12-18T20:54:38.684Z",
+                      "startTime": "2025-12-18T22:18:23.314Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -270,7 +699,7 @@
               ],
               "id": "56c1565fed2d1699cb9f-2f55824aca8d21757971",
               "file": "testimonials-cms.spec.ts",
-              "line": 102,
+              "line": 119,
               "column": 9
             }
           ]
@@ -280,9 +709,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-12-18T20:54:00.614Z",
-    "duration": 67356.984,
-    "expected": 5,
+    "startTime": "2025-12-18T22:16:54.119Z",
+    "duration": 111065.302,
+    "expected": 15,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0
