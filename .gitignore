@@ -24,3 +24,42 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ==========================================
+# SECURITY: Never commit secrets!
+# ==========================================
+# Kubernetes secrets
+k8s/secrets.yml
+**/secrets.yml
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+**/.env
+
+# Ansible sensitive files
+ansible/.env
+ansible/vault.yml
+
+# ==========================================
+# PLAYWRIGHT TEST ARTIFACTS
+# ==========================================
+# Test results and reports
+tests/playwright/test-results/
+tests/playwright/playwright-report/
+tests/playwright/.cache/
+
+# Screenshots and videos
+tests/playwright/test-results/**/*.png
+tests/playwright/test-results/**/*.webm
+
+# Applitools artifacts
+tests/playwright/.applitools/
+
+# Auth state
+tests/playwright/.auth/
+
+# Test node modules
+tests/playwright/node_modules/

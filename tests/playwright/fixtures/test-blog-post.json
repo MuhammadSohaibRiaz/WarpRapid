@@ -1,0 +1,16 @@
+{
+    "title": "Complete Guide to Modern Web Development",
+    "slug": "complete-guide-modern-web-development",
+    "excerpt": "A comprehensive guide covering the latest trends and best practices in modern web development, including React, Next.js, and TypeScript.",
+    "content": "# Complete Guide to Modern Web Development\n\nModern web development has evolved significantly over the past few years. This guide will walk you through the essential technologies and best practices.\n\n## Frontend Technologies\n\n### React and Next.js\nReact has become the de facto standard for building user interfaces, while Next.js adds powerful features like server-side rendering and static site generation.\n\n### TypeScript\nTypeScript brings type safety to JavaScript, making your code more robust and maintainable.\n\n## Backend Technologies\n\n### Node.js and Express\nNode.js allows you to run JavaScript on the server, while Express provides a minimal and flexible web application framework.\n\n## Best Practices\n\n1. Write clean, maintainable code\n2. Use version control (Git)\n3. Implement automated testing\n4. Follow security best practices\n5. Optimize for performance\n\n## Conclusion\n\nStaying up-to-date with modern web development practices is crucial for building high-quality applications.",
+    "tags": [
+        "Web Development",
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tutorial"
+    ],
+    "author": "RapidXTech Team",
+    "seoTitle": "Complete Guide to Modern Web Development | RapidXTech",
+    "seoDescription": "Learn modern web development with React, Next.js, and TypeScript. Comprehensive guide with best practices and real-world examples."
+}

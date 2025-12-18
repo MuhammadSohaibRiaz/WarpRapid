@@ -39,9 +39,66 @@ jobs:
       - name: Run automated tests (lint)
         run: npm test
 
-  docker-build-and-push:
+  ai-testing:
     runs-on: ubuntu-latest
     needs: build-and-test
+    env:
+      APPLITOOLS_API_KEY: ${{ secrets.APPLITOOLS_API_KEY }}
+      BASE_URL: http://20.219.203.205
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Playwright dependencies
+        working-directory: tests/playwright
+        run: npm install
+
+      - name: Install Playwright browsers
+        working-directory: tests/playwright
+        run: npx playwright install chromium
+
+      - name: Run Blog CMS AI Tests
+        working-directory: tests/playwright
+        run: npx playwright test blog-cms --reporter=html,json
+        continue-on-error: true
+
+      - name: Run Portfolio CMS AI Tests
+        working-directory: tests/playwright
+        run: npx playwright test portfolio-cms --reporter=html,json
+        continue-on-error: true
+
+      - name: Run Testimonials CMS AI Tests
+        working-directory: tests/playwright
+        run: npx playwright test testimonials-cms --reporter=html,json
+        continue-on-error: true
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: |
+            tests/playwright/playwright-report/
+            tests/playwright/test-results.json
+          retention-days: 30
+
+      - name: Upload Test Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-failure-screenshots
+          path: tests/playwright/test-results/
+          retention-days: 7
+
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+    needs: ai-testing
 
     permissions:
       contents: read

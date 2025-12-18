@@ -1,0 +1,321 @@
+---
+# Ansible Playbook for Section D - Configuration Management
+# RapidXTech DevOps Lab Assignment
+# This playbook configures web servers with Docker, Node.js, and Nginx
+
+- name: Configure Web Servers for RapidXTech Application
+  hosts: webservers
+  become: yes
+  gather_facts: yes
+
+  vars:
+    nodejs_version: "20.x"
+    docker_compose_version: "2.24.0"
+
+  tasks:
+    # ==========================================
+    # TASK 1: System Update and Prerequisites
+    # ==========================================
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Install required system packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - software-properties-common
+          - git
+          - vim
+          - wget
+        state: present
+      when: ansible_os_family == "Debian"
+
+    # ==========================================
+    # TASK 2: Install Docker
+    # ==========================================
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker Engine
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    # ==========================================
+    # TASK 3: Install Node.js (FIXED VERSION)
+    # ==========================================
+    - name: Download and run NodeSource setup script
+      shell: curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+      when: ansible_os_family == "Debian"
+
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Verify Node.js installation
+      command: node --version
+      register: node_version
+      changed_when: false
+
+    - name: Display Node.js version
+      debug:
+        msg: "Node.js version installed: {{ node_version.stdout }}"
+
+    # ==========================================
+    # TASK 4: Install Nginx
+    # ==========================================
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Start and enable Nginx service
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Configure Nginx for RapidXTech (reverse proxy)
+      copy:
+        dest: /etc/nginx/sites-available/rapidxtech
+        content: |
+          server {
+              listen 80;
+              server_name _;
+
+              location / {
+                  proxy_pass http://localhost:3000;
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host $host;
+                  proxy_cache_bypass $http_upgrade;
+              }
+
+              location /api {
+                  proxy_pass http://localhost:4000;
+                  proxy_http_version 1.1;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+              }
+          }
+      notify: Restart Nginx
+
+    - name: Enable Nginx site configuration
+      file:
+        src: /etc/nginx/sites-available/rapidxtech
+        dest: /etc/nginx/sites-enabled/rapidxtech
+        state: link
+      notify: Restart Nginx
+
+    - name: Remove default Nginx site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Restart Nginx
+
+    # ==========================================
+    # TASK 5: Install Python and pip
+    # ==========================================
+    - name: Install Python3 and pip
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Verify Python installation
+      command: python3 --version
+      register: python_version
+      changed_when: false
+
+    - name: Display Python version
+      debug:
+        msg: "Python version installed: {{ python_version.stdout }}"
+
+    # ==========================================
+    # TASK 6: Configure Firewall (UFW)
+    # ==========================================
+    - name: Install UFW firewall
+      apt:
+        name: ufw
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Allow SSH through firewall
+      ufw:
+        rule: allow
+        port: '22'
+        proto: tcp
+
+    - name: Allow HTTP through firewall
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+    - name: Allow HTTPS through firewall
+      ufw:
+        rule: allow
+        port: '443'
+        proto: tcp
+
+    - name: Enable UFW firewall
+      ufw:
+        state: enabled
+
+    # ==========================================
+    # TASK 7: Create Application Directory
+    # ==========================================
+    - name: Create application directory
+      file:
+        path: /opt/rapidxtech
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+
+    - name: Create .env file for RapidXTech
+      copy:
+        dest: /opt/rapidxtech/.env
+        content: |
+          # Supabase Configuration
+          NEXT_PUBLIC_SUPABASE_URL=https://fmwzrgjfxgxnnislysya.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtd3pyZ2pmeGd4bm5pc2x5c3lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5NTY0NzEsImV4cCI6MjA2ODUzMjQ3MX0.jDJzu9hx6KBDVGRQdcot-RMaHRtunl31ULcfS_ZbAfY
+          
+          # API Configuration
+          NEXT_PUBLIC_API_BASE_URL=http://backend:4000
+          
+          # Database Configuration
+          POSTGRES_DB=warprapid
+          POSTGRES_USER=postgres
+          POSTGRES_PASSWORD=postgres
+          DATABASE_URL=postgres://postgres:postgres@db:5432/warprapid
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0600'
+
+    - name: Create Docker Compose file for RapidXTech
+      copy:
+        dest: /opt/rapidxtech/docker-compose.yml
+        content: |
+          version: '3.8'
+          services:
+            frontend:
+              image: muhammadsohaibriaz/rapidx-frontend:latest
+              ports:
+                - "3000:3000"
+              env_file:
+                - .env
+              depends_on:
+                - backend
+              restart: unless-stopped
+
+            backend:
+              image: muhammadsohaibriaz/rapidx-backend:latest
+              ports:
+                - "4000:4000"
+              env_file:
+                - .env
+              depends_on:
+                - db
+              restart: unless-stopped
+
+            db:
+              image: postgres:15
+              env_file:
+                - .env
+              volumes:
+                - postgres_data:/var/lib/postgresql/data
+              restart: unless-stopped
+
+          volumes:
+            postgres_data:
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0644'
+
+  # ==========================================
+  # HANDLERS
+  # ==========================================
+  handlers:
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
+
+    - name: Restart Docker
+      systemd:
+        name: docker
+        state: restarted
+
+# ==========================================
+# POST-INSTALLATION SUMMARY
+# ==========================================
+- name: Display Installation Summary
+  hosts: webservers
+  gather_facts: no
+  tasks:
+    - name: Show completion message
+      debug:
+        msg:
+          - "=========================================="
+          - "RapidXTech Server Configuration Complete!"
+          - "=========================================="
+          - "Installed Software:"
+          - "  - Docker Engine (latest)"
+          - "  - Node.js 20.x"
+          - "  - Nginx (reverse proxy configured)"
+          - "  - Python 3 with pip"
+          - "  - UFW Firewall (enabled)"
+          - ""
+          - "Application Setup:"
+          - "  - Directory: /opt/rapidxtech"
+          - "  - Docker Compose ready"
+          - ""
+          - "Next Steps:"
+          - "  1. cd /opt/rapidxtech"
+          - "  2. docker compose up -d"
+          - "  3. Access app at http://YOUR_SERVER_IP"
+          - "=========================================="

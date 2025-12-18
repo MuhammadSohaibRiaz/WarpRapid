@@ -1,0 +1,31 @@
+{
+    "name": "rapidxtech-ai-tests",
+    "version": "1.0.0",
+    "description": "AI-driven automated testing for RapidXTech using Playwright and Applitools",
+    "scripts": {
+        "test": "playwright test",
+        "test:headed": "playwright test --headed",
+        "test:blog": "playwright test blog-cms",
+        "test:portfolio": "playwright test portfolio-cms",
+        "test:testimonials": "playwright test testimonials-cms",
+        "test:ui": "playwright test --ui",
+        "test:debug": "playwright test --debug",
+        "report": "playwright show-report",
+        "install:browsers": "playwright install chromium"
+    },
+    "keywords": [
+        "playwright",
+        "testing",
+        "ai",
+        "applitools",
+        "regression"
+    ],
+    "author": "Muhammad Sohaib Riaz",
+    "license": "MIT",
+    "devDependencies": {
+        "@playwright/test": "^1.40.0",
+        "@applitools/eyes-playwright": "^1.19.0",
+        "@types/node": "^20.10.0",
+        "typescript": "^5.3.0"
+    }
+}

@@ -1,0 +1,290 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\pnp\\Desktop\\LRapidXT - Copy - Copy\\tests\\playwright\\playwright.config.ts",
+    "rootDir": "C:/Users/pnp/Desktop/LRapidXT - Copy - Copy/tests/playwright/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/pnp/Desktop/LRapidXT - Copy - Copy/tests/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/pnp/Desktop/LRapidXT - Copy - Copy/tests/playwright/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.57.0",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "testimonials-cms.spec.ts",
+      "file": "testimonials-cms.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Testimonials CMS - Simplified Tests",
+          "file": "testimonials-cms.spec.ts",
+          "line": 9,
+          "column": 6,
+          "specs": [
+            {
+              "title": "TC-TEST-001: Testimonials tab loads successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 36309,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Testimonials tab loaded successfully\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T20:54:02.849Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "56c1565fed2d1699cb9f-be8634ca456d26516c06",
+              "file": "testimonials-cms.spec.ts",
+              "line": 21,
+              "column": 9
+            },
+            {
+              "title": "TC-TEST-002: Open create testimonial modal",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 38902,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Testimonial creation modal opened\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T20:54:02.831Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "56c1565fed2d1699cb9f-417bb3f4afb3c54a54d3",
+              "file": "testimonials-cms.spec.ts",
+              "line": 34,
+              "column": 9
+            },
+            {
+              "title": "TC-TEST-003: Create a simple testimonial",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 41813,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Filled review text\n"
+                        },
+                        {
+                          "text": "✅ Clicked save\n"
+                        },
+                        {
+                          "text": "✅ Testimonial creation attempted\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T20:54:02.838Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "56c1565fed2d1699cb9f-2235cbae01cf660c09e5",
+              "file": "testimonials-cms.spec.ts",
+              "line": 55,
+              "column": 9
+            },
+            {
+              "title": "TC-TEST-004: Search for testimonials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 35508,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Search functionality works\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T20:54:02.868Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "56c1565fed2d1699cb9f-bd3922516b6ca5ea879d",
+              "file": "testimonials-cms.spec.ts",
+              "line": 86,
+              "column": 9
+            },
+            {
+              "title": "TC-TEST-005: Filter testimonials by status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 29124,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Status filter works\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-12-18T20:54:38.684Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "56c1565fed2d1699cb9f-2f55824aca8d21757971",
+              "file": "testimonials-cms.spec.ts",
+              "line": 102,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-12-18T20:54:00.614Z",
+    "duration": 67356.984,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

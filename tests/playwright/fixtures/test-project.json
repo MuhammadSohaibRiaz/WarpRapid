@@ -1,0 +1,32 @@
+{
+    "title": "E-Commerce Platform Redesign",
+    "slug": "ecommerce-platform-redesign",
+    "category": "Web Development",
+    "technology": [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "AWS",
+        "Stripe"
+    ],
+    "description": "Complete redesign and development of a modern e-commerce platform with enhanced user experience and performance.",
+    "longDescription": "We partnered with a leading retail company to completely redesign and rebuild their e-commerce platform. The project involved modernizing the tech stack, improving site performance, and creating a seamless shopping experience across all devices.",
+    "features": [
+        "Responsive design optimized for all devices",
+        "Real-time inventory management",
+        "Secure payment processing with Stripe",
+        "Advanced search and filtering",
+        "Customer reviews and ratings system",
+        "Admin dashboard for order management"
+    ],
+    "results": [
+        "50% increase in conversion rate",
+        "75% improvement in page load times",
+        "40% reduction in cart abandonment",
+        "99.9% uptime since launch",
+        "Positive user feedback with 4.8/5 rating"
+    ],
+    "duration": "6 months",
+    "teamSize": 8,
+    "clientType": "Enterprise"
+}

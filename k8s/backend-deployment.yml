@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rapidx-backend
+  labels:
+    app: rapidx-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rapidx-backend
+  template:
+    metadata:
+      labels:
+        app: rapidx-backend
+    spec:
+      containers:
+        - name: backend
+          # Replace with your own Docker Hub username if different
+          image: muhammadsohaibriaz/rapidx-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: rapidx-config
+                  key: PORT
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rapidx-secrets
+                  key: database-url
+            - name: NEXT_PUBLIC_SUPABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rapidx-secrets
+                  key: supabase-url
+            - name: NEXT_PUBLIC_SUPABASE_ANON_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rapidx-secrets
+                  key: supabase-anon-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rapidx-backend
+  labels:
+    app: rapidx-backend
+spec:
+  type: ClusterIP
+  selector:
+    app: rapidx-backend
+  ports:
+    - name: http
+      port: 4000
+      targetPort: 4000
