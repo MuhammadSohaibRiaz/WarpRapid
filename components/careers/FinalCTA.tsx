@@ -19,7 +19,7 @@ export default function FinalCTA() {
                 technologists.
               </h2>
               <div className="mt-6">
-                <Link href="mailto:info@rapidxtech.com">
+                <Link href="mailto:info@rapidnextech.com">
                   <Button
                     variant="secondary"
                     className="bg-white text-black hover:bg-white/90"

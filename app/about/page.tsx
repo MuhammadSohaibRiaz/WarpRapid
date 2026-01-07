@@ -6,12 +6,12 @@ export const metadata: Metadata = {
   title: "About RapidXTech | Innovative Software Development Company",
   description:
     "RapidXTech is a modern software company specializing in web, mobile, and AI-driven solutions. Learn about our mission, process, and values that drive innovation and performance.",
-  alternates: { canonical: "https://rapidxtech.com/about" },
+  alternates: { canonical: "https://rapidnextech.com/about" },
   openGraph: {
     title: "About RapidXTech",
     description:
       "We build high‑performance apps and platforms using modern frameworks and clean, scalable code.",
-    url: "https://rapidxtech.com/about",
+    url: "https://rapidnextech.com/about",
     type: "website",
   },
   twitter: {
@@ -27,7 +27,7 @@ export default function AboutPage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: "About RapidXTech",
-    url: "https://rapidxtech.com/about",
+    url: "https://rapidnextech.com/about",
     description:
       "RapidXTech is a modern software company specializing in web, mobile, and AI-driven solutions. Learn about our mission, process, and values that drive innovation and performance.",
   }

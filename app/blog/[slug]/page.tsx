@@ -6,13 +6,19 @@ import { RelatedPosts } from "@/components/blog/related-posts"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { slugify } from "@/lib/utils"
 
 type Props = {
   params: { slug: string }
 }
 
-export const dynamic = "force-dynamic"
-export const revalidate = 0
+// Generate static params for all published blog posts
+export async function generateStaticParams() {
+  const posts = await BlogCMS.getPublishedBlogPosts()
+  return posts.map((post) => ({
+    slug: post.slug || slugify(post.title),
+  }))
+}
 
 // Update the metadata function
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -24,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidxtech.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidnextech.com'
   const fullUrl = `${baseUrl}/blog/${params.slug}`
   
   return {
@@ -90,10 +96,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-// Optional: pre-generate no params to allow on-demand rendering from CMS
-export function generateStaticParams() {
-  return [] as { slug: string }[]
-}
 
 export default async function BlogPost({ params }: Props) {
   const post = await BlogCMS.getBlogPostBySlug(params.slug)
@@ -115,7 +117,7 @@ export default async function BlogPost({ params }: Props) {
     )
   }
   
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidxtech.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidnextech.com'
   const fullUrl = `${baseUrl}/blog/${params.slug}`
   
   // Fetch related posts

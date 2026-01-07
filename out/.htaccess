@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# ===== Portfolio → Case Studies Redirects =====
+
+# Redirect /portfolio to /case-studies
+Redirect 301 /portfolio /case-studies
+
+# Redirect all /portfolio/:slug → /case-studies/:slug
+RewriteRule ^portfolio/(.*)$ /case-studies/$1 [R=301,L]
+
+
+# ===== Serve Static Next.js Export Correctly (IMPORTANT) =====
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.html [L]

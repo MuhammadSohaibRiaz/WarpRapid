@@ -155,7 +155,7 @@ export function AdminAuth({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`pl-10 ${getTextClass()} bg-transparent border-gray-300 dark:border-gray-600`}
-                placeholder="admin@rapidxtech.com"
+                placeholder="admin@rapidnextech.com"
                 disabled={isLockedOut || isLoading}
                 required
               />

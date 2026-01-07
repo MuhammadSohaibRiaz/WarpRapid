@@ -66,7 +66,7 @@ export default function OpenRoles() {
                   </div>
                   <div className="mt-6">
                     <Link
-                      href={`mailto:info@rapidxtech.com?subject=Application%20-%20${encodeURIComponent(
+                      href={`mailto:info@rapidnextech.com?subject=Application%20-%20${encodeURIComponent(
                         job.title
                       )}`}
                     >

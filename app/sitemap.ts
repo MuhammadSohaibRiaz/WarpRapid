@@ -3,7 +3,7 @@ import { blogPosts } from "@/lib/blog-data"
 import { portfolioProjects } from "@/lib/portfolio-data"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://rapidxtech.com"
+  const baseUrl = "https://rapidnextech.com"
   const currentDate = new Date().toISOString()
 
   // Static pages

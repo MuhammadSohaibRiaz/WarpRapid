@@ -3,15 +3,15 @@ export default function Head() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "RapidXTech",
-    url: "https://rapidxtech.com",
-    sameAs: ["https://www.linkedin.com/company/rapidxtech"],
-    logo: "https://rapidxtech.com/logo.png",
+    url: "https://rapidnextech.com",
+    sameAs: ["https://www.linkedin.com/company/rapidnextech"],
+    logo: "https://rapidnextech.com/logo.png",
     description:
       "RapidXTech is a software development company offering web, mobile, AI, and automation solutions.",
     hiringOrganization: {
       "@type": "Organization",
       name: "RapidXTech",
-      sameAs: "https://rapidxtech.com/careers",
+      sameAs: "https://rapidnextech.com/careers",
     },
   }
 

@@ -129,7 +129,7 @@ export default function CareersClient() {
               <Link href="#open-roles">
                 <Button>View Open Roles</Button>
               </Link>
-              <Link href="mailto:info@rapidxtech.com">
+              <Link href="mailto:info@rapidnextech.com">
                 <Button variant="outline">Send Your CV</Button>
               </Link>
             </div>
@@ -285,7 +285,7 @@ export default function CareersClient() {
                 </div>
                 <div className="mt-6">
                   <Link
-                    href={`mailto:info@rapidxtech.com?subject=Application%20-%20${job.title}`}
+                    href={`mailto:info@rapidnextech.com?subject=Application%20-%20${job.title}`}
                   >
                     <Button className="w-full">
                       Apply Now <ArrowRight className="w-4 h-4 ml-2" />
@@ -339,7 +339,7 @@ export default function CareersClient() {
                   technologists.
                 </h2>
                 <div className="mt-6">
-                  <Link href="mailto:info@rapidxtech.com">
+                  <Link href="mailto:info@rapidnextech.com">
                     <Button
                       variant="secondary"
                       className="bg-white text-black hover:bg-white/90"

@@ -128,7 +128,7 @@ export default function AboutClient() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "RapidXTech",
-    url: "https://rapidxtech.com/about",
+    url: "https://rapidnextech.com/about",
     sameAs: [
       "https://x.com/RapidxTech",
       "https://www.linkedin.com/company/108194958",

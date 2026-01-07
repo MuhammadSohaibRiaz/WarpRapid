@@ -3,9 +3,6 @@ import Link from "next/link"
 import { BlogCMS } from "@/lib/supabase-cms"
 import { formatDate } from "@/lib/utils"
 
-export const dynamic = "force-dynamic"
-export const revalidate = 0
-
 export const metadata: Metadata = {
   title: "Blog | RapidXTech",
   description:
@@ -14,11 +11,11 @@ export const metadata: Metadata = {
     title: "Blog | RapidXTech",
     description:
       "Read the latest articles about software development, technology trends, and industry insights from RapidXTech.",
-    url: "https://rapidxtech.com/blog",
+    url: "https://rapidnextech.com/blog",
     siteName: "RapidXTech",
     images: [
       {
-        url: "https://rapidxtech.com/og-image.jpg",
+        url: "https://rapidnextech.com/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "RapidXTech Blog",

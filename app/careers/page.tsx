@@ -13,17 +13,17 @@ export const metadata = {
   description:
     "Join RapidXTech — a remote-first, innovation-driven team building next-gen web, mobile, and AI solutions. Discover open roles, culture, and growth opportunities.",
   alternates: {
-    canonical: "https://rapidxtech.com/careers",
+    canonical: "https://rapidnextech.com/careers",
   },
   openGraph: {
     title: "Careers at RapidXTech | Join Our Remote Software Team",
     description:
       "Discover how you can grow with RapidXTech — where technology meets impact.",
-    url: "https://rapidxtech.com/careers",
+    url: "https://rapidnextech.com/careers",
     type: "website",
     images: [
       {
-        url: "https://rapidxtech.com/og-careers.jpg",
+        url: "https://rapidnextech.com/og-careers.jpg",
         width: 1200,
         height: 630,
         alt: "RapidXTech Careers",
@@ -35,7 +35,7 @@ export const metadata = {
     title: "Careers at RapidXTech | Join Our Remote Software Team",
     description:
       "Be part of RapidXTech’s remote-first, high-performance engineering team.",
-    images: ["https://rapidxtech.com/og-careers.jpg"],
+    images: ["https://rapidnextech.com/og-careers.jpg"],
   },
 }
 
@@ -56,7 +56,7 @@ export default function CareersPage() {
               <a href="#open-roles" className="btn-primary">
                 View Open Roles
               </a>
-              <a href="mailto:info@rapidxtech.com" className="btn-outline">
+              <a href="mailto:info@rapidnextech.com" className="btn-outline">
                 Send Your CV
               </a>
             </div>

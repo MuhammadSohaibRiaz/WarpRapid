@@ -19,7 +19,7 @@ const inter = Inter({
 
 // Enhanced SEO metadata
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rapidxtech.com"),
+  metadataBase: new URL("https://rapidnextech.com"),
   title: {
     default: "RapidXTech - Innovative Software Development Company",
     template: "%s | RapidXTech",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     "cloud solutions",
     "DevOps services",
   ],
-  authors: [{ name: "RapidXTech Team", url: "https://rapidxtech.com" }],
+  authors: [{ name: "RapidXTech Team", url: "https://rapidnextech.com" }],
   creator: "RapidXTech",
   publisher: "RapidXTech",
   formatDetection: {
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://rapidxtech.com",
+    url: "https://rapidnextech.com",
     siteName: "RapidXTech",
     title: "RapidXTech - Innovative Software Development Company",
     description:
@@ -96,13 +96,13 @@ export const metadata: Metadata = {
     yandex: "verification_token",
     yahoo: "verification_token",
     other: {
-      me: ["mailto:contact@rapidxtech.com"],
+      me: ["mailto:contact@rapidnextech.com"],
     },
   },
   alternates: {
-    canonical: "https://rapidxtech.com",
+    canonical: "https://rapidnextech.com",
     languages: {
-      "en-US": "https://rapidxtech.com",
+      "en-US": "https://rapidnextech.com",
     },
   },
   category: "technology",
@@ -168,12 +168,12 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "@id": "https://rapidxtech.com/#organization",
+              "@id": "https://rapidnextech.com/#organization",
               name: "RapidXTech",
-              url: "https://rapidxtech.com",
+              url: "https://rapidnextech.com",
               logo: {
                 "@type": "ImageObject",
-                url: "https://rapidxtech.com/logo.png",
+                url: "https://rapidnextech.com/logo.png",
                 width: 200,
                 height: 60,
               },
@@ -217,18 +217,18 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "@id": "https://rapidxtech.com/#website",
-              url: "https://rapidxtech.com",
+              "@id": "https://rapidnextech.com/#website",
+              url: "https://rapidnextech.com",
               name: "RapidXTech",
               description: "Innovative software development company",
               publisher: {
-                "@id": "https://rapidxtech.com/#organization",
+                "@id": "https://rapidnextech.com/#organization",
               },
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate: "https://rapidxtech.com/search?q={search_term_string}",
+                  urlTemplate: "https://rapidnextech.com/search?q={search_term_string}",
                 },
                 "query-input": "required name=search_term_string",
               },

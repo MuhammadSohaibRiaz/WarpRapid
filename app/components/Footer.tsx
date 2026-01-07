@@ -161,10 +161,10 @@ export function Footer() {
               <div className="flex items-center">
                 <Mail className={`w-4 h-4 ${getMutedTextClass()} mr-3`} />
                 <a
-                  href="mailto:info@rapidxtech.com"
+                  href="mailto:info@rapidnextech.com"
                   className={`${getSecondaryTextClass()} hover:text-primary theme-transition`}
                 >
-                  info@rapidxtech.com
+                  info@rapidnextech.com
                 </a>
               </div>
               <div className="flex items-center">
