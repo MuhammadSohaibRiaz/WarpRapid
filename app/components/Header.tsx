@@ -66,10 +66,28 @@ const Header = () => {
 
   return (
     <header className={`fixed w-full z-50 transition-all duration-300 ${getHeaderBgClass()}`}>
-      <nav className="container mx-auto mb-5 px-6 py-4">
+      <nav className="container mx-auto px-6 py-2">
         <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold">
-            <span className="bg-clip-text text-transparent theme-gradient-text theme-transition">RapidXTech</span>
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="relative h-10 w-10 md:h-12 md:w-12 transition-transform group-hover:scale-105">
+              <Image
+                src={color === "white" || (mode === "light" && color !== "black") ? "/symbol-blue.png" : "/symbol-white.png"}
+                alt="RapidNexTech Symbol"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="relative h-10 w-48 md:h-12 md:w-48 transition-transform group-hover:scale-105 ml-1 mt-2">
+              <Image
+                src={color === "white" || (mode === "light" && color !== "black") ? "/header-logo-blue.png" : "/header-logo-white.png"}
+                alt="RapidNexTech"
+                fill
+                className="object-contain object-left"
+                priority
+                quality={100}
+              />
+            </div>
           </Link>
           <div className="flex items-center space-x-4">
             <ThemeSwitcher />
@@ -89,9 +107,8 @@ const Header = () => {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`theme-text hover:opacity-80 transition-colors relative ${
-                  pathname === item.href ? "opacity-100 font-medium" : "opacity-80"
-                } theme-transition`}
+                className={`theme-text hover:opacity-80 transition-colors relative ${pathname === item.href ? "opacity-100 font-medium" : "opacity-80"
+                  } theme-transition`}
               >
                 {item.name}
                 {pathname === item.href && (
@@ -117,9 +134,8 @@ const Header = () => {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`block py-2 ${getMobileMenuTextClass()} hover:opacity-80 transition-colors ${
-                    pathname === item.href ? "opacity-100 font-medium" : "opacity-80"
-                  }`}
+                  className={`block py-2 ${getMobileMenuTextClass()} hover:opacity-80 transition-colors ${pathname === item.href ? "opacity-100 font-medium" : "opacity-80"
+                    }`}
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}

@@ -33,7 +33,7 @@ const PROCESS_STEPS: ProcessStep[] = [
   {
     icon: Rocket,
     title: "Onboard",
-    desc: "Join RapidXTech",
+    desc: "Join RapidNexTech",
     svg: "/careers-hiringprocess-handshake.svg",
   },
 ]

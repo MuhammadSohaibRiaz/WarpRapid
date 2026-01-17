@@ -55,7 +55,7 @@ export function Footer() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h3 className={`text-2xl font-bold ${getTextClass()} mb-4 theme-transition`}>RapidXTech</h3>
+            <h3 className={`text-2xl font-bold ${getTextClass()} mb-4 theme-transition`}>RapidNexTech</h3>
             <p className={`${getSecondaryTextClass()} mb-6 theme-transition`}>
               Transforming ideas into powerful digital solutions. We specialize in web development, mobile apps, and
               enterprise software that drives business growth.
@@ -78,7 +78,7 @@ export function Footer() {
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="https://x.com/RapidxTech"
+                href="https://x.com/RapidNexTech"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${getMutedTextClass()} hover:text-primary theme-transition`}
@@ -86,7 +86,7 @@ export function Footer() {
                 <Twitter className="w-5 h-5" />
               </a>
               <a
-                href="https://www.instagram.com/rapidxtech/"
+                href="https://www.instagram.com/RapidNexTech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${getMutedTextClass()} hover:text-primary theme-transition`}
@@ -108,7 +108,7 @@ export function Footer() {
               {[
                 { name: "Home", href: "/" },
                 { name: "About", href: "/about" },
-{ name: "Case Studies", href: "/case-studies" },
+                { name: "Case Studies", href: "/case-studies" },
                 { name: "Blog", href: "/blog" },
                 { name: "Contact", href: "/contact" },
               ].map((link) => (
@@ -208,7 +208,7 @@ export function Footer() {
           viewport={{ once: true }}
           className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center"
         >
-          <p className={`${getMutedTextClass()} text-sm theme-transition`}>© 2024 RapidXTech. All rights reserved.</p>
+          <p className={`${getMutedTextClass()} text-sm theme-transition`}>© 2024 RapidNexTech. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="/privacy" className={`${getMutedTextClass()} hover:text-primary text-sm theme-transition`}>
               Privacy Policy

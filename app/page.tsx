@@ -45,41 +45,43 @@ export default function Home() {
 
         <motion.div style={{ opacity, scale, y }} className="relative z-10 text-center px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-6xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition">
-              Innovative Software Solutions
+            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight">
+              Custom Software That Solves Real Business Problems
             </h1>
             <p className="text-xl md:text-2xl theme-text mb-12 max-w-3xl mx-auto theme-transition">
-              We build cutting-edge applications that transform businesses and deliver exceptional user experiences
+              We help companies automate operations, launch products, and scale with confidence.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-<Link href="/case-studies">
+              <Link href="/contact">
                 <Button
                   size="lg"
                   className="bg-gradient-to-r theme-gradient-text text-white hover:opacity-90 transform hover:-translate-y-1 transition-all duration-200 theme-transition"
                 >
-                  Our Work
+                  Discuss Your Project
                 </Button>
               </Link>
-              <Link href="/contact">
+              <Link href="/case-studies">
                 <Button
                   size="lg"
                   variant="outline"
                   className="border-2 border-primary hover:bg-primary/10 transform hover:-translate-y-1 transition-all duration-200 theme-transition bg-transparent"
                 >
-                  Get in Touch
+                  View Case Studies
                 </Button>
               </Link>
             </div>
+
+            <motion.div
+              className="mt-8"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+            >
+              <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
+            </motion.div>
           </motion.div>
         </motion.div>
 
-        <motion.div
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-        >
-          <span className="theme-text text-sm theme-transition">Scroll to explore</span>
-        </motion.div>
+
       </section>
 
       {/* 2. Trusted By / Client Carousel */}
@@ -91,7 +93,7 @@ export default function Home() {
       {/* 4. Our Services */}
       <FloatingCards />
 
-      {/* 5. Why Choose RapidXTech */}
+      {/* 5. Why Choose RapidNexTech */}
       <ScrollSection />
 
       {/* 6. Featured Work / Portfolio Preview */}
@@ -116,7 +118,7 @@ export default function Home() {
               Ready to Transform Your Business?
             </h2>
             <p className="text-xl theme-text max-w-2xl mx-auto theme-transition">
-              Partner with RapidXTech to build innovative software solutions that drive growth and efficiency
+              Partner with RapidNexTech to build innovative software solutions that drive growth and efficiency
             </p>
             <Link href="/contact">
               <Button

@@ -1,9 +1,9 @@
 import type React from "react"
 import "./globals.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Space_Grotesk } from "next/font/google"
 import Header from "./components/Header"
-import {Footer} from "./components/Footer"
+import { Footer } from "./components/Footer"
 import ProgressBar from "./components/ProgressBar"
 import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
@@ -17,15 +17,21 @@ const inter = Inter({
   preload: true,
 })
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+  display: "swap",
+})
+
 // Enhanced SEO metadata
 export const metadata: Metadata = {
   metadataBase: new URL("https://rapidnextech.com"),
   title: {
-    default: "RapidXTech - Innovative Software Development Company",
-    template: "%s | RapidXTech",
+    default: "RapidNexTech - Innovative Software Development Company",
+    template: "%s | RapidNexTech",
   },
   description:
-    "RapidXTech delivers cutting-edge software solutions in web development, mobile apps, and enterprise systems. Transform your business with our expert development team.",
+    "RapidNexTech delivers cutting-edge software solutions in web development, mobile apps, and enterprise systems. Transform your business with our expert development team.",
   keywords: [
     "software development",
     "web development",
@@ -43,9 +49,9 @@ export const metadata: Metadata = {
     "cloud solutions",
     "DevOps services",
   ],
-  authors: [{ name: "RapidXTech Team", url: "https://rapidnextech.com" }],
-  creator: "RapidXTech",
-  publisher: "RapidXTech",
+  authors: [{ name: "RapidNexTech Team", url: "https://rapidnextech.com" }],
+  creator: "RapidNexTech",
+  publisher: "RapidNexTech",
   formatDetection: {
     email: false,
     address: false,
@@ -55,8 +61,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://rapidnextech.com",
-    siteName: "RapidXTech",
-    title: "RapidXTech - Innovative Software Development Company",
+    siteName: "RapidNexTech",
+    title: "RapidNexTech - Innovative Software Development Company",
     description:
       "Transform your business with cutting-edge software solutions. Expert web development, mobile apps, and enterprise systems.",
     images: [
@@ -64,19 +70,19 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "RapidXTech - Software Development Company",
+        alt: "RapidNexTech - Software Development Company",
         type: "image/jpeg",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RapidXTech - Innovative Software Development Company",
+    title: "RapidNexTech - Innovative Software Development Company",
     description:
       "Transform your business with cutting-edge software solutions. Expert web development, mobile apps, and enterprise systems.",
     images: ["/og-image.jpg"],
-    creator: "@rapidxtech",
-    site: "@rapidxtech",
+    creator: "@RapidNexTech",
+    site: "@RapidNexTech",
   },
   robots: {
     index: true,
@@ -106,7 +112,7 @@ export const metadata: Metadata = {
     },
   },
   category: "technology",
-    generator: 'v0.app'
+  generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -127,10 +133,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 
         {/* Favicon and app icons */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+        <link rel="manifest" href="/manifest.json?v=2" />
 
         {/* Theme and viewport */}
         <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: light)" />
@@ -140,7 +145,7 @@ export default function RootLayout({
         {/* Performance hints */}
         <meta httpEquiv="x-dns-prefetch-control" content="on" />
       </head>
-      <body className={`${inter.className} theme-transition antialiased`}>
+      <body className={`${inter.className} ${spaceGrotesk.variable} theme-transition antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <ThemeContextProvider>
             <AuthProvider>
@@ -169,7 +174,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "@id": "https://rapidnextech.com/#organization",
-              name: "RapidXTech",
+              name: "RapidNexTech",
               url: "https://rapidnextech.com",
               logo: {
                 "@type": "ImageObject",
@@ -192,10 +197,10 @@ export default function RootLayout({
                 areaServed: "Worldwide",
               },
               sameAs: [
-                "https://twitter.com/rapidxtech",
-                "https://facebook.com/rapidxtech",
-                "https://github.com/rapidxtech",
-                "https://linkedin.com/company/rapidxtech",
+                "https://twitter.com/RapidNexTech",
+                "https://facebook.com/RapidNexTech",
+                "https://github.com/RapidNexTech",
+                "https://linkedin.com/company/RapidNexTech",
               ],
               serviceType: [
                 "Software Development",
@@ -219,7 +224,7 @@ export default function RootLayout({
               "@type": "WebSite",
               "@id": "https://rapidnextech.com/#website",
               url: "https://rapidnextech.com",
-              name: "RapidXTech",
+              name: "RapidNexTech",
               description: "Innovative software development company",
               publisher: {
                 "@id": "https://rapidnextech.com/#organization",

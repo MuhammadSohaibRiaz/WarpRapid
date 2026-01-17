@@ -4,21 +4,21 @@ import { BlogCMS } from "@/lib/supabase-cms"
 import { formatDate } from "@/lib/utils"
 
 export const metadata: Metadata = {
-  title: "Blog | RapidXTech",
+  title: "Blog | RapidNexTech",
   description:
-    "Read the latest articles about software development, technology trends, and industry insights from RapidXTech.",
+    "Read the latest articles about software development, technology trends, and industry insights from RapidNexTech.",
   openGraph: {
-    title: "Blog | RapidXTech",
+    title: "Blog | RapidNexTech",
     description:
-      "Read the latest articles about software development, technology trends, and industry insights from RapidXTech.",
+      "Read the latest articles about software development, technology trends, and industry insights from RapidNexTech.",
     url: "https://rapidnextech.com/blog",
-    siteName: "RapidXTech",
+    siteName: "RapidNexTech",
     images: [
       {
         url: "https://rapidnextech.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "RapidXTech Blog",
+        alt: "RapidNexTech Blog",
       },
     ],
     locale: "en_US",

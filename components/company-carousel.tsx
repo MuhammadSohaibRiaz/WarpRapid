@@ -22,9 +22,9 @@ export function CompanyCarousel() {
           mapped.length
             ? mapped
             : [
-                { name: "TechStart", logo: "/placeholder.svg?height=40&width=160&text=TechStart" },
-                { name: "InnovateHub", logo: "/placeholder.svg?height=40&width=160&text=InnovateHub" },
-              ],
+              { name: "TechStart", logo: "/placeholder.svg?height=40&width=160&text=TechStart" },
+              { name: "InnovateHub", logo: "/placeholder.svg?height=40&width=160&text=InnovateHub" },
+            ],
         )
       })
       .catch(() => {
@@ -61,8 +61,7 @@ export function CompanyCarousel() {
           className="text-center mb-10"
         >
           <h2 className="text-base md:text-lg font-medium theme-text opacity-80 theme-transition">
-            Trusted by startups and enterprises worldwide
-          </h2>
+            Trusted by founders and teams across fintech, hosting, e-commerce, and SaaS.          </h2>
         </motion.div>
 
         {/* Continuous marquee */}
@@ -75,11 +74,10 @@ export function CompanyCarousel() {
             {marqueeList.map((c, i) => (
               <div
                 key={`${c.name}-${i}`}
-                className={`${
-                  mode === "dark" || color === "black"
-                    ? "grayscale hover:grayscale-0"
-                    : "opacity-70 hover:opacity-100"
-                } transition-all duration-300`}
+                className={`${mode === "dark" || color === "black"
+                  ? "grayscale hover:grayscale-0"
+                  : "opacity-70 hover:opacity-100"
+                  } transition-all duration-300`}
               >
                 <img
                   src={c.logo || "/placeholder.svg"}

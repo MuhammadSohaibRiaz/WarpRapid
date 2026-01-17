@@ -5,9 +5,9 @@ import { useRef, useState } from "react"
 import { useThemeContext } from "@/context/theme-context"
 
 const stats = [
-  { number: 150, suffix: "+", label: "Projects Delivered", icon: "🚀" },
-  { number: 50, suffix: "+", label: "Enterprise Clients", icon: "🏢" },
-  { number: 8, suffix: "+", label: "Years of Excellence", icon: "⭐" },
+  { number: 4, suffix: "+", label: "Years of Hands-On Experience", icon: "⭐" },
+  { number: 20, suffix: "+", label: "Software Projects Developed", icon: "🚀" },
+  { number: 5, suffix: "+", label: "Countries Served Worldwide", icon: "🌍" },
 ]
 
 const Counter = ({ value, suffix }: { value: number; suffix: string }) => {
@@ -58,6 +58,14 @@ export function StatsSection() {
       </div>
 
       <div className="container mx-auto px-4 relative">
+        <motion.h2
+          className="text-4xl md:text-5xl font-bold text-center mb-16 bg-clip-text text-transparent theme-gradient-text theme-transition"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Our Impact at a Glance
+        </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
           {stats.map((stat, index) => (
             <motion.div

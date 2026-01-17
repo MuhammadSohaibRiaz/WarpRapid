@@ -2,25 +2,25 @@ export default function Head() {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "RapidXTech",
+    name: "RapidNexTech",
     url: "https://rapidnextech.com",
     sameAs: ["https://www.linkedin.com/company/rapidnextech"],
     logo: "https://rapidnextech.com/logo.png",
     description:
-      "RapidXTech is a software development company offering web, mobile, AI, and automation solutions.",
+      "RapidNexTech is a software development company offering web, mobile, AI, and automation solutions.",
     hiringOrganization: {
       "@type": "Organization",
-      name: "RapidXTech",
+      name: "RapidNexTech",
       sameAs: "https://rapidnextech.com/careers",
     },
   }
 
   return (
     <>
-      <title>Careers at RapidXTech | Join Our Remote Software Team</title>
+      <title>Careers at RapidNexTech | Join Our Remote Software Team</title>
       <meta
         name="description"
-        content="Join RapidXTech — a remote-first, innovation-driven team building next-gen web, mobile, and AI solutions."
+        content="Join RapidNexTech — a remote-first, innovation-driven team building next-gen web, mobile, and AI solutions."
       />
       <script
         type="application/ld+json"

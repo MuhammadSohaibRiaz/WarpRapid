@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .font-chakra {
+    font-family: var(--font-chakra), sans-serif;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -82,7 +88,69 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
 
+/* Premium Glitch Effect */
+.glitch-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.glitch-text {
+  position: relative;
+  color: inherit; /* User specific color will be applied via utility classes */
+}
+
+/* Subtle horizontal slices - less chaotic than before */
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit; /* Matches background to hide main text momentarily if needed, or transparent */
+  opacity: 0.8;
+}
+
+/* Primary subtle slice */
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -1px 0 #1E5EFF; /* Brand Blue Shadow */
+  clip: rect(0, 900px, 0, 0);
+  animation: glitch-anim-premium-1 4s infinite linear alternate-reverse;
+}
+
+/* Secondary subtle slice */
+.glitch-text::after {
+  left: -2px;
+  text-shadow: 1px 0 #ffffff; /* White shadow highlight */
+  clip: rect(0, 900px, 0, 0);
+  animation: glitch-anim-premium-2 4s infinite linear alternate-reverse;
+}
+
+/* Much more subtle animations */
+@keyframes glitch-anim-premium-1 {
+  0%, 90% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+  91% { clip: rect(12px, 9999px, 15px, 0); transform: translate(-2px); }
+  92% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+  95% { clip: rect(35px, 9999px, 45px, 0); transform: translate(2px); }
+  96% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+  100% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+}
+
+@keyframes glitch-anim-premium-2 {
+  0%, 85% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+  86% { clip: rect(65px, 9999px, 80px, 0); transform: translate(2px); }
+  87% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+  94% { clip: rect(20px, 9999px, 30px, 0); transform: translate(-2px); }
+  95% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+  100% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+}
+
+@layer base {
   /* Improve focus visibility for accessibility */
   *:focus-visible {
     @apply outline-2 outline-offset-2 outline-primary;
@@ -123,6 +191,20 @@
   }
 }
 
+/* Shimmer animation for modern cards */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s infinite;
+}
+
 /* Performance optimizations */
 @layer utilities {
   .will-change-transform {
@@ -147,15 +229,19 @@
   0% {
     transform: translate3d(0%, 0%, 0);
   }
+
   25% {
     transform: translate3d(25%, 25%, 0);
   }
+
   50% {
     transform: translate3d(0%, 50%, 0);
   }
+
   75% {
     transform: translate3d(-25%, 25%, 0);
   }
+
   100% {
     transform: translate3d(0%, 0%, 0);
   }
@@ -490,6 +576,7 @@
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

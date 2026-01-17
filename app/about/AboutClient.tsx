@@ -70,7 +70,7 @@ function ProcessStep({ step, title, text, icon: Icon }: { step: number; title: s
     >
       {/* gradient glow ring on hover */}
       <div className={`pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity ${`ring-1 ring-offset-0 ring-transparent`} `} />
-      <div className={`absolute -top-4 -left-4 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold text-white ${`bg-gradient-to-r ${getGradient("from")} ${getGradient("to")}`}`}>{step.toString().padStart(2,'0')}</div>
+      <div className={`absolute -top-4 -left-4 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold text-white ${`bg-gradient-to-r ${getGradient("from")} ${getGradient("to")}`}`}>{step.toString().padStart(2, '0')}</div>
       {Icon && <Icon className="w-6 h-6 text-blue-500 mb-3" />}
       <h4 className="font-semibold theme-text mb-2">{title}</h4>
       <p className="text-sm theme-text opacity-80 leading-relaxed">{text}</p>
@@ -102,7 +102,7 @@ function LottieProcess({ src }: { src?: string }) {
         <canvas id={canvasId} width={1152} height={420} className="w-full h-[260px] sm:h-[300px] md:h-[360px] lg:h-[420px] block" />
         {/* Overlay our own labels to replace embedded ones visually */}
         <div className="pointer-events-none absolute inset-x-0 -bottom-8 hidden sm:grid grid-cols-4 gap-4 text-center">
-          {['Discover','Plan','Build','Deliver'].map((t)=> (
+          {['Discover', 'Plan', 'Build', 'Deliver'].map((t) => (
             <span key={t} className="mx-2 inline-block rounded-full px-3 py-1 text-xs font-medium bg-white/20 dark:bg-black/30 backdrop-blur-md theme-text">
               {t}
             </span>
@@ -127,12 +127,12 @@ export default function AboutClient() {
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "RapidXTech",
+    name: "RapidNexTech",
     url: "https://rapidnextech.com/about",
     sameAs: [
-      "https://x.com/RapidxTech",
+      "https://x.com/RapidNexTech",
       "https://www.linkedin.com/company/108194958",
-      "https://github.com/rapidxtech",
+      "https://github.com/RapidNexTech",
     ],
   }
 
@@ -159,13 +159,13 @@ export default function AboutClient() {
             className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent theme-gradient-text"
             {...fadeUp(0, prefersReducedMotion)}
           >
-            About RapidXTech
+            About RapidNexTech
           </motion.h1>
           <motion.p className="mt-5 text-lg md:text-xl theme-text opacity-80" {...fadeUp(0.1, prefersReducedMotion)}>
             The speed you need, the technology you trust.
           </motion.p>
           <motion.p className="mt-4 theme-text opacity-80" {...fadeUp(0.15, prefersReducedMotion)}>
-            RapidXTech is a next-generation software company helping startups and enterprises move faster through
+            RapidNexTech is a next-generation software company helping startups and enterprises move faster through
             intelligent design, clean engineering, and strategic automation.
           </motion.p>
           <motion.div className="mt-8" {...fadeUp(0.2, prefersReducedMotion)}>
@@ -189,7 +189,7 @@ export default function AboutClient() {
               <div className={`rounded-2xl overflow-hidden ring-1 ring-primary/20 shadow-xl ${mode === "dark" ? "bg-gray-900/60" : "bg-white/70"}`}>
                 <Image
                   src="/logo-main.png"
-                  alt="RapidXTech workspace mockup"
+                  alt="RapidNexTech workspace mockup"
                   width={1200}
                   height={800}
                   className="w-full h-auto object-contain p-8"
@@ -208,7 +208,7 @@ export default function AboutClient() {
             {/* Text */}
             <div className="order-1 lg:order-2">
               <motion.p {...fadeUp(0.05, prefersReducedMotion)} className="theme-text opacity-90 leading-relaxed">
-                RapidXTech was founded to accelerate digital transformation for startups and enterprises. We create
+                RapidNexTech was founded to accelerate digital transformation for startups and enterprises. We create
                 world‑class web and mobile solutions using clean, scalable, high‑performance code — crafted for speed,
                 usability, and growth.
               </motion.p>
@@ -261,26 +261,26 @@ export default function AboutClient() {
             subtitle="End‑to‑end solutions, engineered for growth."
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[{icon:Cpu,title:"Web & Mobile App Development",text:"High‑performance, cross‑platform apps."},
-              {icon:Layers,title:"SaaS Platforms",text:"Secure multi‑tenant applications."},
-              {icon:Zap,title:"AI & Workflow Automation",text:"Save hours with intelligent pipelines."},
-              {icon:MessageSquare,title:"UI/UX Design",text:"Design systems that convert."},
-              {icon:BarChart3,title:"Cloud & Integrations",text:"Reliable APIs and services."},
-              {icon:Shield,title:"IT Consulting",text:"Roadmaps, audits, and architecture."}]
+            {[{ icon: Cpu, title: "Web & Mobile App Development", text: "High‑performance, cross‑platform apps." },
+            { icon: Layers, title: "SaaS Platforms", text: "Secure multi‑tenant applications." },
+            { icon: Zap, title: "AI & Workflow Automation", text: "Save hours with intelligent pipelines." },
+            { icon: MessageSquare, title: "UI/UX Design", text: "Design systems that convert." },
+            { icon: BarChart3, title: "Cloud & Integrations", text: "Reliable APIs and services." },
+            { icon: Shield, title: "IT Consulting", text: "Roadmaps, audits, and architecture." }]
               .map((s, i) => (
-              <motion.div
-                key={i}
-                className={`group relative rounded-xl p-6 border overflow-hidden transition-transform ${mode === "dark" ? "bg-gray-900/40 border-gray-700" : "bg-white/60 border-gray-200"} hover:scale-[1.02]`}
-                whileHover={{ y: -6 }}
-                {...fadeUp(i * 0.05)}
-              >
-                <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full opacity-30 blur-2xl ${`bg-gradient-to-tr ${getGradient("from")} ${getGradient("to")}`}`} />
-                <s.icon className="w-7 h-7 text-blue-600 mb-3" />
-                <h3 className="font-semibold theme-text mb-1">{s.title}</h3>
-                <p className="text-sm theme-text opacity-80 leading-relaxed">{s.text}</p>
-                <ArrowRight className="w-4 h-4 absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.div>
-            ))}
+                <motion.div
+                  key={i}
+                  className={`group relative rounded-xl p-6 border overflow-hidden transition-transform ${mode === "dark" ? "bg-gray-900/40 border-gray-700" : "bg-white/60 border-gray-200"} hover:scale-[1.02]`}
+                  whileHover={{ y: -6 }}
+                  {...fadeUp(i * 0.05)}
+                >
+                  <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full opacity-30 blur-2xl ${`bg-gradient-to-tr ${getGradient("from")} ${getGradient("to")}`}`} />
+                  <s.icon className="w-7 h-7 text-blue-600 mb-3" />
+                  <h3 className="font-semibold theme-text mb-1">{s.title}</h3>
+                  <p className="text-sm theme-text opacity-80 leading-relaxed">{s.text}</p>
+                  <ArrowRight className="w-4 h-4 absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.div>
+              ))}
           </div>
         </section>
 
@@ -295,7 +295,7 @@ export default function AboutClient() {
           </div>
         </section>
 
-        {/* Why RapidXTech */}
+        {/* Why RapidNexTech */}
         <section className="mb-20">
           <SectionHeading title="What Makes Us Different" />
           <div className="max-w-4xl mx-auto">
@@ -303,14 +303,14 @@ export default function AboutClient() {
               We don’t just ship software — we deliver outcomes. Every line of code is optimized for performance, SEO,
               and reusability. We prioritize collaboration, quality, and measurable business impact.
             </motion.p>
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[{icon:Layers,title:"Reusable Architecture",text:"Composable, DRY, scalable components."},
-              {icon:BarChart3,title:"Benchmark‑Driven",text:"Lighthouse 95+ targets."},
-              {icon:MessageSquare,title:"Agile & Transparent",text:"Fast iterations, aligned progress."},
-              {icon:Shield,title:"SEO & Mobile‑First",text:"Semantic, accessible, performant."}].map((f,i)=> (
-              <ProcessStep key={i} step={i+1} title={f.title} text={f.text} icon={f.icon} />
-            ))}
-          </div>
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[{ icon: Layers, title: "Reusable Architecture", text: "Composable, DRY, scalable components." },
+              { icon: BarChart3, title: "Benchmark‑Driven", text: "Lighthouse 95+ targets." },
+              { icon: MessageSquare, title: "Agile & Transparent", text: "Fast iterations, aligned progress." },
+              { icon: Shield, title: "SEO & Mobile‑First", text: "Semantic, accessible, performant." }].map((f, i) => (
+                <ProcessStep key={i} step={i + 1} title={f.title} text={f.text} icon={f.icon} />
+              ))}
+            </div>
           </div>
         </section>
 

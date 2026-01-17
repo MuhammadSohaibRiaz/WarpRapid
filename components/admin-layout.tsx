@@ -122,7 +122,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               </div>
               <div>
                 <h1 className={`text-lg font-bold ${getTextClass()} theme-transition`}>Admin Panel</h1>
-                <p className={`text-xs ${getSecondaryTextClass()} theme-transition`}>RapidXTech CMS</p>
+                <p className={`text-xs ${getSecondaryTextClass()} theme-transition`}>RapidNexTech CMS</p>
               </div>
             </div>
 

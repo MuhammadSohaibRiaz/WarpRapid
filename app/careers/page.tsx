@@ -9,16 +9,16 @@ import SectionHeader from "@/components/careers/SectionHeader"
 import AnimatedSVG from "@/components/careers/AnimatedSVG"
 
 export const metadata = {
-  title: "Careers at RapidXTech | Join Our Remote Software Team",
+  title: "Careers at RapidNexTech | Join Our Remote Software Team",
   description:
-    "Join RapidXTech — a remote-first, innovation-driven team building next-gen web, mobile, and AI solutions. Discover open roles, culture, and growth opportunities.",
+    "Join RapidNexTech — a remote-first, innovation-driven team building next-gen web, mobile, and AI solutions. Discover open roles, culture, and growth opportunities.",
   alternates: {
     canonical: "https://rapidnextech.com/careers",
   },
   openGraph: {
-    title: "Careers at RapidXTech | Join Our Remote Software Team",
+    title: "Careers at RapidNexTech | Join Our Remote Software Team",
     description:
-      "Discover how you can grow with RapidXTech — where technology meets impact.",
+      "Discover how you can grow with RapidNexTech — where technology meets impact.",
     url: "https://rapidnextech.com/careers",
     type: "website",
     images: [
@@ -26,15 +26,15 @@ export const metadata = {
         url: "https://rapidnextech.com/og-careers.jpg",
         width: 1200,
         height: 630,
-        alt: "RapidXTech Careers",
+        alt: "RapidNexTech Careers",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Careers at RapidXTech | Join Our Remote Software Team",
+    title: "Careers at RapidNexTech | Join Our Remote Software Team",
     description:
-      "Be part of RapidXTech’s remote-first, high-performance engineering team.",
+      "Be part of RapidNexTech’s remote-first, high-performance engineering team.",
     images: ["https://rapidnextech.com/og-careers.jpg"],
   },
 }
@@ -47,7 +47,7 @@ export default function CareersPage() {
         <div className="grid md:grid-cols-2 gap-10 items-center min-h-[60vh] md:min-h-[70vh]">
           <div>
             <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">
-              Join the RapidXTech Team
+              Join the RapidNexTech Team
             </h1>
             <p className="mt-4 text-muted-foreground text-lg">
               We build technology that moves fast — and so do our people.
@@ -82,7 +82,7 @@ export default function CareersPage() {
       {/* 💼 Open Roles */}
       <OpenRoles />
 
-      {/* 🌍 Life at RapidXTech */}
+      {/* 🌍 Life at RapidNexTech */}
       <LifeSection />
 
       {/* ✉️ Final Call-To-Action */}

@@ -1,6 +1,6 @@
 {
-  "name": "RapidXTech - Software Development Company",
-  "short_name": "RapidXTech",
+  "name": "RapidNexTech - Software Development Company",
+  "short_name": "RapidNexTech",
   "description": "Innovative software development company specializing in web development, mobile apps, and enterprise solutions.",
   "start_url": "/",
   "display": "standalone",
@@ -9,19 +9,23 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
   ],
-  "categories": ["business", "productivity", "technology"],
+  "categories": [
+    "business",
+    "productivity",
+    "technology"
+  ],
   "lang": "en-US",
   "dir": "ltr"
 }

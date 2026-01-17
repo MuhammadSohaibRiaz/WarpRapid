@@ -3,21 +3,21 @@ import PortfolioClient from "./PortfolioClient"
 import Script from "next/script"
 
 export const metadata: Metadata = {
-  title: "Software Case Studies | RapidXTech Portfolio",
+  title: "Software Case Studies | RapidNexTech Portfolio",
   description:
-    "Explore RapidXTech’s software case studies — real-world projects that showcase innovation, scalability, and measurable impact. Discover how we’ve helped startups and enterprises achieve digital transformation.",
+    "Explore RapidNexTech’s software case studies — real-world projects that showcase innovation, scalability, and measurable impact. Discover how we’ve helped startups and enterprises achieve digital transformation.",
   openGraph: {
-    title: "Software Case Studies | RapidXTech",
+    title: "Software Case Studies | RapidNexTech",
     description:
-      "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidXTech delivers performance and innovation.",
+      "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidNexTech delivers performance and innovation.",
 url: "https://rapidnextech.com/case-studies",
-    siteName: "RapidXTech",
+    siteName: "RapidNexTech",
     images: [
       {
         url: "https://rapidnextech.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "RapidXTech Case Studies",
+        alt: "RapidNexTech Case Studies",
       },
     ],
     locale: "en_US",
@@ -25,9 +25,9 @@ url: "https://rapidnextech.com/case-studies",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Software Case Studies | RapidXTech",
+    title: "Software Case Studies | RapidNexTech",
     description:
-      "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidXTech delivers performance and innovation.",
+      "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidNexTech delivers performance and innovation.",
     images: ["https://rapidnextech.com/og-image.jpg"],
   },
   alternates: {
@@ -39,11 +39,11 @@ export default async function Portfolio() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Software Case Studies | RapidXTech",
+    name: "Software Case Studies | RapidNexTech",
 url: "https://rapidnextech.com/case-studies",
     description:
-      "Explore RapidXTech’s software case studies — real-world projects that showcase innovation, scalability, and measurable impact.",
-    about: { "@type": "Organization", name: "RapidXTech" },
+      "Explore RapidNexTech’s software case studies — real-world projects that showcase innovation, scalability, and measurable impact.",
+    about: { "@type": "Organization", name: "RapidNexTech" },
   }
   return (
     <>

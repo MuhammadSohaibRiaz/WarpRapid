@@ -120,7 +120,7 @@ export default function CareersClient() {
         <div className="grid md:grid-cols-2 gap-10 items-center min-h-[60vh] md:min-h-[70vh]">
           <div>
             <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">
-              Join the RapidXTech Team
+              Join the RapidNexTech Team
             </h1>
             <p className="mt-4 text-muted-foreground text-lg">
               We build technology that moves fast — and so do our people.
@@ -306,13 +306,13 @@ export default function CareersClient() {
         </div>
       </FadeInSection>
 
-      {/* Life at RapidXTech */}
+      {/* Life at RapidNexTech */}
       <FadeInSection className="container mx-auto px-6 py-24 md:py-32">
-        <SectionHeader title="Life at RapidXTech" />
+        <SectionHeader title="Life at RapidNexTech" />
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-muted-foreground text-lg">
             We’re a distributed team of builders who value autonomy, curiosity,
-            and craftsmanship. Every day at RapidXTech means learning fast,
+            and craftsmanship. Every day at RapidNexTech means learning fast,
             collaborating openly, and shipping real impact.
           </p>
         </div>
