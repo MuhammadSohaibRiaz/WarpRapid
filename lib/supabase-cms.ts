@@ -1,6 +1,8 @@
 import { supabase, type ProjectDetail, type BlogPost, type ClientReview, type TrustedPartner } from "./supabase"
 import { slugify } from "./utils"
 
+export type { ProjectDetail, BlogPost, ClientReview, TrustedPartner }
+
 
 // Portfolio Projects CMS
 export class PortfolioCMS {
@@ -45,25 +47,25 @@ export class PortfolioCMS {
       .eq("slug", slug)
       .eq("is_published", true)
       .single()
-    
+
     if (!error && data) {
       return data
     }
-    
+
     if (error && error.code !== 'PGRST116') {
       throw error
     }
-    
+
     // If not found by slug, try to find all published projects and match by generated slug
     // This handles projects that don't have slugs saved yet
     const { data: allProjects, error: allError } = await supabase
       .from("projects")
       .select("*")
       .eq("is_published", true)
-    
+
     if (allError) throw allError
     if (!allProjects || allProjects.length === 0) return null
-    
+
     // Find project where generated slug matches
     const project = allProjects.find(project => slugify(project.title) === slug)
     return project || null
