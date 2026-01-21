@@ -1,3 +1,5 @@
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 import FadeInSection from "@/components/careers/FadeInSection"
 import FeaturesGrid from "@/components/careers/FeaturesGrid"
 import CareerPathways from "@/components/careers/CareerPathways"
@@ -43,32 +45,40 @@ export default function CareersPage() {
   return (
     <main className="min-h-screen">
       {/* 🧭 Hero Section */}
-      <FadeInSection className="container mx-auto px-6 py-24 md:py-32">
-        <div className="grid md:grid-cols-2 gap-10 items-center min-h-[60vh] md:min-h-[70vh]">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">
-              Join the RapidNexTech Team
+      {/* 🧭 Hero Section */}
+      <section className="relative min-h-[60vh] flex items-center pt-24 pb-12 overflow-hidden">
+        {/* Subtle Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 mix-blend-overlay" />
+
+        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
+          <div className="space-y-8">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] theme-gradient-text bg-clip-text text-transparent">
+              Join the <br /> RapidNexTech Team
             </h1>
-            <p className="mt-4 text-muted-foreground text-lg">
+            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-lg">
               We build technology that moves fast — and so do our people.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#open-roles" className="btn-primary">
-                View Open Roles
-              </a>
-              <a href="mailto:info@rapidnextech.com" className="btn-outline">
-                Send Your CV
+            <div className="flex flex-wrap gap-4">
+              <Link href="#open-roles">
+                <Button className="h-12 px-8 text-lg rounded-full bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-105">
+                  View Open Roles
+                </Button>
+              </Link>
+              <a href="mailto:info@rapidnextech.com">
+                <Button variant="outline" className="h-12 px-8 text-lg rounded-full border-2 hover:bg-muted/50 transition-all">
+                  Send Your CV
+                </Button>
               </a>
             </div>
           </div>
-          <div className="relative">
+          <div className="relative hidden md:block">
             <AnimatedSVG
               src="/careers-hero-hiring.svg"
               alt="Hiring illustration"
             />
           </div>
         </div>
-      </FadeInSection>
+      </section>
 
       {/* 🌟 Why Work With Us */}
       <FeaturesGrid />

@@ -4,7 +4,7 @@ import Script from "next/script"
 import Image from "next/image"
 import { motion, useMotionValue, animate, useReducedMotion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { CheckCircle2, Cpu, Layers, Shield, Zap, BarChart3, MessageSquare, Workflow, ArrowRight } from "lucide-react"
+import { CheckCircle2, Cpu, Layers, Shield, Zap, BarChart3, MessageSquare, Workflow, ArrowRight, type LucideIcon } from "lucide-react"
 import { useEffect } from "react"
 import { useThemeContext } from "@/context/theme-context"
 
@@ -29,7 +29,7 @@ function SectionHeading({ title, subtitle }: { title: string; subtitle?: string 
   )
 }
 
-function ValueCard({ icon: Icon, title, text }: { icon: any; title: string; text: string }) {
+function ValueCard({ icon: Icon, title, text }: { icon: LucideIcon | React.ComponentType<{ className?: string }>; title: string; text: string }) {
   const { mode, color } = useThemeContext()
   const surface = useSurface(mode, color)
   return (

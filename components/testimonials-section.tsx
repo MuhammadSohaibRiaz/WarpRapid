@@ -122,7 +122,7 @@ export function TestimonialsSection() {
           </div>
           <div className="max-w-4xl mx-auto">
             <div
-              className={`${mode === "dark" || color === "black" ? "bg-gray-900/40" : "bg-white/40"} backdrop-blur-md rounded-2xl p-12 shadow-2xl animate-pulse`}
+              className={`${mode === "dark" || color === "black" ? "bg-background/20" : "bg-white/20"} backdrop-blur-xl border border-white/10 rounded-2xl p-12 shadow-2xl animate-pulse`}
             >
               <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-full mb-4" />
               <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-5/6 mb-4" />
@@ -257,10 +257,11 @@ export function TestimonialsSection() {
                           goToPrevious()
                         }
                       }}
-                      className={`w-full ${
-                        mode === "dark" || color === "black" ? "bg-gray-900/40" : "bg-white/40"
-                      } backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-2xl theme-transition cursor-grab active:cursor-grabbing border border-white/10`}
+                      className={`w-full ${mode === "dark" || color === "black" ? "bg-background/10" : "bg-white/10"
+                        } backdrop-blur-3xl rounded-3xl p-8 md:p-12 shadow-2xl theme-transition cursor-grab active:cursor-grabbing border border-white/10 relative overflow-hidden`}
                     >
+                      {/* Glass gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
                       {/* Quote icon */}
                       <motion.div
                         className="mb-6"
@@ -442,13 +443,12 @@ export function TestimonialsSection() {
                 <motion.button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
                       ? "bg-primary scale-125"
                       : mode === "dark" || color === "black"
                         ? "bg-gray-600 hover:bg-gray-500"
                         : "bg-gray-300 hover:bg-gray-400"
-                  }`}
+                    }`}
                   aria-label={`Go to testimonial ${index + 1}`}
                   whileHover={{ scale: index === currentIndex ? 1.25 : 1.1 }}
                   whileTap={{ scale: 0.9 }}

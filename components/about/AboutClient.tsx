@@ -88,10 +88,10 @@ export default function AboutClient() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent theme-gradient-text mb-8 leading-[1.1]"
+              className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]"
             >
-              The Speed You Need, <br className="hidden md:block" />
-              <span className="opacity-80">The Technology You Trust.</span>
+              <span className="bg-clip-text text-transparent theme-gradient-text">The Speed You Need,</span> <br className="hidden md:block" />
+              <span className="theme-text opacity-90">The Technology You Trust.</span>
             </motion.h1>
 
             <motion.p
@@ -115,7 +115,7 @@ export default function AboutClient() {
                 </Button>
               </Link>
               <Link href="/case-studies">
-                <Button variant="outline" className={`h-14 px-8 text-lg rounded-full border-2 hover:bg-transparent ${mode === 'dark' ? 'border-white/20 text-white hover:border-white' : 'border-black/10 text-black hover:border-black'} transition-all w-full sm:w-auto`}>
+                <Button variant="outline" className={`h-14 px-8 text-lg rounded-full border-2 bg-transparent hover:bg-transparent ${mode === 'dark' ? 'border-white/20 text-white hover:border-white' : 'border-black/10 text-black hover:border-black'} transition-all w-full sm:w-auto`}>
                   View Our Work
                 </Button>
               </Link>
@@ -193,7 +193,7 @@ export default function AboutClient() {
             {[
               { name: "Muhammad Sohaib Riaz", role: "Founder & CEO", bio: "Visionary leader focused on scalable architecture and business impact.", image: "/muhammad-sohaib-riaz.jpg" },
               { name: "Sohail Riaz", role: "Chief Technology Advisor", bio: "Expert in distributed systems and enterprise-grade security.", image: "/sohail-riaz.jpeg" },
-              { name: "Jehanzaib Javed", role: "Lead Full Stack Engineer", bio: "Master of efficient, clean code and high-performance UI.", image: "/jehanzaib-javed.jpg" }
+              { name: "Jehanzaib Javed", role: "Lead Full Stack Engineer", bio: "Master of efficient, clean code and high-performance UI.", image: "/jehanzaib-javed.JPG" }
             ].map((member, i) => (
               <motion.div
                 key={member.name}

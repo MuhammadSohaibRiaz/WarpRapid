@@ -3,8 +3,8 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
 
-type ThemeMode = "dark" | "light"
-type ThemeColor = "blue" | "green" | "purple" | "red" | "orange" | "white" | "black"
+export type ThemeMode = "dark" | "light"
+export type ThemeColor = "blue" | "green" | "purple" | "red" | "orange" | "white" | "black"
 
 type ThemeContextType = {
   mode: ThemeMode

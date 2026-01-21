@@ -92,26 +92,30 @@ After building, check that:
 The `.htaccess` file should be in your root directory and contain:
 
 ```apache
-RewriteEngine On
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
 
-# ===== Portfolio → Case Studies Redirects =====
+  # 1. Redirect trailing slashes to non-trailing slashes (canonical URLs)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-# Redirect /portfolio to /case-studies
-Redirect 301 /portfolio /case-studies
+  # 2. Clean URLs: Internally map /path to /path.html
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.*)$ $1.html [L]
 
-# Redirect all /portfolio/:slug → /case-studies/:slug
-RewriteRule ^portfolio/(.*)$ /case-studies/$1 [R=301,L]
-
-# ===== Serve Static Next.js Export Correctly (IMPORTANT) =====
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /index.html [L]
+  # 3. Custom 404 Page
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  ErrorDocument 404 /404.html
+</IfModule>
 ```
 
-This ensures:
-- Portfolio redirects work correctly
-- All routes are properly served
-- 404s fall back to index.html for client-side routing
+### Why this works:
+- **Clean URLs**: It lets users visit `/admin` but serves `/admin.html` behind the scenes.
+- **No Force-Index**: Unlike SPAs, we do NOT redirect everything to `index.html`. We serve the specific HTML file for each route.
+- **404 Handling**: If a user types a non-existent route, they get the proper `404.html` instead of the homepage.
 
 ## Step 8: Test Your Deployment
 

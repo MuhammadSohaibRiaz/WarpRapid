@@ -2,13 +2,21 @@
 
 import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "../components/ui/button"
-import { StatsSection } from "../components/stats-section"
-import { CompanyCarousel } from "../components/company-carousel"
-import { FloatingCards } from "../components/floating-cards"
-import { ScrollSection } from "../components/scroll-section"
-import { TestimonialsSection } from "../components/testimonials-section"
-import { ProcessSection } from "../components/process-section"
-import { FeaturedWorkSection } from "../components/featured-work"
+import dynamic from "next/dynamic"
+
+// Dynamic imports for performance (code splitting)
+const StatsSection = dynamic(() => import("../components/stats-section").then(mod => mod.StatsSection))
+const CompanyCarousel = dynamic(() => import("../components/company-carousel").then(mod => mod.CompanyCarousel))
+const ServicesBento = dynamic(() => import("../components/services-bento").then(mod => mod.ServicesBento))
+const ScrollSection = dynamic(() => import("../components/scroll-section").then(mod => mod.ScrollSection))
+const TestimonialsSection = dynamic(() => import("../components/testimonials-section").then(mod => mod.TestimonialsSection))
+const ProcessSection = dynamic(() => import("../components/process-section").then(mod => mod.ProcessSection))
+const FeaturedWorkSection = dynamic(() => import("../components/featured-work").then(mod => mod.FeaturedWorkSection))
+
+import { ParticleBackground } from "../components/particle-background"
+import { MeshGradient } from "../components/mesh-gradient"
+import { TypewriterText } from "../components/typewriter-text"
+import { TiltButton } from "../components/tilt-button"
 import Link from "next/link"
 import { useRef } from "react"
 
@@ -26,48 +34,66 @@ export default function Home() {
   return (
     <div className="bg-transparent theme-transition">
       <section ref={containerRef} className="min-h-screen relative flex items-center justify-center overflow-hidden">
-        {/* Animated background */}
+        {/* Enhanced Animated background */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
-          <motion.div
-            className="absolute inset-0 theme-glow blur-3xl theme-transition"
-            animate={{
-              x: ["0%", "100%", "0%"],
-              y: ["0%", "50%", "0%"],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
-            }}
-          />
+          {/* Mesh Gradient */}
+          <MeshGradient />
+
+          {/* Grid Pattern - Optimized (No CSS Mask) */}
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20" />
+
+          {/* Fade Gradient Overlay (Cheaper than mask) */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90" />
+
+          {/* Particle System */}
+          <ParticleBackground particleCount={40} />
+
+          {/* Animated Glow */}
+
         </div>
 
-        <motion.div style={{ opacity, scale, y }} className="relative z-10 text-center px-4">
+        <motion.div style={{ opacity, scale, y }} className="relative z-10 text-center px-4 will-change-transform">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight">
-              Custom Software That Solves Real Business Problems
+            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight grid place-items-center">
+              {/* Ghost Element to Reserve Height (Prevents Layout Shift) */}
+              <span className="col-start-1 row-start-1 invisible opacity-0 pointer-events-none select-none">
+                Custom Software That Solves Real Business Problems
+              </span>
+
+              {/* Actual Animated Text */}
+              <span className="col-start-1 row-start-1">
+                <TypewriterText
+                  texts={[
+                    "Custom Software That Solves Real Business Problems",
+                    "Build Scalable Solutions That Drive Growth",
+                    "Transform Ideas Into Production-Ready Apps",
+                  ]}
+                  className="bg-clip-text text-transparent theme-gradient-text"
+                  typingSpeed={80}
+                  deletingSpeed={40}
+                  pauseDuration={3000}
+                />
+              </span>
             </h1>
             <p className="text-xl md:text-2xl theme-text mb-12 max-w-3xl mx-auto theme-transition">
               We help companies automate operations, launch products, and scale with confidence.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link href="/contact">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r theme-gradient-text text-white hover:opacity-90 transform hover:-translate-y-1 transition-all duration-200 theme-transition"
+                <TiltButton
+                  className="bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white px-8 py-4 text-lg font-bold shadow-2xl shadow-primary/30"
+                  tiltIntensity={12}
                 >
                   Discuss Your Project
-                </Button>
+                </TiltButton>
               </Link>
               <Link href="/case-studies">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-primary hover:bg-primary/10 transform hover:-translate-y-1 transition-all duration-200 theme-transition bg-transparent"
+                <TiltButton
+                  className="border-2 border-primary bg-background/50 backdrop-blur-sm text-primary px-8 py-4 text-lg font-bold hover:bg-primary/10"
+                  tiltIntensity={12}
                 >
                   View Case Studies
-                </Button>
+                </TiltButton>
               </Link>
             </div>
 
@@ -91,7 +117,8 @@ export default function Home() {
       <StatsSection />
 
       {/* 4. Our Services */}
-      <FloatingCards />
+      {/* 4. Our Services */}
+      <ServicesBento />
 
       {/* 5. Why Choose RapidNexTech */}
       <ScrollSection />

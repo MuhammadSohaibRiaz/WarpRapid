@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { useThemeContext } from "@/context/theme-context"
+import { useThemeContext, type ThemeColor } from "@/context/theme-context"
 import { Button } from "./ui/button"
 import { Moon, Sun, Palette } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -76,22 +76,20 @@ export function ThemeSwitcher() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            className={`absolute right-0 mt-2 p-3 ${
-              color === "white" && mode === "light"
-                ? "bg-white border border-gray-300"
-                : "bg-background border border-border"
-            } rounded-lg shadow-lg z-50 w-64`}
+            className={`absolute right-0 mt-2 p-3 ${color === "white" && mode === "light"
+              ? "bg-white border border-gray-300"
+              : "bg-background border border-border"
+              } rounded-lg shadow-lg z-50 w-64`}
           >
             <h3 className="text-sm font-medium mb-2 theme-text">Choose Theme</h3>
             <div className="grid grid-cols-4 gap-2">
               {colors.map((themeColor) => (
                 <button
                   key={themeColor.name}
-                  className={`w-12 h-12 rounded-full ${
-                    color === themeColor.name ? "ring-2 ring-primary" : ""
-                  } ${themeColor.bgClass} flex items-center justify-center transition-transform hover:scale-110`}
+                  className={`w-12 h-12 rounded-full ${color === themeColor.name ? "ring-2 ring-primary" : ""
+                    } ${themeColor.bgClass} flex items-center justify-center transition-transform hover:scale-110`}
                   onClick={() => {
-                    setColor(themeColor.name as any)
+                    setColor(themeColor.name as ThemeColor)
                     setShowColorPicker(false)
                   }}
                   aria-label={`Set theme color to ${themeColor.label}`}
