@@ -1,0 +1,44 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Redirect trailing slashes to non-trailing slashes (canonical URLs)
+  # Exclude directories to avoid breaking directory access
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+  # 2. Handle External Redirects first (if any specific ones are needed)
+  # Redirect /portfolio to /case-studies
+  RewriteRule ^portfolio/?$ /case-studies [L,R=301]
+
+  # 3. Clean URLs: Internally map /path to /path.html
+  # If the request is not a directory
+  RewriteCond %{REQUEST_FILENAME} !-d
+  # And the corresponding .html file exists
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  # Rewrite the request to render the .html file
+  RewriteRule ^(.*)$ $1.html [L]
+
+  # 4. Fallback for 404s
+  # If it's not a file or directory, serve the custom 404 page
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  ErrorDocument 404 /404.html
+
+  # Optional: Cache Control
+  <IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresDefault "access plus 2 days"
+  </IfModule>
+</IfModule>
