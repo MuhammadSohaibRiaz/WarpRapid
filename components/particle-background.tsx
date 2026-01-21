@@ -22,125 +22,142 @@ export function ParticleBackground({
     className = "",
 }: ParticleBackgroundProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
     const particlesRef = useRef<Particle[]>([])
     const animationFrameRef = useRef<number>()
+    const isVisibleRef = useRef(true)
     const { theme, resolvedTheme } = useTheme()
 
     useEffect(() => {
         const canvas = canvasRef.current
         if (!canvas) return
 
-        const ctx = canvas.getContext("2d")
+        const ctx = canvas.getContext("2d", { alpha: true }) // Optimize context
         if (!ctx) return
+
+        // Intersection Observer to pause animation
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isVisibleRef.current = entry.isIntersecting
+            },
+            { threshold: 0.1 }
+        )
+
+        if (canvas) observer.observe(canvas)
 
         // Set canvas size
         const resizeCanvas = () => {
-            canvas.width = window.innerWidth
-            canvas.height = window.innerHeight
+            if (!canvas) return
+            const dpr = window.devicePixelRatio || 1
+            const width = window.innerWidth
+            const height = window.innerHeight
+            canvas.width = width * dpr
+            canvas.height = height * dpr
+            canvas.style.width = `${width}px`
+            canvas.style.height = `${height}px`
+            ctx.scale(dpr, dpr)
         }
+
         resizeCanvas()
         window.addEventListener("resize", resizeCanvas)
 
         // Initialize particles
         const initParticles = () => {
             particlesRef.current = []
-            // Reduce count on mobile
-            const count = window.innerWidth < 768 ? Math.floor(particleCount / 2) : particleCount
+            const width = window.innerWidth
+            const count = width < 768 ? 15 : particleCount
 
             for (let i = 0; i < count; i++) {
                 particlesRef.current.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    radius: Math.random() * 2 + 1,
-                    opacity: Math.random() * 0.5 + 0.2,
+                    x: Math.random() * width,
+                    y: Math.random() * window.innerHeight,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    radius: Math.random() * 1.5 + 0.5,
+                    opacity: Math.random() * 0.4 + 0.1,
                 })
             }
         }
         initParticles()
 
-        // Get theme-aware colors
         const getParticleColor = () => {
             const currentTheme = resolvedTheme || theme
-            if (currentTheme === "dark") {
-                return {
-                    primary: "147, 51, 234", // Purple
-                    secondary: "59, 130, 246", // Blue
-                    accent: "236, 72, 153", // Pink
-                }
-            } else {
-                return {
-                    primary: "99, 102, 241", // Indigo
-                    secondary: "59, 130, 246", // Blue
-                    accent: "168, 85, 247", // Purple
-                }
-            }
+            return currentTheme === "dark"
+                ? { primary: "147, 51, 234", secondary: "59, 130, 246", accent: "236, 72, 153" }
+                : { primary: "99, 102, 241", secondary: "59, 130, 246", accent: "168, 85, 247" }
         }
 
-        // Animation loop
+        const colors = getParticleColor()
+
         const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-            const colors = getParticleColor()
+            if (!isVisibleRef.current) {
+                animationFrameRef.current = requestAnimationFrame(animate)
+                return
+            }
 
-            particlesRef.current.forEach((particle, index) => {
-                // Update position
-                particle.x += particle.vx
-                particle.y += particle.vy
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
 
-                // Bounce off edges
-                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
+            const particles = particlesRef.current
+            const count = particles.length
+            const width = window.innerWidth
+            const height = window.innerHeight
+            const centerX = width / 2
+            const centerY = height / 2
 
-                // Keep particles in bounds
-                particle.x = Math.max(0, Math.min(canvas.width, particle.x))
-                particle.y = Math.max(0, Math.min(canvas.height, particle.y))
+            for (let i = 0; i < count; i++) {
+                const p = particles[i]
 
-                // Draw particle with gradient
-                const gradient = ctx.createRadialGradient(
-                    particle.x,
-                    particle.y,
-                    0,
-                    particle.x,
-                    particle.y,
-                    particle.radius * 3
-                )
+                // CENTER AVOIDANCE: Subtle push away from middle of screen
+                const dxCenter = p.x - centerX
+                const dyCenter = p.y - centerY
+                const distToCenter = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter)
+                if (distToCenter < 300) {
+                    const force = (1 - distToCenter / 300) * 0.05
+                    p.vx += dxCenter * force * 0.01
+                    p.vy += dyCenter * force * 0.01
+                }
 
-                // Cycle through colors based on index
-                const colorKey =
-                    index % 3 === 0
-                        ? colors.primary
-                        : index % 3 === 1
-                            ? colors.secondary
-                            : colors.accent
+                p.x += p.vx
+                p.y += p.vy
 
-                gradient.addColorStop(0, `rgba(${colorKey}, ${particle.opacity})`)
+                // Speed limit
+                p.vx = Math.max(-0.6, Math.min(0.6, p.vx))
+                p.vy = Math.max(-0.6, Math.min(0.6, p.vy))
+
+                if (p.x < 0 || p.x > width) p.vx *= -1
+                if (p.y < 0 || p.y > height) p.vy *= -1
+
+                const colorKey = i % 3 === 0 ? colors.primary : i % 3 === 1 ? colors.secondary : colors.accent
+
+                // VIVID GLOW: Higher opacity and larger area for that Matrix feel
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 4)
+                gradient.addColorStop(0, `rgba(${colorKey}, ${p.opacity * 1.5})`) // 50% more vivid
                 gradient.addColorStop(1, `rgba(${colorKey}, 0)`)
 
                 ctx.fillStyle = gradient
                 ctx.beginPath()
-                ctx.arc(particle.x, particle.y, particle.radius * 3, 0, Math.PI * 2)
+                ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2)
                 ctx.fill()
 
-                // Draw connections between nearby particles
-                particlesRef.current.forEach((otherParticle, otherIndex) => {
-                    if (index === otherIndex) return
+                // VIVID CONNECTIONS
+                for (let j = i + 1; j < count; j++) {
+                    const p2 = particles[j]
+                    const dx = p.x - p2.x
+                    const dy = p.y - p2.y
+                    const distSq = dx * dx + dy * dy
 
-                    const dx = particle.x - otherParticle.x
-                    const dy = particle.y - otherParticle.y
-                    const distance = Math.sqrt(dx * dx + dy * dy)
-
-                    if (distance < 150) {
-                        const opacity = (1 - distance / 150) * 0.2
+                    if (distSq < 32400) { // 180px - Longer connections for full visibility
+                        const distance = Math.sqrt(distSq)
+                        const opacity = (1 - distance / 180) * 0.3 // Increased from 0.2
                         ctx.strokeStyle = `rgba(${colors.primary}, ${opacity})`
-                        ctx.lineWidth = 0.5
+                        ctx.lineWidth = 0.8 // Slightly thicker
                         ctx.beginPath()
-                        ctx.moveTo(particle.x, particle.y)
-                        ctx.lineTo(otherParticle.x, otherParticle.y)
+                        ctx.moveTo(p.x, p.y)
+                        ctx.lineTo(p2.x, p2.y)
                         ctx.stroke()
                     }
-                })
-            })
+                }
+            }
 
             animationFrameRef.current = requestAnimationFrame(animate)
         }
@@ -149,17 +166,16 @@ export function ParticleBackground({
 
         return () => {
             window.removeEventListener("resize", resizeCanvas)
-            if (animationFrameRef.current) {
-                cancelAnimationFrame(animationFrameRef.current)
-            }
+            observer.disconnect()
+            if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
         }
     }, [particleCount, theme, resolvedTheme])
 
     return (
         <canvas
             ref={canvasRef}
-            className={`fixed inset-0 pointer-events-none ${className}`}
-            style={{ opacity: 0.6 }}
+            className={`absolute inset-0 pointer-events-none ${className}`}
+            style={{ opacity: 0.8 }}
         />
     )
 }

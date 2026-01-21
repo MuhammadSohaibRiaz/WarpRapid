@@ -27,9 +27,9 @@ export default function Home() {
     offset: ["start start", "end start"],
   })
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8])
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 100])
+  // Simplified transforms for better performance
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
+  const y = useTransform(scrollYProgress, [0, 0.4], [0, 50])
 
   return (
     <div className="bg-transparent theme-transition">
@@ -40,19 +40,16 @@ export default function Home() {
           <MeshGradient />
 
           {/* Grid Pattern - Optimized (No CSS Mask) */}
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 pointer-events-none" />
 
           {/* Fade Gradient Overlay (Cheaper than mask) */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90 pointer-events-none" />
 
-          {/* Particle System */}
-          <ParticleBackground particleCount={40} />
-
-          {/* Animated Glow */}
-
+          {/* Particle System - Absolute positioned helps browser culling */}
+          <ParticleBackground particleCount={15} />
         </div>
 
-        <motion.div style={{ opacity, scale, y }} className="relative z-10 text-center px-4 will-change-transform">
+        <motion.div style={{ opacity, y }} className="relative z-10 text-center px-4 will-change-[transform,opacity]">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight grid place-items-center">
               {/* Ghost Element to Reserve Height (Prevents Layout Shift) */}
