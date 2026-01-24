@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,6 +22,7 @@ import {
   MessageSquare,
   UploadCloud,
   Star,
+  FileEdit,
 } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { useSupabaseCMS } from "@/lib/supabase-cms"
@@ -46,22 +47,22 @@ export default function AdminDashboard() {
   const toast = useAdminToast()
 
   // State management
-const [activeTab, setActiveTab] = useState<"projects" | "blog" | "testimonials" | "partners">("projects")
+  const [activeTab, setActiveTab] = useState<"projects" | "blog" | "testimonials" | "partners" | "drafts">("projects")
   const [projects, setProjects] = useState<ProjectDetail[]>([])
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
-const [testimonials, setTestimonials] = useState<ClientReview[]>([])
-const [partners, setPartners] = useState<TrustedPartner[]>([])
+  const [testimonials, setTestimonials] = useState<ClientReview[]>([])
+  const [partners, setPartners] = useState<TrustedPartner[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   // Form states
   const [isProjectFormOpen, setIsProjectFormOpen] = useState(false)
   const [isBlogFormOpen, setIsBlogFormOpen] = useState(false)
-const [isTestimonialFormOpen, setIsTestimonialFormOpen] = useState(false)
-const [isPartnerFormOpen, setIsPartnerFormOpen] = useState(false)
+  const [isTestimonialFormOpen, setIsTestimonialFormOpen] = useState(false)
+  const [isPartnerFormOpen, setIsPartnerFormOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<ProjectDetail | null>(null)
   const [editingBlogPost, setEditingBlogPost] = useState<BlogPost | null>(null)
-const [editingTestimonial, setEditingTestimonial] = useState<ClientReview | null>(null)
-const [editingPartner, setEditingPartner] = useState<TrustedPartner | null>(null)
+  const [editingTestimonial, setEditingTestimonial] = useState<ClientReview | null>(null)
+  const [editingPartner, setEditingPartner] = useState<TrustedPartner | null>(null)
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState("")
@@ -76,6 +77,7 @@ const [editingPartner, setEditingPartner] = useState<TrustedPartner | null>(null
   const [uploadingImageIndex, setUploadingImageIndex] = useState<number | null>(null)
   const [bulkUploading, setBulkUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const [techSearchTerm, setTechSearchTerm] = useState("")
 
   // Project form data
   const [projectFormData, setProjectFormData] = useState<Partial<ProjectDetail>>({
@@ -119,7 +121,7 @@ const [editingPartner, setEditingPartner] = useState<TrustedPartner | null>(null
     seo_description: "",
   })
 
-// Testimonial form data
+  // Testimonial form data
   const [testimonialFormData, setTestimonialFormData] = useState<Partial<ClientReview>>({
     client_name: "",
     client_position: "",
@@ -131,21 +133,51 @@ const [editingPartner, setEditingPartner] = useState<TrustedPartner | null>(null
     testimonial_type: "identified",
     is_featured: false,
     is_published: false,
-})
+  })
 
-// Partners form data
-const [partnerFormData, setPartnerFormData] = useState<Partial<TrustedPartner>>({
-  company_name: "",
-  company_logo: "",
-  company_website: "",
-  partnership_type: "",
-  description: "",
-  is_featured: false,
-  is_published: false,
-  display_order: 0,
-})
+  // Partners form data
+  const [partnerFormData, setPartnerFormData] = useState<Partial<TrustedPartner>>({
+    company_name: "",
+    company_logo: "",
+    company_website: "",
+    partnership_type: "",
+    description: "",
+    is_featured: false,
+    is_published: false,
+    display_order: 0,
+  })
 
-// Load data
+  // Draft Preservation Logic
+  const saveProjectDraft = useCallback((data: Partial<ProjectDetail>, id: number | null) => {
+    localStorage.setItem("wr-project-draft", JSON.stringify({ data, id, timestamp: Date.now() }))
+  }, [])
+
+  const saveBlogDraft = useCallback((data: Partial<BlogPost>, id: number | null) => {
+    localStorage.setItem("wr-blog-draft", JSON.stringify({ data, id, timestamp: Date.now() }))
+  }, [])
+
+  const clearProjectDraft = useCallback(() => {
+    localStorage.removeItem("wr-project-draft")
+  }, [])
+
+  const clearBlogDraft = useCallback(() => {
+    localStorage.removeItem("wr-blog-draft")
+  }, [])
+
+  // Auto-save effects
+  useEffect(() => {
+    if (isProjectFormOpen && projectFormData.title) {
+      saveProjectDraft(projectFormData, editingProject?.id || null)
+    }
+  }, [projectFormData, isProjectFormOpen, editingProject])
+
+  useEffect(() => {
+    if (isBlogFormOpen && blogFormData.title) {
+      saveBlogDraft(blogFormData, editingBlogPost?.id || null)
+    }
+  }, [blogFormData, isBlogFormOpen, editingBlogPost])
+
+  // Load data
   useEffect(() => {
     loadData()
   }, [])
@@ -153,7 +185,7 @@ const [partnerFormData, setPartnerFormData] = useState<Partial<TrustedPartner>>(
   const loadData = async () => {
     try {
       setIsLoading(true)
-const [projectsData, blogData, testimonialsData, partnersData] = await Promise.all([
+      const [projectsData, blogData, testimonialsData, partnersData] = await Promise.all([
         cms.getAllProjects(),
         cms.getAllBlogPosts(),
         cms.getAllReviews(),
@@ -198,7 +230,7 @@ const [projectsData, blogData, testimonialsData, partnersData] = await Promise.a
     return matchesSearch && matchesStatus
   })
 
-const filteredTestimonials = testimonials.filter((testimonial) => {
+  const filteredTestimonials = testimonials.filter((testimonial) => {
     const matchesSearch =
       (testimonial.client_name && testimonial.client_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (testimonial.client_company && testimonial.client_company.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -208,22 +240,22 @@ const filteredTestimonials = testimonials.filter((testimonial) => {
       (filterStatus === "Published" && testimonial.is_published) ||
       (filterStatus === "Draft" && !testimonial.is_published)
 
-return matchesSearch && matchesStatus
-})
+    return matchesSearch && matchesStatus
+  })
 
-const filteredPartners = partners.filter((p) => {
-  const matchesSearch =
-    p.company_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (p.partnership_type || "").toLowerCase().includes(searchTerm.toLowerCase())
-  const matchesStatus =
-    filterStatus === "All" ||
-    (filterStatus === "Published" && p.is_published) ||
-    (filterStatus === "Draft" && !p.is_published)
-  return matchesSearch && matchesStatus
-})
+  const filteredPartners = partners.filter((p) => {
+    const matchesSearch =
+      p.company_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (p.partnership_type || "").toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus =
+      filterStatus === "All" ||
+      (filterStatus === "Published" && p.is_published) ||
+      (filterStatus === "Draft" && !p.is_published)
+    return matchesSearch && matchesStatus
+  })
 
-// Project handlers
-  const resetProjectForm = () => {
+  // Project handlers
+  const resetProjectForm = useCallback(() => {
     setProjectFormData({
       title: "",
       category: "",
@@ -250,12 +282,33 @@ const filteredPartners = partners.filter((p) => {
     })
     setEditingProject(null)
     setIsProjectFormOpen(false)
-  }
+    setTechSearchTerm("")
+    clearProjectDraft()
+  }, [clearProjectDraft])
 
   const handleEditProject = (project: ProjectDetail) => {
     setProjectFormData(project)
     setEditingProject(project)
     setIsProjectFormOpen(true)
+  }
+
+  const handleAddProjectClick = () => {
+    setIsProjectFormOpen(true)
+  }
+
+  const handleResumeProjectDraft = () => {
+    const saved = localStorage.getItem("wr-project-draft")
+    if (saved) {
+      try {
+        const { data, id } = JSON.parse(saved)
+        setProjectFormData(data)
+        if (id) {
+          const original = projects.find(p => p.id === id)
+          if (original) setEditingProject(original)
+        }
+        setIsProjectFormOpen(true)
+      } catch (e) { console.error(e) }
+    }
   }
 
   const handleSaveProject = async () => {
@@ -273,8 +326,7 @@ const filteredPartners = partners.filter((p) => {
         setProjects((prev) => [...prev, created])
         toast.success("Project Created", "New project has been added successfully")
       }
-      setIsProjectFormOpen(false)
-      setEditingProject(null)
+      resetProjectForm()
     } catch (error) {
       console.error("Error saving project:", error)
       toast.error("Save Failed", "Error saving project. Please try again.")
@@ -308,7 +360,7 @@ const filteredPartners = partners.filter((p) => {
   }
 
   // Blog handlers
-  const resetBlogForm = () => {
+  const resetBlogForm = useCallback(() => {
     setBlogFormData({
       title: "",
       slug: "",
@@ -324,12 +376,32 @@ const filteredPartners = partners.filter((p) => {
     })
     setEditingBlogPost(null)
     setIsBlogFormOpen(false)
-  }
+    clearBlogDraft()
+  }, [clearBlogDraft])
 
   const handleEditBlogPost = (post: BlogPost) => {
     setBlogFormData(post)
     setEditingBlogPost(post)
     setIsBlogFormOpen(true)
+  }
+
+  const handleAddBlogClick = () => {
+    setIsBlogFormOpen(true)
+  }
+
+  const handleResumeBlogDraft = () => {
+    const saved = localStorage.getItem("wr-blog-draft")
+    if (saved) {
+      try {
+        const { data, id } = JSON.parse(saved)
+        setBlogFormData(data)
+        if (id) {
+          const original = blogPosts.find(b => b.id === id)
+          if (original) setEditingBlogPost(original)
+        }
+        setIsBlogFormOpen(true)
+      } catch (e) { console.error(e) }
+    }
   }
 
   const handleSaveBlogPost = async () => {
@@ -349,8 +421,7 @@ const filteredPartners = partners.filter((p) => {
         setBlogPosts((prev) => [created, ...prev])
         toast.success("Blog Created", "New blog post has been published successfully")
       }
-      setIsBlogFormOpen(false)
-      setEditingBlogPost(null)
+      resetBlogForm()
     } catch (error) {
       console.error("Error saving blog post:", error)
       toast.error("Save Failed", "Error saving blog post. Please try again.")
@@ -383,7 +454,7 @@ const filteredPartners = partners.filter((p) => {
     }
   }
 
-// Testimonial handlers
+  // Testimonial handlers
   const resetTestimonialForm = () => {
     setTestimonialFormData({
       client_name: "",
@@ -500,7 +571,7 @@ const filteredPartners = partners.filter((p) => {
     }))
   }
 
-// Images helpers
+  // Images helpers
   const addImage = () => {
     const newId = Math.max(...(projectFormData.images?.map((img) => img.id) || [0])) + 1
     setProjectFormData((prev) => ({
@@ -613,7 +684,7 @@ const filteredPartners = partners.filter((p) => {
           </h1>
           <p className="theme-text opacity-80 theme-transition">
             Manage your portfolio projects, blog posts, and client testimonials - add, edit, delete, and control
-visibility
+            visibility
           </p>
         </motion.div>
 
@@ -627,11 +698,10 @@ visibility
           <div className="flex space-x-1 rounded-lg bg-gray-100 dark:bg-gray-800 p-1 overflow-x-auto">
             <button
               onClick={() => setActiveTab("projects")}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${
-                activeTab === "projects"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${activeTab === "projects"
+                ? "bg-primary text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
             >
               <Briefcase className="w-4 h-4" />
               <span>Projects</span>
@@ -639,11 +709,10 @@ visibility
             </button>
             <button
               onClick={() => setActiveTab("blog")}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${
-                activeTab === "blog"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${activeTab === "blog"
+                ? "bg-primary text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
             >
               <FileText className="w-4 h-4" />
               <span>Blog</span>
@@ -651,26 +720,35 @@ visibility
             </button>
             <button
               onClick={() => setActiveTab("testimonials")}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${
-                activeTab === "testimonials"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${activeTab === "testimonials"
+                ? "bg-primary text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
             >
               <MessageSquare className="w-4 h-4" />
               <span>Testimonials</span>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs">{testimonials.length}</span>
-</button>
+            </button>
             <button
               onClick={() => setActiveTab("partners")}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${
-                activeTab === "partners"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-              }`}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${activeTab === "partners"
+                ? "bg-primary text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
             >
+              <Users className="w-4 h-4" />
               <span>Partners</span>
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs">{partners.length}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("drafts")}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${activeTab === "drafts"
+                ? "bg-primary text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
+            >
+              <FileEdit className="w-4 h-4" />
+              <span>Drafts</span>
             </button>
           </div>
         </motion.div>
@@ -703,11 +781,10 @@ visibility
                       setCategoryDropdownOpen(!categoryDropdownOpen)
                       setStatusDropdownOpen(false)
                     }}
-                    className={`flex items-center justify-between w-full md:w-48 px-3 py-2 rounded-md border ${
-                      mode === "dark" || color === "black"
-                        ? "border-gray-600 bg-gray-800/50"
-                        : "border-gray-300 bg-white/50"
-                    } theme-text theme-transition hover:bg-opacity-80`}
+                    className={`flex items-center justify-between w-full md:w-48 px-3 py-2 rounded-md border ${mode === "dark" || color === "black"
+                      ? "border-gray-600 bg-gray-800/50"
+                      : "border-gray-300 bg-white/50"
+                      } theme-text theme-transition hover:bg-opacity-80`}
                   >
                     <span>{filterCategory}</span>
                     <ChevronDown
@@ -748,11 +825,10 @@ visibility
                     setStatusDropdownOpen(!statusDropdownOpen)
                     setCategoryDropdownOpen(false)
                   }}
-                  className={`flex items-center justify-between w-full md:w-48 px-3 py-2 rounded-md border ${
-                    mode === "dark" || color === "black"
-                      ? "border-gray-600 bg-gray-800/50"
-                      : "border-gray-300 bg-white/50"
-                  } theme-text theme-transition hover:bg-opacity-80`}
+                  className={`flex items-center justify-between w-full md:w-48 px-3 py-2 rounded-md border ${mode === "dark" || color === "black"
+                    ? "border-gray-600 bg-gray-800/50"
+                    : "border-gray-300 bg-white/50"
+                    } theme-text theme-transition hover:bg-opacity-80`}
                 >
                   <span>{filterStatus}</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${statusDropdownOpen ? "rotate-180" : ""}`} />
@@ -787,9 +863,9 @@ visibility
             {/* Add Button */}
             <Button
               onClick={() => {
-                if (activeTab === "projects") setIsProjectFormOpen(true)
-                else if (activeTab === "blog") setIsBlogFormOpen(true)
-else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
+                if (activeTab === "projects") handleAddProjectClick()
+                else if (activeTab === "blog") handleAddBlogClick()
+                else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
                 else if (activeTab === "partners") setIsPartnerFormOpen(true)
               }}
               className="bg-primary hover:bg-primary/90 text-white"
@@ -801,20 +877,30 @@ else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary">
+            <button
+              onClick={() => setFilterStatus("All")}
+              className="text-center group hover:scale-105 transition-transform"
+            >
+              <div className="text-2xl font-bold text-primary group-hover:text-primary/80">
                 {activeTab === "projects"
                   ? projects.length
                   : activeTab === "blog"
                     ? blogPosts.length
-: activeTab === "testimonials" ? testimonials.length : partners.length}
+                    : activeTab === "testimonials"
+                      ? testimonials.length
+                      : activeTab === "partners"
+                        ? partners.length
+                        : (typeof window !== "undefined" ? (localStorage.getItem("wr-project-draft") ? 1 : 0) + (localStorage.getItem("wr-blog-draft") ? 1 : 0) : 0)}
               </div>
-              <div className="text-sm theme-text opacity-70 theme-transition">
-Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : activeTab === "testimonials" ? "Testimonials" : "Partners"}
+              <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">
+                Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : activeTab === "testimonials" ? "Testimonials" : activeTab === "partners" ? "Partners" : "Drafts"}
               </div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-500">
+            </button>
+            <button
+              onClick={() => setFilterStatus("Published")}
+              className="text-center group hover:scale-105 transition-transform"
+            >
+              <div className="text-2xl font-bold text-green-500 group-hover:text-green-400">
                 {activeTab === "projects"
                   ? projects.filter((p) => p.is_published).length
                   : activeTab === "blog"
@@ -823,10 +909,13 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
                       ? testimonials.filter((p) => p.is_published).length
                       : partners.filter((p) => p.is_published).length}
               </div>
-              <div className="text-sm theme-text opacity-70 theme-transition">Published</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-500">
+              <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">Published</div>
+            </button>
+            <button
+              onClick={() => setFilterStatus("Draft")}
+              className="text-center group hover:scale-105 transition-transform"
+            >
+              <div className="text-2xl font-bold text-yellow-500 group-hover:text-yellow-400">
                 {activeTab === "projects"
                   ? projects.filter((p) => !p.is_published).length
                   : activeTab === "blog"
@@ -835,8 +924,8 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
                       ? testimonials.filter((p) => !p.is_published).length
                       : partners.filter((p) => !p.is_published).length}
               </div>
-              <div className="text-sm theme-text opacity-70 theme-transition">Drafts</div>
-            </div>
+              <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">Drafts</div>
+            </button>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-500">
                 {activeTab === "projects"
@@ -845,7 +934,9 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
                     ? filteredBlogPosts.length
                     : activeTab === "testimonials"
                       ? filteredTestimonials.length
-                      : filteredPartners.length}
+                      : activeTab === "partners"
+                        ? filteredPartners.length
+                        : (typeof window !== "undefined" ? (localStorage.getItem("wr-project-draft") ? 1 : 0) + (localStorage.getItem("wr-blog-draft") ? 1 : 0) : 0)}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition">Filtered</div>
             </div>
@@ -859,6 +950,81 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
           transition={{ delay: 0.3 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
         >
+          {/* Drafts Grid */}
+          {activeTab === "drafts" && (
+            <>
+              {(() => {
+                const saved = typeof window !== "undefined" ? localStorage.getItem("wr-project-draft") : null
+                if (!saved) return null
+                try {
+                  const { data, timestamp } = JSON.parse(saved)
+                  return (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`${theme.cardBg} backdrop-blur-md rounded-lg p-6 border-l-4 border-yellow-500 shadow-lg theme-transition flex flex-col items-center text-center`}
+                    >
+                      <div className="p-3 bg-yellow-500/10 rounded-full mb-4">
+                        <Briefcase className="w-8 h-8 text-yellow-500" />
+                      </div>
+                      <h3 className="text-xl font-bold theme-text mb-2 line-clamp-1">{data.title || "Untitled Project"}</h3>
+                      <p className="text-sm theme-text opacity-60 mb-6">
+                        Unsaved project changes from {new Date(timestamp).toLocaleTimeString()}
+                      </p>
+                      <div className="flex gap-3 w-full mt-auto">
+                        <Button onClick={handleResumeProjectDraft} className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+                          Resume
+                        </Button>
+                        <Button variant="outline" onClick={clearProjectDraft} className="flex-1 text-red-500 hover:text-red-600">
+                          Discard
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )
+                } catch (e) { return null }
+              })()}
+
+              {(() => {
+                const saved = typeof window !== "undefined" ? localStorage.getItem("wr-blog-draft") : null
+                if (!saved) return null
+                try {
+                  const { data, timestamp } = JSON.parse(saved)
+                  return (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`${theme.cardBg} backdrop-blur-md rounded-lg p-6 border-l-4 border-orange-500 shadow-lg theme-transition flex flex-col items-center text-center`}
+                    >
+                      <div className="p-3 bg-orange-500/10 rounded-full mb-4">
+                        <FileText className="w-8 h-8 text-orange-500" />
+                      </div>
+                      <h3 className="text-xl font-bold theme-text mb-2 line-clamp-1">{data.title || "Untitled Post"}</h3>
+                      <p className="text-sm theme-text opacity-60 mb-6">
+                        Unsaved blog changes from {new Date(timestamp).toLocaleTimeString()}
+                      </p>
+                      <div className="flex gap-3 w-full mt-auto">
+                        <Button onClick={handleResumeBlogDraft} className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold">
+                          Resume
+                        </Button>
+                        <Button variant="outline" onClick={clearBlogDraft} className="flex-1 text-red-500 hover:text-red-600">
+                          Discard
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )
+                } catch (e) { return null }
+              })()}
+
+              {typeof window !== "undefined" && !localStorage.getItem("wr-project-draft") && !localStorage.getItem("wr-blog-draft") && (
+                <div className="col-span-full py-20 text-center">
+                  <div className="text-7xl mb-6">✨</div>
+                  <h3 className="text-2xl font-bold theme-text mb-3 text-primary">No Unsaved Work</h3>
+                  <p className="theme-text opacity-70 max-w-md mx-auto">Your changes are automatically saved as drafts while you edit projects or blog posts.</p>
+                </div>
+              )}
+            </>
+          )}
+
           {/* Projects Grid (unchanged UI, handlers above now optimistic) */}
           {activeTab === "projects" &&
             filteredProjects.map((project, index) => (
@@ -867,7 +1033,7 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-              className={`${theme.cardBg} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col`}
+                className={`${theme.cardBg} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col`}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
@@ -885,9 +1051,8 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
                   />
                   <div className="absolute top-2 right-2">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        project.is_published ? "bg-green-500 text-white" : "bg-yellow-500 text-black"
-                      }`}
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${project.is_published ? "bg-green-500 text-white" : "bg-yellow-500 text-black"
+                        }`}
                     >
                       {project.is_published ? "Published" : "Draft"}
                     </span>
@@ -976,7 +1141,7 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
               />
             ))}
 
-{/* Testimonials Grid (modularized) */}
+          {/* Testimonials Grid (modularized) */}
           {activeTab === "testimonials" &&
             filteredTestimonials.map((t, index) => (
               <TestimonialCard
@@ -1030,18 +1195,18 @@ Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : 
           (activeTab === "blog" && filteredBlogPosts.length === 0) ||
           (activeTab === "testimonials" && filteredTestimonials.length === 0) ||
           (activeTab === "partners" && filteredPartners.length === 0)) && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
-            <div className="text-6xl mb-4">{activeTab === "projects" ? "📁" : activeTab === "blog" ? "📝" : "💬"}</div>
-            <h3 className="text-xl font-semibold theme-text mb-2 theme-transition">
-No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" : activeTab === "testimonials" ? "testimonials" : "partners"} found
-            </h3>
-            <p className="theme-text opacity-70 theme-transition">
-              {searchTerm || filterCategory !== "All" || filterStatus !== "All"
-                ? "Try adjusting your filters"
-: `Create your first ${activeTab === "projects" ? "project" : activeTab === "blog" ? "blog post" : activeTab === "testimonials" ? "testimonial" : "partner"} to get started`}
-            </p>
-          </motion.div>
-        )}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
+              <div className="text-6xl mb-4">{activeTab === "projects" ? "📁" : activeTab === "blog" ? "📝" : "💬"}</div>
+              <h3 className="text-xl font-semibold theme-text mb-2 theme-transition">
+                No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" : activeTab === "testimonials" ? "testimonials" : "partners"} found
+              </h3>
+              <p className="theme-text opacity-70 theme-transition">
+                {searchTerm || filterCategory !== "All" || filterStatus !== "All"
+                  ? "Try adjusting your filters"
+                  : `Create your first ${activeTab === "projects" ? "project" : activeTab === "blog" ? "blog post" : activeTab === "testimonials" ? "testimonial" : "partner"} to get started`}
+              </p>
+            </motion.div>
+          )}
       </div>
 
       {/* Project Form Modal */}
@@ -1087,11 +1252,10 @@ No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" 
                     <select
                       value={projectFormData.category || ""}
                       onChange={(e) => setProjectFormData((prev) => ({ ...prev, category: e.target.value }))}
-                      className={`w-full px-3 py-2 rounded-md border ${
-                        mode === "dark" || color === "black"
-                          ? "border-gray-600 bg-gray-800/50"
-                          : "border-gray-300 bg-white/50"
-                      } theme-text theme-transition`}
+                      className={`w-full px-3 py-2 rounded-md border ${mode === "dark" || color === "black"
+                        ? "border-gray-600 bg-gray-800/50"
+                        : "border-gray-300 bg-white/50"
+                        } theme-text theme-transition`}
                     >
                       <option value="">Select category</option>
                       {CATEGORIES.map((category) => (
@@ -1103,11 +1267,25 @@ No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" 
                   </div>
                 </div>
 
-                {/* Technology Stack */}
+                {/* Technology Stack with Search */}
                 <div>
-                  <label className="block text-sm font-medium theme-text mb-2 theme-transition">Technology Stack</label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-32 overflow-y-auto p-2 border rounded-md">
-                    {TECHNOLOGIES.map((tech) => (
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-sm font-medium theme-text theme-transition">Technology Stack</label>
+                    <div className="relative w-48">
+                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 theme-text opacity-40" />
+                      <Input
+                        value={techSearchTerm}
+                        onChange={(e) => setTechSearchTerm(e.target.value)}
+                        placeholder="Search tech..."
+                        className="pl-8 py-1 h-8 text-xs bg-transparent border-gray-300 dark:border-gray-600 focus:ring-1 focus:ring-primary"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto p-2 border rounded-md bg-black/5 dark:bg-white/5">
+                    {TECHNOLOGIES.filter((tech) =>
+                      tech.toLowerCase().includes(techSearchTerm.toLowerCase()) ||
+                      projectFormData.technology?.includes(tech)
+                    ).map((tech) => (
                       <label key={tech} className="flex items-center space-x-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -1337,7 +1515,7 @@ No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" 
                             onClick={() => document.getElementById(`upload-input-${image.id}`)?.click()}
                             disabled={uploadingImageIndex === index || bulkUploading}
                             className="bg-transparent whitespace-nowrap"
-                         >
+                          >
                             {uploadingImageIndex === index ? "Uploading..." : "Upload"}
                           </Button>
                         </div>
@@ -1360,31 +1538,31 @@ No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" 
                   </div>
                 </div>
 
-              {/* Publish & Featured Status */}
-              <div className="flex items-center gap-6">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="isProjectPublished"
-                    checked={projectFormData.is_published || false}
-                    onChange={(e) => setProjectFormData((prev) => ({ ...prev, is_published: e.target.checked }))}
-                    className="rounded"
-                  />
-                  <span className="text-sm font-medium theme-text theme-transition">Publish immediately</span>
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="isProjectFeatured"
-                    checked={projectFormData.is_featured || false}
-                    onChange={(e) => setProjectFormData((prev) => ({ ...prev, is_featured: e.target.checked }))}
-                    className="rounded"
-                  />
-                  <span className="text-sm font-medium theme-text theme-transition flex items-center">
-                    <Star className="w-3 h-3 mr-1" /> Featured Project
-                  </span>
-                </label>
-              </div>
+                {/* Publish & Featured Status */}
+                <div className="flex items-center gap-6">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isProjectPublished"
+                      checked={projectFormData.is_published || false}
+                      onChange={(e) => setProjectFormData((prev) => ({ ...prev, is_published: e.target.checked }))}
+                      className="rounded"
+                    />
+                    <span className="text-sm font-medium theme-text theme-transition">Publish immediately</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isProjectFeatured"
+                      checked={projectFormData.is_featured || false}
+                      onChange={(e) => setProjectFormData((prev) => ({ ...prev, is_featured: e.target.checked }))}
+                      className="rounded"
+                    />
+                    <span className="text-sm font-medium theme-text theme-transition flex items-center">
+                      <Star className="w-3 h-3 mr-1" /> Featured Project
+                    </span>
+                  </label>
+                </div>
               </div>
 
               {/* Form Actions */}
@@ -1417,7 +1595,7 @@ No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" 
         slugify={slugify}
       />
 
-{/* Testimonial Form Modal (modularized) */}
+      {/* Testimonial Form Modal (modularized) */}
       <TestimonialFormModal
         isOpen={isTestimonialFormOpen}
         onClose={() => {

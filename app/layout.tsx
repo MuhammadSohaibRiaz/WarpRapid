@@ -111,6 +111,11 @@ export const metadata: Metadata = {
       "en-US": "https://rapidnextech.com",
     },
   },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
+  manifest: "/manifest.json",
   category: "technology",
   generator: 'v0.app'
 }
@@ -132,12 +137,8 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 
-        {/* Favicon and app icons */}
-        <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
-        <link rel="manifest" href="/manifest.json?v=2" />
-
-        {/* Theme and viewport */}
+        {/* Theme and viewport handled by Next.js metadata implicitly, 
+            but kept standard meta tags for safety/backwards-compat if preferred */}
         <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
