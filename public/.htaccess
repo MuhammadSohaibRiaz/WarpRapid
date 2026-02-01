@@ -1,6 +1,12 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+  
+  # Disable directory browsing (hides "Index of..." pages)
+  Options -Indexes
+
+  # 0. Allow access to _next static files immediately
+  RewriteRule ^_next - [L]
 
   # 1. Redirect trailing slashes to non-trailing slashes (canonical URLs)
   # Exclude directories to avoid breaking directory access
@@ -12,11 +18,16 @@
   RewriteRule ^portfolio/?$ /case-studies [L,R=301]
 
   # 3. Clean URLs: Internally map /path to /path.html
-  # If the request is not a directory
-  RewriteCond %{REQUEST_FILENAME} !-d
-  # And the corresponding .html file exists
+  
+  # SPECIAL CASE: If a directory exists (like /blog) but there is also a .html file (blog.html),
+  # serve the HTML file instead of the directory index.
+  RewriteCond %{REQUEST_FILENAME} -d
   RewriteCond %{REQUEST_FILENAME}.html -f
-  # Rewrite the request to render the .html file
+  RewriteRule ^(.*[^/])/?$ $1.html [L]
+
+  # Standard clean URLs for non-directories
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
   RewriteRule ^(.*)$ $1.html [L]
 
   # 4. Fallback for 404s
