@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { CheckCircle2, Cpu, Layers, Shield, Zap, BarChart3, MessageSquare, Workflow, ArrowRight, type LucideIcon } from "lucide-react"
 import { useEffect } from "react"
 import { useThemeContext } from "@/context/theme-context"
+import { ProjectCTA } from "@/components/shared/ProjectCTA"
 
 const fadeUp = (delay = 0, rm?: boolean) => ({
   initial: { opacity: 0, y: rm ? 0 : 20 },
@@ -328,21 +329,7 @@ export default function AboutClient() {
         </section>
 
         {/* Final CTA */}
-        <section className="rounded-2xl p-10 md:p-14 text-center bg-gradient-to-r from-blue-600 to-cyan-500 text-white">
-          <motion.h3 className="text-2xl md:text-3xl font-bold" {...fadeUp(0, prefersReducedMotion)}>
-            Ready to Build Something Extraordinary?
-          </motion.h3>
-          <motion.p className="mt-3 opacity-90" {...fadeUp(0.1, prefersReducedMotion)}>
-            Let’s turn your vision into a powerful digital product — built for speed, performance, and long‑term impact.
-          </motion.p>
-          <motion.div className="mt-6" {...fadeUp(0.2, prefersReducedMotion)}>
-            <Link href="/contact">
-              <Button size="lg" variant="secondary" className="rounded-xl text-blue-700">
-                Start Your Project
-              </Button>
-            </Link>
-          </motion.div>
-        </section>
+        <ProjectCTA />
       </div>
     </div>
   )

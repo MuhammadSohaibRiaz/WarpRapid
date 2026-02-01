@@ -17,7 +17,7 @@ export default function CareerPathways() {
 
       {/* Flex container for svg + cards */}
       <div className="flex flex-col md:flex-row items-center gap-12 mt-12">
-        
+
         {/* SVG Container (Left side now) */}
         <div className="flex-shrink-0 w-80 h-[32rem] md:h-[32rem] relative">
           <AnimatedSVG

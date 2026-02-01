@@ -12,6 +12,8 @@ type Props = {
   params: { slug: string }
 }
 
+export const dynamicParams = true // Allow visiting newly created posts without a rebuild
+
 // Generate static params for all published blog posts
 export async function generateStaticParams() {
   const posts = await BlogCMS.getPublishedBlogPosts()
@@ -33,9 +35,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidnextech.com'
   const fullUrl = `${baseUrl}/blog/${params.slug}`
 
+  const seoTitle = post.seo_title || post.title
+  const seoDescription = post.seo_description || post.excerpt
+
   return {
-    title: `${post.title} | RapidXTech Blog`,
-    description: post.excerpt,
+    title: post.seo_title ? post.seo_title : `${post.title} | RapidXTech Blog`,
+    description: seoDescription,
     keywords: post.tags?.join(', '),
     authors: [{ name: post.author }],
     creator: post.author,
@@ -52,8 +57,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: fullUrl,
     },
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title: seoTitle,
+      description: seoDescription,
       url: fullUrl,
       siteName: 'RapidXTech Blog',
       type: "article",
@@ -67,7 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             url: post.images[0].url,
             width: 1200,
             height: 630,
-            alt: post.images[0].alt || post.title,
+            alt: post.images[0].alt || seoTitle,
             type: 'image/jpeg',
           },
         ]
@@ -77,12 +82,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       site: '@RapidXTech',
       creator: '@RapidXTech',
-      title: post.title,
-      description: post.excerpt,
+      title: seoTitle,
+      description: seoDescription,
       images: post.images?.[0]?.url ? [
         {
           url: post.images[0].url,
-          alt: post.images[0].alt || post.title,
+          alt: post.images[0].alt || seoTitle,
         }
       ] : [],
     },
@@ -135,8 +140,8 @@ export default async function BlogPostPage({ params }: Props) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            headline: post.title,
-            description: post.excerpt,
+            headline: post.seo_title || post.title,
+            description: post.seo_description || post.excerpt,
             image: post.images?.[0]?.url || `${baseUrl}/og-image.jpg`,
             datePublished: post.date,
             dateModified: post.updated_at,

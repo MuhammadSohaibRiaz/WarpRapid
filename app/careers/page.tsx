@@ -46,7 +46,7 @@ export default function CareersPage() {
     <main className="min-h-screen">
       {/* 🧭 Hero Section */}
       {/* 🧭 Hero Section */}
-      <section className="relative min-h-[60vh] flex items-center pt-24 pb-12 overflow-hidden">
+      <section id="open-roles" className="relative min-h-[60vh] flex items-center pt-24 pb-12 overflow-hidden">
         {/* Subtle Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 mix-blend-overlay" />
 
@@ -61,7 +61,7 @@ export default function CareersPage() {
             <div className="flex flex-wrap gap-4">
               <Link href="#open-roles">
                 <Button className="h-12 px-8 text-lg rounded-full bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-105">
-                  View Open Roles
+                  Join our Pipeline
                 </Button>
               </Link>
               <a href="mailto:info@rapidnextech.com">

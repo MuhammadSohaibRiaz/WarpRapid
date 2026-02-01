@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
-
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -18,7 +16,7 @@ const nextConfig = {
     missingSuspenseWithCSRBailout: false,
   },
 
-  // ❌ Removed redirects (static export does not support them)
+  // Note: Removed "output: export" to support dynamic CMS content from Supabase
 }
 
 export default nextConfig

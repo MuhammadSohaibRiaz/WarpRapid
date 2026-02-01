@@ -112,7 +112,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon-32x32.png",
     apple: "/apple-icon.png",
   },
   manifest: "/manifest.json",
@@ -146,17 +146,17 @@ export default function RootLayout({
         {/* Performance hints */}
         <meta httpEquiv="x-dns-prefetch-control" content="on" />
       </head>
-      <body className={`${inter.className} ${spaceGrotesk.variable} theme-transition antialiased`}>
+      <body className={`${inter.className} ${spaceGrotesk.variable} theme-transition antialiased overflow-x-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <ThemeContextProvider>
             <AuthProvider>
-              <div className="flex flex-col min-h-screen relative overflow-hidden theme-bg theme-transition">
+              <div className="flex flex-col min-h-screen relative theme-bg theme-transition">
                 <Suspense fallback={null}>
                   <ProgressBar />
                 </Suspense>
                 <Header />
                 <div aria-hidden className="h-12 md:h-16" />
-                <main className="flex-grow z-10" role="main">
+                <main className="flex-grow" role="main">
                   {children}
                 </main>
                 <Footer />

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Github, Twitter, Linkedin, Mail, Facebook, Instagram } from "lucide-react"
+import { Github, Twitter, Linkedin, Mail, Facebook, Instagram, ArrowRight } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { servicesData } from "@/lib/services-data"
 import { ParticleBackground } from "./particle-background"
@@ -21,7 +21,7 @@ export function Footer() {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
           {/* Brand */}
-          <div className="col-span-1 md:col-span-1 lg:col-span-4">
+          <div className="col-span-1 md:col-span-1 lg:col-span-3">
             <Link href="/" className="flex items-center gap-2 mb-6 group">
               <div className="relative h-8 w-8 transition-transform group-hover:scale-105">
                 <Image
@@ -90,7 +90,10 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-4">
-            <h3 className="font-bold theme-text mb-6">Services</h3>
+            <Link href="/services" className="group flex items-center gap-2 mb-6">
+              <h3 className="font-bold theme-text group-hover:text-primary transition-colors">Services</h3>
+              <ArrowRight className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+            </Link>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
               {Object.entries(servicesData).map(([slug, service]) => (
                 <Link key={slug} href={`/services/${slug}`} className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm block">
@@ -100,7 +103,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <h3 className="font-bold theme-text mb-6">Resources</h3>
             <ul className="space-y-4">
               <li>
@@ -114,7 +117,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:contact@rapidnextech.com" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm flex items-center gap-2">
+                <a href="mailto:contact@rapidnextech.com" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm flex items-center gap-2 whitespace-nowrap">
                   <Mail size={16} />
                   contact@rapidnextech.com
                 </a>

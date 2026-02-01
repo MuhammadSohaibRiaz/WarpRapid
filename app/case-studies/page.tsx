@@ -1,16 +1,17 @@
 import type { Metadata } from "next"
 import PortfolioClient from "./PortfolioClient"
 import Script from "next/script"
+import { PortfolioCMS } from "@/lib/supabase-cms"
 
 export const metadata: Metadata = {
   title: "Software Case Studies | RapidNexTech Portfolio",
   description:
-    "Explore RapidNexTech’s software case studies — real-world projects that showcase innovation, scalability, and measurable impact. Discover how we’ve helped startups and enterprises achieve digital transformation.",
+    "We build production-ready products and automation systems that remove operational drag and scale with your business. Explore our real-world software projects.",
   openGraph: {
     title: "Software Case Studies | RapidNexTech",
     description:
       "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidNexTech delivers performance and innovation.",
-url: "https://rapidnextech.com/case-studies",
+    url: "https://rapidnextech.com/case-studies",
     siteName: "RapidNexTech",
     images: [
       {
@@ -31,23 +32,35 @@ url: "https://rapidnextech.com/case-studies",
     images: ["https://rapidnextech.com/og-image.jpg"],
   },
   alternates: {
-canonical: "https://rapidnextech.com/case-studies",
+    canonical: "https://rapidnextech.com/case-studies",
   },
 }
 
 export default async function Portfolio() {
+  const projects = await PortfolioCMS.getPublishedProjects()
+
+  // ItemList Schema for better SEO
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Software Case Studies | RapidNexTech",
-url: "https://rapidnextech.com/case-studies",
-    description:
-      "Explore RapidNexTech’s software case studies — real-world projects that showcase innovation, scalability, and measurable impact.",
-    about: { "@type": "Organization", name: "RapidNexTech" },
+    "@type": "ItemList",
+    numberOfItems: projects.length,
+    itemListElement: projects.map((project, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: project.title,
+        url: `https://rapidnextech.com/case-studies/${project.slug}`,
+        image: project.images[0]?.url,
+        description: project.description,
+        about: project.category
+      }
+    }))
   }
+
   return (
     <>
-      <PortfolioClient />
+      <PortfolioClient initialProjects={projects} />
       <Script id="case-studies-collection" type="application/ld+json" strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </>

@@ -13,7 +13,7 @@ import { HeaderNav } from "./header-nav"
 
 const navigation = [
   { name: "About", href: "/about" },
-  { name: "What We Do", href: "/#services" }, // Matches Desktop "What We Do"
+  { name: "What We Do", href: "/services" },
   { name: "Case Studies", href: "/case-studies" },
   { name: "Blog", href: "/blog" },
   { name: "Careers", href: "/careers" },
@@ -51,7 +51,7 @@ export default function Header() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBgClass}`}>
-      <nav className="container mx-auto px-6 h-20 flex items-center justify-between">
+      <nav className={`container mx-auto px-6 flex items-center justify-between transition-all duration-300 ${isScrolled ? "h-16" : "h-20"}`}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative h-10 w-10 md:h-12 md:w-12 transition-transform group-hover:scale-105">

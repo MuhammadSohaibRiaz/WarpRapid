@@ -1,41 +1,9 @@
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import type { LucideIcon } from "lucide-react"
+import { ArrowRight, Mail, UserPlus, Sparkles, Zap } from "lucide-react"
 import SectionHeader from "./SectionHeader"
 import FadeInSection from "./FadeInSection"
 import AnimatedSVG from "./AnimatedSVG"
 import { Button } from "@/components/ui/button"
-
-interface Role {
-  title: string
-  type: string
-  location: string
-  description: string
-}
-
-const OPEN_ROLES: Role[] = [
-  {
-    title: "Frontend Developer",
-    type: "Full-time",
-    location: "Remote",
-    description:
-      "Build high-performance web apps with Next.js and modern tooling.",
-  },
-  {
-    title: "Backend Engineer",
-    type: "Full-time",
-    location: "Remote",
-    description:
-      "Design scalable APIs and services using Node.js and cloud infrastructure.",
-  },
-  {
-    title: "UI/UX Designer",
-    type: "Internship",
-    location: "Remote",
-    description:
-      "Craft intuitive interfaces and design systems that delight users.",
-  },
-]
 
 export default function OpenRoles() {
   return (
@@ -43,57 +11,83 @@ export default function OpenRoles() {
       id="open-roles"
       className="container mx-auto px-6 py-24 md:py-32"
     >
-      <SectionHeader title="Open Roles" />
+      <SectionHeader
+        title="The Future of RapidNexTech"
+        subtitle="We’re building the next generation of software elite. While our current roster is full, we are always open to meeting the visionary talent who will power our next phase of growth."
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 items-start">
-        {/* Roles Grid */}
-        <div>
-          {OPEN_ROLES.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {OPEN_ROLES.map((job) => (
-                <div
-                  key={job.title}
-                  className="rounded-xl border p-6 bg-background/60 backdrop-blur flex flex-col hover:shadow-md transition-shadow"
-                >
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold">{job.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {job.type} • {job.location}
-                    </p>
-                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                      {job.description}
-                    </p>
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Pipeline Invitation Card */}
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative rounded-[2rem] border border-border/50 p-8 md:p-12 bg-background/80 backdrop-blur-xl shadow-2xl space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <UserPlus className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold theme-text">Join Our Talent Pipeline</h3>
+                  <p className="text-primary font-medium text-sm">Open for Future Opportunities</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-muted-foreground leading-relaxed text-lg">
+                  Are you a master of your craft? Whether you’re an engineer, designer, or strategist, we want to know about you.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Sparkles className="w-4 h-4 text-purple-500" />
+                    <span>Visionary Design</span>
                   </div>
-                  <div className="mt-6">
-                    <Link
-                      href={`mailto:info@rapidnextech.com?subject=Application%20-%20${encodeURIComponent(
-                        job.title
-                      )}`}
-                    >
-                      <Button className="w-full group">
-                        Apply Now
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Zap className="w-4 h-4 text-yellow-500" />
+                    <span>High-Perf Engineering</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-muted-foreground py-12">
-              No open roles right now — but we're always excited to meet new talent.
-            </p>
-          )}
-        </div>
+              </div>
 
-        {/* SVG Illustration - Desktop Only */}
-        <div className="hidden lg:flex items-center justify-center">
-          <div className="w-full max-w-[280px]">
-            <AnimatedSVG
-              src="/careers-openroles-apply.svg"
-              alt="Apply illustration"
-              className="w-full h-auto"
-            />
+              <div className="pt-4">
+                <Link
+                  href="mailto:info@rapidnextech.com?subject=Talent%20Pipeline%20-%20General%20Application%20%5BYour%20Name%20%2F%20Role%5D"
+                >
+                  <Button size="lg" className="w-full md:w-auto px-10 py-7 rounded-full text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95 group">
+                    Submit Your Resume
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <p className="mt-4 text-xs text-muted-foreground italic text-center md:text-left">
+                  We review every submission and keep top talent in our priority pipeline.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Context/Values Side */}
+          <div className="space-y-12">
+            <div className="space-y-6">
+              <h4 className="text-xl font-bold theme-text flex items-center gap-2">
+                <div className="w-2 h-8 bg-primary rounded-full" />
+                Waitlist for Innovation
+              </h4>
+              <p className="text-muted-foreground leading-relaxed">
+                At RapidNexTech, we don't just hire for roles; we partner with people who are obsessed with excellence.
+                Joining our pipeline means you're first in line when we expand our capabilities in AI, Cloud Architecture, and Premium UX.
+              </p>
+            </div>
+
+            <div className="grid gap-6">
+              <div className="flex gap-4 p-4 rounded-xl hover:bg-muted/50 transition-colors">
+                <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-6 h-6 text-muted-foreground" />
+                </div>
+                <div>
+                  <h5 className="font-bold theme-text">Direct Communication</h5>
+                  <p className="text-sm text-muted-foreground">No automated filters. Your work is reviewed by our leadership team.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

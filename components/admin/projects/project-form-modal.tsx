@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { AnimatePresence, motion } from "framer-motion"
-import { Save, X } from "lucide-react"
+import { Save, X, Plus } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import type { ProjectDetail, ProjectImage } from "@/lib/supabase"
 import { ImageManager } from "@/components/admin/shared/ImageManager"
@@ -17,6 +17,71 @@ type Props = {
   categories: string[]
   formData: Partial<ProjectDetail>
   setFormData: (updater: (prev: Partial<ProjectDetail>) => Partial<ProjectDetail>) => void
+}
+
+// Internal helper for array inputs
+function ArrayInput({
+  label,
+  values,
+  onChange,
+  placeholder
+}: {
+  label: string
+  values: string[]
+  onChange: (values: string[]) => void
+  placeholder: string
+}) {
+  const { mode, color } = useThemeContext()
+
+  const handleAdd = () => {
+    onChange([...values, ""])
+  }
+
+  const handleRemove = (index: number) => {
+    onChange(values.filter((_, i) => i !== index))
+  }
+
+  const handleChange = (index: number, value: string) => {
+    const newValues = [...values]
+    newValues[index] = value
+    onChange(newValues)
+  }
+
+  return (
+    <div className="space-y-2">
+      <label className="block text-sm font-medium theme-text theme-transition">{label}</label>
+      <div className="space-y-2">
+        {values.map((value, index) => (
+          <div key={index} className="flex gap-2">
+            <Input
+              value={value}
+              onChange={(e) => handleChange(index, e.target.value)}
+              placeholder={placeholder}
+              className="theme-text bg-transparent"
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleRemove(index)}
+              className="shrink-0 hover:bg-red-500/10 hover:text-red-500"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        ))}
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleAdd}
+          className="w-full border-dashed"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Item
+        </Button>
+      </div>
+    </div>
+  )
 }
 
 export function ProjectFormModal({
@@ -59,7 +124,7 @@ export function ProjectFormModal({
 
             <div className="space-y-6">
               {/* Basic Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium theme-text mb-2 theme-transition">Title *</label>
                   <Input
@@ -70,15 +135,24 @@ export function ProjectFormModal({
                   />
                 </div>
                 <div>
+                  <label className="block text-sm font-medium theme-text mb-2 theme-transition">Slug (URL)</label>
+                  <Input
+                    value={formData.slug || ""}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
+                    placeholder="project-url-slug"
+                    className="theme-text bg-transparent"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Leave empty to auto-generate from title</p>
+                </div>
+                <div>
                   <label className="block text-sm font-medium theme-text mb-2 theme-transition">Category *</label>
                   <select
                     value={formData.category || ""}
                     onChange={(e) => setFormData((prev) => ({ ...prev, category: e.target.value }))}
-                    className={`w-full px-3 py-2 rounded-md border ${
-                      mode === "dark" || color === "black"
-                        ? "border-gray-600 bg-gray-800/50"
-                        : "border-gray-300 bg-white/50"
-                    } theme-text theme-transition`}
+                    className={`w-full px-3 py-2 rounded-md border ${mode === "dark" || color === "black"
+                      ? "border-gray-600 bg-gray-800/50"
+                      : "border-gray-300 bg-white/50"
+                      } theme-text theme-transition`}
                   >
                     <option value="">Select category</option>
                     {categories.map((category) => (
@@ -114,6 +188,52 @@ export function ProjectFormModal({
                     placeholder="Detailed project description"
                     className="theme-text bg-transparent"
                     rows={4}
+                  />
+                </div>
+              </div>
+
+              {/* Client Context (NEW) */}
+              <div className="space-y-4 pt-4 border-t border-border/50">
+                <h3 className="text-lg font-semibold theme-text">Client Context & Results</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                      Client Description
+                    </label>
+                    <Textarea
+                      value={formData.client_description || ""}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, client_description: e.target.value }))}
+                      placeholder="Who is the client? e.g. 'Mid-sized SaaS in hospitality...'"
+                      className="theme-text bg-transparent"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                      Business Outcome (Hero Subheadline)
+                    </label>
+                    <Textarea
+                      value={formData.business_outcome || ""}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, business_outcome: e.target.value }))}
+                      placeholder="e.g. 'Helping XYZ scale 10x...'"
+                      className="theme-text bg-transparent"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <ArrayInput
+                    label="pain points (Before)"
+                    values={formData.before_items || []}
+                    onChange={(values) => setFormData((prev) => ({ ...prev, before_items: values }))}
+                    placeholder="e.g. Manual process..."
+                  />
+                  <ArrayInput
+                    label="Solutions (After)"
+                    values={formData.after_items || []}
+                    onChange={(values) => setFormData((prev) => ({ ...prev, after_items: values }))}
+                    placeholder="e.g. Automated workflow..."
                   />
                 </div>
               </div>

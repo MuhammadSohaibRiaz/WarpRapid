@@ -140,8 +140,8 @@ export function SocialShare({ title, url, description, hashtags = [] }: SocialSh
                   handleShare(platform)
                 }}
                 className={`p-2 rounded-full text-white transition-all duration-200 hover:scale-110 ${platform.name === 'Facebook' ? 'bg-blue-600 hover:bg-blue-700' :
-                    platform.name === 'X' ? 'bg-black hover:bg-gray-800' :
-                      platform.name === 'LinkedIn' ? 'bg-blue-700 hover:bg-blue-800' : platform.color
+                  platform.name === 'X' ? 'bg-black hover:bg-gray-800' :
+                    platform.name === 'LinkedIn' ? 'bg-blue-700 hover:bg-blue-800' : platform.color
                   }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}

@@ -1,7 +1,7 @@
-import { supabase, type ProjectDetail, type BlogPost, type ClientReview, type TrustedPartner } from "./supabase"
+import { supabase, type ProjectDetail, type BlogPost, type ClientReview, type TrustedPartner, type BlogComment } from "./supabase"
 import { slugify } from "./utils"
 
-export type { ProjectDetail, BlogPost, ClientReview, TrustedPartner }
+export type { ProjectDetail, BlogPost, ClientReview, TrustedPartner, BlogComment }
 
 
 // Portfolio Projects CMS
@@ -373,6 +373,58 @@ export class PartnersCMS {
   }
 }
 
+// Blog Comments CMS
+export class BlogCommentsCMS {
+  static async getCommentsForPost(postSlug: string): Promise<BlogComment[]> {
+    const { data, error } = await supabase
+      .from("blog_comments")
+      .select("*")
+      .eq("post_slug", postSlug)
+      .eq("is_approved", true)
+      .order("created_at", { ascending: true })
+    if (error) throw error
+    return data || []
+  }
+
+  static async getAllComments(): Promise<BlogComment[]> {
+    const { data, error } = await supabase
+      .from("blog_comments")
+      .select("*")
+      .order("created_at", { ascending: false })
+    if (error) throw error
+    return data || []
+  }
+
+  static async addComment(comment: Omit<BlogComment, "id" | "created_at" | "updated_at" | "is_approved">): Promise<BlogComment> {
+    const { data, error } = await supabase
+      .from("blog_comments")
+      .insert([comment])
+      .select()
+      .single()
+    if (error) throw error
+    return data
+  }
+
+  static async approveComment(id: number): Promise<BlogComment> {
+    const { data, error } = await supabase
+      .from("blog_comments")
+      .update({ is_approved: true })
+      .eq("id", id)
+      .select()
+      .single()
+    if (error) throw error
+    return data
+  }
+
+  static async deleteComment(id: number): Promise<void> {
+    const { error } = await supabase
+      .from("blog_comments")
+      .delete()
+      .eq("id", id)
+    if (error) throw error
+  }
+}
+
 // Combined CMS
 export function useSupabaseCMS() {
   return {
@@ -418,5 +470,12 @@ export function useSupabaseCMS() {
     deletePartner: PartnersCMS.deletePartner,
     togglePartnerPublishStatus: PartnersCMS.togglePartnerPublishStatus,
     togglePartnerFeaturedStatus: PartnersCMS.togglePartnerFeaturedStatus,
+
+    // Blog Comments
+    getCommentsForPost: BlogCommentsCMS.getCommentsForPost,
+    getAllComments: BlogCommentsCMS.getAllComments,
+    addComment: BlogCommentsCMS.addComment,
+    approveComment: BlogCommentsCMS.approveComment,
+    deleteComment: BlogCommentsCMS.deleteComment,
   }
 }

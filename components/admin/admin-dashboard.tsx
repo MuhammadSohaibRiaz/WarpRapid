@@ -1237,7 +1237,7 @@ export default function AdminDashboard() {
 
               <div className="space-y-6">
                 {/* Basic Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium theme-text mb-2 theme-transition">Title *</label>
                     <Input
@@ -1246,6 +1246,16 @@ export default function AdminDashboard() {
                       placeholder="Project title"
                       className="theme-text bg-transparent"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium theme-text mb-2 theme-transition">Slug (URL)</label>
+                    <Input
+                      value={projectFormData.slug || ""}
+                      onChange={(e) => setProjectFormData((prev) => ({ ...prev, slug: e.target.value }))}
+                      placeholder="project-url-slug"
+                      className="theme-text bg-transparent"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">Leave empty to auto-generate from title</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium theme-text mb-2 theme-transition">Category *</label>
@@ -1335,6 +1345,133 @@ export default function AdminDashboard() {
                   />
                 </div>
 
+                {/* Client Context & Results (NEW) */}
+                <div className="space-y-4 pt-4 border-t border-border/50">
+                  <h3 className="text-lg font-semibold theme-text">Client Context & Results</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                        Client Description
+                      </label>
+                      <Textarea
+                        value={projectFormData.client_description || ""}
+                        onChange={(e) => setProjectFormData((prev) => ({ ...prev, client_description: e.target.value }))}
+                        placeholder="Who is the client? e.g. 'Mid-sized SaaS in hospitality...'"
+                        className="theme-text bg-transparent"
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                        Business Outcome (Hero Subheadline)
+                      </label>
+                      <Textarea
+                        value={projectFormData.business_outcome || ""}
+                        onChange={(e) => setProjectFormData((prev) => ({ ...prev, business_outcome: e.target.value }))}
+                        placeholder="e.g. 'Helping XYZ scale 10x...'"
+                        className="theme-text bg-transparent"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Before Items */}
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium theme-text theme-transition">Pain Points (Before)</label>
+                      <div className="space-y-2">
+                        {(projectFormData.before_items || []).map((item, index) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              value={item}
+                              onChange={(e) => {
+                                const newItems = [...(projectFormData.before_items || [])]
+                                newItems[index] = e.target.value
+                                setProjectFormData((prev) => ({ ...prev, before_items: newItems }))
+                              }}
+                              placeholder="e.g. Manual process..."
+                              className="theme-text bg-transparent"
+                            />
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                const newItems = (projectFormData.before_items || []).filter((_, i) => i !== index)
+                                setProjectFormData((prev) => ({ ...prev, before_items: newItems }))
+                              }}
+                              className="shrink-0 hover:bg-red-500/10 hover:text-red-500"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setProjectFormData((prev) => ({
+                              ...prev,
+                              before_items: [...(prev.before_items || []), ""]
+                            }))
+                          }}
+                          className="w-full border-dashed"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Item
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* After Items */}
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium theme-text theme-transition">Solutions (After)</label>
+                      <div className="space-y-2">
+                        {(projectFormData.after_items || []).map((item, index) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              value={item}
+                              onChange={(e) => {
+                                const newItems = [...(projectFormData.after_items || [])]
+                                newItems[index] = e.target.value
+                                setProjectFormData((prev) => ({ ...prev, after_items: newItems }))
+                              }}
+                              placeholder="e.g. Automated workflow..."
+                              className="theme-text bg-transparent"
+                            />
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                const newItems = (projectFormData.after_items || []).filter((_, i) => i !== index)
+                                setProjectFormData((prev) => ({ ...prev, after_items: newItems }))
+                              }}
+                              className="shrink-0 hover:bg-red-500/10 hover:text-red-500"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ))}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setProjectFormData((prev) => ({
+                              ...prev,
+                              after_items: [...(prev.after_items || []), ""]
+                            }))
+                          }}
+                          className="w-full border-dashed"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Item
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Challenge & Solution */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -1356,6 +1493,103 @@ export default function AdminDashboard() {
                       className="theme-text bg-transparent"
                       rows={4}
                     />
+                  </div>
+                </div>
+
+                {/* Results & Features */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Results */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium theme-text theme-transition">Results / Outcomes</label>
+                    <div className="space-y-2">
+                      {(projectFormData.results || []).map((item, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            value={item}
+                            onChange={(e) => {
+                              const newItems = [...(projectFormData.results || [])]
+                              newItems[index] = e.target.value
+                              setProjectFormData((prev) => ({ ...prev, results: newItems }))
+                            }}
+                            placeholder="e.g. 50% increase in conversions"
+                            className="theme-text bg-transparent"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              const newItems = (projectFormData.results || []).filter((_, i) => i !== index)
+                              setProjectFormData((prev) => ({ ...prev, results: newItems }))
+                            }}
+                            className="shrink-0 hover:bg-red-500/10 hover:text-red-500"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setProjectFormData((prev) => ({
+                            ...prev,
+                            results: [...(prev.results || []), ""]
+                          }))
+                        }}
+                        className="w-full border-dashed"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Result
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium theme-text theme-transition">Key Features</label>
+                    <div className="space-y-2">
+                      {(projectFormData.features || []).map((item, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            value={item}
+                            onChange={(e) => {
+                              const newItems = [...(projectFormData.features || [])]
+                              newItems[index] = e.target.value
+                              setProjectFormData((prev) => ({ ...prev, features: newItems }))
+                            }}
+                            placeholder="e.g. Real-time analytics dashboard"
+                            className="theme-text bg-transparent"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              const newItems = (projectFormData.features || []).filter((_, i) => i !== index)
+                              setProjectFormData((prev) => ({ ...prev, features: newItems }))
+                            }}
+                            className="shrink-0 hover:bg-red-500/10 hover:text-red-500"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setProjectFormData((prev) => ({
+                            ...prev,
+                            features: [...(prev.features || []), ""]
+                          }))
+                        }}
+                        className="w-full border-dashed"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Feature
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
