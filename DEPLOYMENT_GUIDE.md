@@ -1,11 +1,15 @@
 # Deployment Guide for RapidNexTech.com to cPanel
 
 ## Overview
-This guide explains how to build your Next.js application locally and deploy the static export to cPanel, avoiding memory limitations during build on the server.
+This guide explains how to build your Next.js application locally and deploy the static export to cPanel. 
+
+> [!NOTE]
+> **Manual Deployment Flow**: The automated GitHub Actions workflow has been removed. All deployments are now performed manually by building the project locally and uploading the results.
 
 ## Prerequisites
 - Node.js installed locally (version 18 or higher)
 - Access to your cPanel account
+- Terminal/PowerShell access for running builds
 - FTP/SFTP access or cPanel File Manager
 - Supabase credentials (for environment variables)
 
@@ -162,6 +166,17 @@ If you're using Supabase for content, ensure:
 - Verify `.htaccess` is uploaded
 - Check cPanel allows `.htaccess` overrides
 - Test redirects manually
+
+## Step 6.5: Update Repository Head (cPanel Git Version Control)
+
+If you are using cPanel's **Git Version Control** feature to track your site's source:
+
+1. Log into your cPanel.
+2. Navigate to **Git™ Version Control**.
+3. Locate your repository and click **Manage**.
+4. Click on the **Pull or Deploy** tab.
+5. Click **Update from Remote** to ensure your cPanel repository is pointing to the latest `HEAD`.
+6. Use the **Deploy Head Revision** button if you have specific deployment scripts configured in cPanel (though manual upload of `out/` is still recommended for reliability).
 
 ## Updating Your Site
 

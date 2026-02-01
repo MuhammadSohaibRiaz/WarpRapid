@@ -16,7 +16,7 @@ const nextConfig = {
     missingSuspenseWithCSRBailout: false,
   },
 
-  // Note: Removed "output: export" to support dynamic CMS content from Supabase
+  output: "export",
 }
 
 export default nextConfig
