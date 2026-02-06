@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import { Button } from "../components/ui/button"
 import dynamic from "next/dynamic"
 
@@ -28,9 +28,10 @@ export default function Home() {
     offset: ["start start", "end start"],
   })
 
-  // Simplified transforms for better performance
-  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
-  const y = useTransform(scrollYProgress, [0, 0.4], [0, 50])
+  // Springs for smoother scroll transforms (reduces jank during fast scroll)
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
+  const opacity = useTransform(smoothProgress, [0, 0.4], [1, 0])
+  const y = useTransform(smoothProgress, [0, 0.4], [0, 50])
 
   return (
     <div className="bg-transparent theme-transition">
@@ -50,7 +51,7 @@ export default function Home() {
           <ParticleBackground particleCount={15} />
         </div>
 
-        <motion.div style={{ opacity, y }} className="relative z-10 text-center px-4 will-change-[transform,opacity]">
+        <motion.div style={{ opacity, y }} className="relative z-10 text-center px-4 will-change-[transform,opacity] transform-gpu">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight grid place-items-center">
               {/* Ghost Element to Reserve Height (Prevents Layout Shift) */}

@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState, memo } from "react"
 
 interface TypewriterTextProps {
     texts: string[]
@@ -12,7 +11,8 @@ interface TypewriterTextProps {
     cursorClassName?: string
 }
 
-export function TypewriterText({
+// Memoized to prevent parent scroll re-renders from affecting this component
+export const TypewriterText = memo(function TypewriterText({
     texts,
     typingSpeed = 100,
     deletingSpeed = 50,
@@ -23,33 +23,30 @@ export function TypewriterText({
     const [currentTextIndex, setCurrentTextIndex] = useState(0)
     const [currentText, setCurrentText] = useState("")
     const [isDeleting, setIsDeleting] = useState(false)
-    const [showCursor, setShowCursor] = useState(true)
 
     useEffect(() => {
         const fullText = texts[currentTextIndex]
 
         const timeout = setTimeout(
             () => {
-                requestAnimationFrame(() => {
-                    if (!isDeleting) {
-                        // Typing
-                        if (currentText.length < fullText.length) {
-                            setCurrentText(fullText.slice(0, currentText.length + 1))
-                        } else {
-                            // Finished typing, pause then start deleting
-                            setTimeout(() => setIsDeleting(true), pauseDuration)
-                        }
+                if (!isDeleting) {
+                    // Typing
+                    if (currentText.length < fullText.length) {
+                        setCurrentText(fullText.slice(0, currentText.length + 1))
                     } else {
-                        // Deleting
-                        if (currentText.length > 0) {
-                            setCurrentText(currentText.slice(0, -1))
-                        } else {
-                            // Finished deleting, move to next text
-                            setIsDeleting(false)
-                            setCurrentTextIndex((prev) => (prev + 1) % texts.length)
-                        }
+                        // Finished typing, pause then start deleting
+                        setTimeout(() => setIsDeleting(true), pauseDuration)
                     }
-                })
+                } else {
+                    // Deleting
+                    if (currentText.length > 0) {
+                        setCurrentText(currentText.slice(0, -1))
+                    } else {
+                        // Finished deleting, move to next text
+                        setIsDeleting(false)
+                        setCurrentTextIndex((prev) => (prev + 1) % texts.length)
+                    }
+                }
             },
             isDeleting ? deletingSpeed : typingSpeed
         )
@@ -57,28 +54,29 @@ export function TypewriterText({
         return () => clearTimeout(timeout)
     }, [currentText, isDeleting, currentTextIndex, texts, typingSpeed, deletingSpeed, pauseDuration])
 
-    // Cursor blink effect
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setShowCursor((prev) => !prev)
-        }, 530)
-
-        return () => clearInterval(interval)
-    }, [])
-
     return (
         <span className={className}>
             <span className="sr-only">{texts[currentTextIndex]}</span>
             <span aria-hidden="true">
                 {currentText}
-                <motion.span
-                    className={`inline-block ${cursorClassName}`}
-                    animate={{ opacity: showCursor ? 1 : 0 }}
-                    transition={{ duration: 0 }}
+                {/* CSS-based cursor animation - no React re-renders */}
+                <span
+                    className={`inline-block animate-blink ${cursorClassName}`}
+                    style={{
+                        animation: 'blink 1s step-end infinite',
+                    }}
+                    aria-hidden="true"
                 >
                     |
-                </motion.span>
+                </span>
             </span>
+            {/* Inject keyframes via style tag (one-time) */}
+            <style jsx>{`
+                @keyframes blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0; }
+                }
+            `}</style>
         </span>
     )
-}
+})
