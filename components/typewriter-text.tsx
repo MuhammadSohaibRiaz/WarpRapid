@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, memo } from "react"
+import { motion } from "framer-motion"
 
 interface TypewriterTextProps {
     texts: string[]
@@ -59,24 +60,19 @@ export const TypewriterText = memo(function TypewriterText({
             <span className="sr-only">{texts[currentTextIndex]}</span>
             <span aria-hidden="true">
                 {currentText}
-                {/* CSS-based cursor animation - no React re-renders */}
-                <span
-                    className={`inline-block animate-blink ${cursorClassName}`}
-                    style={{
-                        animation: 'blink 1s step-end infinite',
+                {/* Framer Motion cursor with CSS animation (no state re-renders) */}
+                <motion.span
+                    className={`inline-block ${cursorClassName}`}
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        ease: "linear"
                     }}
-                    aria-hidden="true"
                 >
                     |
-                </span>
+                </motion.span>
             </span>
-            {/* Inject keyframes via style tag (one-time) */}
-            <style jsx>{`
-                @keyframes blink {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0; }
-                }
-            `}</style>
         </span>
     )
 })

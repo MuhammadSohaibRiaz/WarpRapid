@@ -19,7 +19,8 @@ export function MeshGradient({ className = "", animate = true }: MeshGradientPro
         setMounted(true)
     }, [])
 
-    if (!mounted) return null
+    // Instead of returning null, we render immediately but fade in
+    // This prevents a blank flash while keeping hydration safe
 
     return (
         <div className={`absolute inset-0 overflow-hidden ${className}`}>
