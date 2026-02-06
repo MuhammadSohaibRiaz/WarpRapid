@@ -36,8 +36,8 @@ export function FeaturedWorkSection() {
 
       <div className="container mx-auto px-4 relative z-10">
 
-        {/* Header Section */}
-        <div className="mb-24 flex items-end justify-between">
+        {/* Header Section - Sticky on Mobile for Parallax Effect */}
+        <div className="sticky top-0 z-0 md:static mb-12 md:mb-24 flex items-end justify-between py-6 md:py-0 bg-background/80 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none transition-all">
           <div className="space-y-6 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-md">
               <Briefcase className="w-4 h-4 text-primary" />
@@ -48,7 +48,6 @@ export function FeaturedWorkSection() {
             </h2>
             <p className="text-lg theme-text opacity-70 font-medium leading-relaxed">
               Immersive journey through our latest production-grade breakthroughs.
-              Each project represents a unique challenge solved with precision engineering.
             </p>
           </div>
 
@@ -84,28 +83,43 @@ export function FeaturedWorkSection() {
 
 function Card({ project, index, total }: { project: ProjectDetail, index: number, total: number }) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [topOffset, setTopOffset] = useState(280)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      const desktop = window.innerWidth >= 768
+      setIsDesktop(desktop)
+      setTopOffset(desktop ? 100 : 280)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'start start']
   })
 
-  // Subtle scale effect as the card enters
-  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1])
-
-  // Static top offset for Full Overlap
-  const topOffset = 120;
+  // Only apply scale transform on mobile to prevent desktop distortion
+  // On desktop, we keep scale at exactly 1 (no animation)
+  const mobileScale = useTransform(scrollYProgress, [0, 1], [0.95, 1])
 
   return (
     <motion.div
       ref={containerRef}
-      className="w-full sticky mb-12 md:mb-24 last:mb-0"
+      className="w-full sticky mb-12 md:mb-24 last:mb-0 will-change-[top]"
       style={{
         top: topOffset,
         zIndex: index + 1,
+        // Only apply scale on mobile; desktop gets a static transform
+        transform: isDesktop ? 'none' : undefined,
+        scale: isDesktop ? undefined : mobileScale,
       }}
     >
       <Link href={`/case-studies/${project.slug ?? ''}`} className="block group max-w-6xl mx-auto">
-        <div className="relative w-full aspect-[4/5] md:aspect-[2.4/1] bg-muted/10 rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl backdrop-blur-sm transition-all duration-500 hover:shadow-primary/20">
+        <div className="relative w-full aspect-[4/5] md:aspect-[2.4/1] bg-muted/10 rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl backdrop-blur-sm md:transition-shadow md:duration-500 hover:shadow-primary/20">
 
           {/* Background Image */}
           <div className="absolute inset-0">

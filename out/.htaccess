@@ -2,30 +2,26 @@
   RewriteEngine On
   RewriteBase /
   
-  # Disable directory browsing (hides "Index of..." pages)
+  # Disable directory browsing and automatic trailing slashes for directories
   Options -Indexes
+  DirectorySlash Off
 
   # 0. Allow access to _next static files immediately
   RewriteRule ^_next - [L]
 
-  # 1. Redirect trailing slashes to non-trailing slashes (canonical URLs)
-  # Exclude directories to avoid breaking directory access
+  # 1. SPECIAL CASE: Directory/File Conflict Resolution
+  # If a request matches a directory, BUT a corresponding .html file exists, serve the file.
+  # This fixes the /blog/ vs /blog.html issue.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+
+  # 2. Redirect trailing slashes to non-trailing slashes (canonical URLs)
+  # Only if it's NOT a real directory (unless handled above)
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-  # 2. Handle External Redirects first (if any specific ones are needed)
-  # Redirect /portfolio to /case-studies
-  RewriteRule ^portfolio/?$ /case-studies [L,R=301]
-
   # 3. Clean URLs: Internally map /path to /path.html
-  
-  # SPECIAL CASE: If a directory exists (like /blog) but there is also a .html file (blog.html),
-  # serve the HTML file instead of the directory index.
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.*[^/])/?$ $1.html [L]
-
-  # Standard clean URLs for non-directories
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}.html -f
   RewriteRule ^(.*)$ $1.html [L]
