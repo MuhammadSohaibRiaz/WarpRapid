@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { motion } from "framer-motion"
 import { Button } from "../components/ui/button"
 import dynamic from "next/dynamic"
 
@@ -28,24 +28,12 @@ import { MeshGradient } from "../components/mesh-gradient"
 import { TypewriterText } from "../components/typewriter-text"
 import { TiltButton } from "../components/tilt-button"
 import Link from "next/link"
-import { useRef } from "react"
 import { ProjectCTA } from "../components/shared/ProjectCTA"
 
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  })
-
-  // Springs for smoother scroll transforms (reduces jank during fast scroll)
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
-  const opacity = useTransform(smoothProgress, [0, 0.4], [1, 0])
-  const y = useTransform(smoothProgress, [0, 0.4], [0, 50])
-
   return (
     <div className="bg-transparent theme-transition">
-      <section ref={containerRef} className="min-h-screen relative flex items-center justify-center overflow-hidden">
+      <section className="min-h-screen relative flex items-center justify-center overflow-hidden">
         {/* Enhanced Animated background */}
         <div className="absolute inset-0">
           {/* Mesh Gradient */}
@@ -60,9 +48,9 @@ export default function Home() {
           {/* Particle System - Absolute positioned helps browser culling */}
           <ParticleBackground particleCount={15} />
         </div>
-
-        <motion.div style={{ opacity, y }} className="relative z-10 text-center px-4 will-change-[transform,opacity] transform-gpu">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+        {/* Hero content - Visible immediately in static HTML */}
+        <div className="relative z-10 text-center px-4 animate-fade-in-up">
+          <div>
             <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight grid place-items-center">
               {/* Ghost Element to Reserve Height (Prevents Layout Shift) */}
               <span className="col-start-1 row-start-1 invisible opacity-0 pointer-events-none select-none">
@@ -113,8 +101,9 @@ export default function Home() {
             >
               <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
             </motion.div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
+
 
 
       </section>
