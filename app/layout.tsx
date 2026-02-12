@@ -155,7 +155,6 @@ export default function RootLayout({
                   <ProgressBar />
                 </Suspense>
                 <Header />
-                <div aria-hidden className="h-12 md:h-16" />
                 <main className="flex-grow" role="main">
                   {children}
                 </main>

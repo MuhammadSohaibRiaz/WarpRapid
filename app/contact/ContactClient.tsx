@@ -33,16 +33,32 @@ export default function ContactClient() {
     setIsSubmitting(true)
     setSubmitStatus("idle")
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
 
-    // Simulate success (you would replace this with your actual API call)
-    setIsSubmitting(false)
-    setSubmitStatus("success")
-    setFormData({ name: "", email: "", message: "" })
+      const data = await response.json()
 
-    // Reset status after 3 seconds
-    setTimeout(() => setSubmitStatus("idle"), 3000)
+      if (response.ok) {
+        setSubmitStatus("success")
+        setFormData({ name: "", email: "", message: "" })
+        // Reset status after 5 seconds to give user time to read
+        setTimeout(() => setSubmitStatus("idle"), 5000)
+      } else {
+        console.error('Submission failed:', data.error)
+        setSubmitStatus("error")
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      setSubmitStatus("error")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const inputBgClass =
@@ -69,7 +85,7 @@ export default function ContactClient() {
         />
       </div>
 
-      <div className="container mx-auto px-6 py-12 relative z-10">
+      <div className="container mx-auto px-6 pt-24 pb-12 relative z-10 md:pt-32">
         {/* Hero Section */}
         <motion.div
           className="text-center mb-12"

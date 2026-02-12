@@ -81,7 +81,7 @@ export default function AboutClient() {
 
       <div className="relative z-10">
         {/* Modern Hero Section */}
-        <section className="container mx-auto px-6 pt-20 pb-12 md:pt-28 md:pb-20">
+        <section className="container mx-auto px-6 pt-32 pb-12 md:pt-40 md:pb-20">
           <div className="max-w-5xl mx-auto text-center">
 
             <motion.h1

@@ -63,7 +63,7 @@ export default function Header() {
               priority
             />
           </div>
-          <div className="relative h-10 w-48 md:h-12 md:w-48 transition-transform group-hover:scale-105 ml-1 mt-2">
+          <div className="relative h-10 w-32 sm:w-40 md:h-12 md:w-48 transition-transform group-hover:scale-105 ml-1 mt-2">
             <Image
               src={color === "white" || (mode === "light" && color !== "black") ? "/header-logo-blue.png" : "/header-logo-white.png"}
               alt="RapidNexTech"
