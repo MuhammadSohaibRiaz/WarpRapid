@@ -88,69 +88,85 @@ export function ParticleBackground({
         }
 
         const colors = getParticleColor()
+        const targetFPS = 30
+        const frameInterval = 1000 / targetFPS
+        let lastFrameTime = 0
 
-        const animate = () => {
+        const animate = (currentTime: number) => {
             if (!isVisibleRef.current) {
                 animationFrameRef.current = requestAnimationFrame(animate)
                 return
             }
 
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+            // Framerate throttling for mobile performance
+            const elapsedSinceLastFrame = currentTime - lastFrameTime
+            if (elapsedSinceLastFrame < frameInterval) {
+                animationFrameRef.current = requestAnimationFrame(animate)
+                return
+            }
+            lastFrameTime = currentTime - (elapsedSinceLastFrame % frameInterval)
+
+            const width = window.innerWidth
+            const height = window.innerHeight
+
+            ctx.clearRect(0, 0, width, height)
 
             const particles = particlesRef.current
             const count = particles.length
-            const width = window.innerWidth
-            const height = window.innerHeight
             const centerX = width / 2
             const centerY = height / 2
+
+            // Pre-calculate colors outside the loop
+            const colorKeys = [colors.primary, colors.secondary, colors.accent]
 
             for (let i = 0; i < count; i++) {
                 const p = particles[i]
 
-                // CENTER AVOIDANCE: Subtle push away from middle of screen
+                // CENTER AVOIDANCE: Optimized math
                 const dxCenter = p.x - centerX
                 const dyCenter = p.y - centerY
-                const distToCenter = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter)
-                if (distToCenter < 300) {
-                    const force = (1 - distToCenter / 300) * 0.05
-                    p.vx += dxCenter * force * 0.01
-                    p.vy += dyCenter * force * 0.01
+                const distSqCenter = dxCenter * dxCenter + dyCenter * dyCenter
+
+                // Only apply force if relatively close (avoiding sqrt where possible)
+                if (distSqCenter < 90000) { // 300px squared
+                    const distToCenter = Math.sqrt(distSqCenter)
+                    const force = (1 - distToCenter / 300) * 0.0005
+                    p.vx += dxCenter * force
+                    p.vy += dyCenter * force
                 }
 
                 p.x += p.vx
                 p.y += p.vy
 
                 // Speed limit
-                p.vx = Math.max(-0.6, Math.min(0.6, p.vx))
-                p.vy = Math.max(-0.6, Math.min(0.6, p.vy))
+                if (p.vx > 0.6) p.vx = 0.6
+                else if (p.vx < -0.6) p.vx = -0.6
+                if (p.vy > 0.6) p.vy = 0.6
+                else if (p.vy < -0.6) p.vy = -0.6
 
                 if (p.x < 0 || p.x > width) p.vx *= -1
                 if (p.y < 0 || p.y > height) p.vy *= -1
 
-                const colorKey = i % 3 === 0 ? colors.primary : i % 3 === 1 ? colors.secondary : colors.accent
+                const colorKey = colorKeys[i % 3]
 
-                // VIVID GLOW: Higher opacity and larger area for that Matrix feel
-                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 4)
-                gradient.addColorStop(0, `rgba(${colorKey}, ${p.opacity * 1.5})`) // 50% more vivid
-                gradient.addColorStop(1, `rgba(${colorKey}, 0)`)
-
-                ctx.fillStyle = gradient
+                // OPTIMIZED GLOW: Simplified drawing (circles instead of complex radial gradients for every particle)
                 ctx.beginPath()
-                ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2)
+                ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2)
+                ctx.fillStyle = `rgba(${colorKey}, ${p.opacity * 2})`
                 ctx.fill()
 
-                // VIVID CONNECTIONS
+                // CONNECTIONS: Limited search distance
                 for (let j = i + 1; j < count; j++) {
                     const p2 = particles[j]
                     const dx = p.x - p2.x
                     const dy = p.y - p2.y
                     const distSq = dx * dx + dy * dy
 
-                    if (distSq < 32400) { // 180px - Longer connections for full visibility
+                    if (distSq < 22500) { // 150px (reduced from 180px for performance)
                         const distance = Math.sqrt(distSq)
-                        const opacity = (1 - distance / 180) * 0.3 // Increased from 0.2
+                        const opacity = (1 - distance / 150) * 0.2
                         ctx.strokeStyle = `rgba(${colors.primary}, ${opacity})`
-                        ctx.lineWidth = 0.8 // Slightly thicker
+                        ctx.lineWidth = 0.5
                         ctx.beginPath()
                         ctx.moveTo(p.x, p.y)
                         ctx.lineTo(p2.x, p2.y)
@@ -162,7 +178,7 @@ export function ParticleBackground({
             animationFrameRef.current = requestAnimationFrame(animate)
         }
 
-        animate()
+        requestAnimationFrame(animate)
 
         return () => {
             window.removeEventListener("resize", resizeCanvas)

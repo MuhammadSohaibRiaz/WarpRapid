@@ -33,7 +33,7 @@ import { ProjectCTA } from "../components/shared/ProjectCTA"
 export default function Home() {
   return (
     <div className="bg-transparent theme-transition">
-      <section className="min-h-screen relative flex items-center justify-center overflow-hidden">
+      <section className="min-h-screen relative flex items-center justify-center overflow-hidden pt-16 md:pt-24">
         {/* Enhanced Animated background */}
         <div className="absolute inset-0">
           {/* Mesh Gradient */}
@@ -51,28 +51,19 @@ export default function Home() {
         {/* Hero content - Visible immediately in static HTML */}
         <div className="relative z-10 text-center px-4 animate-fade-in-up">
           <div>
-            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight grid place-items-center">
-              {/* Ghost Element to Reserve Height (Prevents Layout Shift) */}
-              <span className="col-start-1 row-start-1 invisible opacity-0 pointer-events-none select-none">
-                Custom Software That Solves Real Business Problems
-              </span>
-
-              {/* Actual Animated Text */}
-              <span className="col-start-1 row-start-1">
-                <TypewriterText
-                  texts={[
-                    "Custom Software That Solves Real Business Problems",
-                    "Build Scalable Solutions That Drive Growth",
-                    "Transform Ideas Into Production-Ready Apps",
-                  ]}
-                  className="bg-clip-text text-transparent theme-gradient-text"
-                  typingSpeed={80}
-                  deletingSpeed={40}
-                  pauseDuration={3000}
-                />
-              </span>
+            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent theme-gradient-text mb-6 theme-transition leading-tight flex items-center justify-center">
+              <TypewriterText
+                texts={[
+                  "Custom Software That Solves Real Business Problems",
+                  "Build Scalable Solutions That Drive Growth",
+                  "Transform Ideas Into Production-Ready Apps",
+                ]}
+                typingSpeed={80}
+                deletingSpeed={40}
+                pauseDuration={3000}
+              />
             </h1>
-            <p className="text-xl md:text-2xl theme-text mb-12 max-w-3xl mx-auto theme-transition">
+            <p className="text-xl md:text-2xl theme-text mb-10 max-w-3xl mx-auto theme-transition">
               We help companies automate operations, launch products, and scale with confidence.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -93,17 +84,17 @@ export default function Home() {
                 </TiltButton>
               </Link>
             </div>
-
-            <motion.div
-              className="mt-8"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            >
-              <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
-            </motion.div>
           </div>
         </div>
 
+        {/* Scroll Indicator - Positioned absolutely at the bottom to match production */}
+        <motion.div
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+        >
+          <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
+        </motion.div>
 
 
       </section>
