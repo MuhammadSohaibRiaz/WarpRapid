@@ -170,34 +170,34 @@ export default function ServicesPage() {
             </div>
 
             {/* Final CTA Section */}
-            <section className="py-40 relative overflow-hidden theme-bg border-t border-border/10">
+            <section className="py-16 md:py-20 relative overflow-hidden theme-bg border-t border-border/10">
                 <div className="container mx-auto px-6">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="p-12 md:p-32 rounded-[5rem] bg-gradient-to-br from-primary via-purple-600 to-pink-600 text-white relative overflow-hidden shadow-2xl shadow-primary/30 text-center"
+                        className="p-8 md:p-16 rounded-3xl md:rounded-[4rem] bg-gradient-to-br from-primary via-purple-600 to-pink-600 text-white relative overflow-hidden shadow-2xl shadow-primary/30 text-center"
                     >
                         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2" />
                         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-black/10 blur-[150px] rounded-full -translate-x-1/2 translate-y-1/2" />
 
-                        <div className="relative z-10 space-y-12 max-w-4xl mx-auto">
-                            <div className="space-y-6">
-                                <h2 className="text-5xl md:text-8xl font-black leading-none tracking-tighter">
+                        <div className="relative z-10 space-y-8 md:space-y-10 max-w-4xl mx-auto">
+                            <div className="space-y-4 md:space-y-6">
+                                <h2 className="text-3xl md:text-6xl font-black leading-none tracking-tighter">
                                     Create something <span className="italic">legendary</span>.
                                 </h2>
-                                <p className="text-xl md:text-3xl text-white/80 leading-relaxed font-medium">
+                                <p className="text-lg md:text-xl text-white/80 leading-relaxed font-medium">
                                     Join forces with RapidNexTech to engineer scalable software solutions that don't just work — they dominate.
                                 </p>
                             </div>
-                            <div className="flex flex-wrap items-center justify-center gap-8">
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
                                 <Link href="/contact" className="w-full sm:w-auto">
-                                    <button className="w-full sm:w-auto h-20 px-12 rounded-full bg-white text-primary text-2xl font-black shadow-[0_20px_50px_rgba(255,255,255,0.2)] transition-all hover:scale-105 active:scale-95">
+                                    <button className="w-full sm:w-auto h-16 md:h-16 px-8 md:px-10 rounded-full bg-white text-primary text-xl md:text-xl font-black shadow-[0_20px_50px_rgba(255,255,255,0.2)] transition-all hover:scale-105 active:scale-95">
                                         Let's Talk Business
                                     </button>
                                 </Link>
                                 <Link href="/case-studies" className="w-full sm:w-auto">
-                                    <button className="w-full sm:w-auto h-20 px-12 rounded-full bg-transparent border-2 border-white/40 text-white text-2xl font-black backdrop-blur-xl transition-all hover:bg-white/10">
+                                    <button className="w-full sm:w-auto h-16 md:h-16 px-8 md:px-10 rounded-full bg-transparent border-2 border-white/40 text-white text-xl md:text-xl font-black backdrop-blur-xl transition-all hover:bg-white/10">
                                         Explore Success Stories
                                     </button>
                                 </Link>

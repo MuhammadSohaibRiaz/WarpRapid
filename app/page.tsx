@@ -86,14 +86,14 @@ export default function Home() {
             </div>
 
             {/* Mobile Scroll Indicator - Just below CTA */}
-            <div className="mt-8 md:hidden animate-float">
-              <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
+            <div className="mt-6 md:hidden animate-float">
+              <span className="theme-text text-xs theme-transition opacity-60">Scroll to explore</span>
             </div>
           </div>
         </div>
 
-        {/* Desktop Scroll Indicator - Absolutely at bottom */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:block animate-float">
+        {/* Desktop Scroll Indicator - Absolutely at bottom, hidden on short screens to avoid overlap */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:block lg:block animate-float h-[600px]:hidden">
           <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
         </div>
 
