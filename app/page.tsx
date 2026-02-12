@@ -40,7 +40,7 @@ export default function Home() {
           <MeshGradient />
 
           {/* Grid Pattern - Optimized (No CSS Mask) */}
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.08] pointer-events-none" />
 
           {/* Fade Gradient Overlay (Cheaper than mask) */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90 pointer-events-none" />
@@ -63,7 +63,7 @@ export default function Home() {
                 pauseDuration={3000}
               />
             </h1>
-            <p className="text-xl md:text-2xl theme-text mb-10 max-w-3xl mx-auto theme-transition">
+            <p className="text-xl md:text-2xl theme-text mb-12 max-w-3xl mx-auto theme-transition opacity-70">
               We help companies automate operations, launch products, and scale with confidence.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -77,24 +77,25 @@ export default function Home() {
               </Link>
               <Link href="/case-studies">
                 <TiltButton
-                  className="border-2 border-primary bg-background/50 backdrop-blur-sm text-primary px-8 py-4 text-lg font-bold hover:bg-primary/10"
+                  className="border-2 border-primary bg-transparent text-primary px-8 py-4 text-lg font-bold hover:bg-primary/5 transition-colors"
                   tiltIntensity={12}
                 >
                   View Case Studies
                 </TiltButton>
               </Link>
             </div>
+
+            {/* Mobile Scroll Indicator - Just below CTA */}
+            <div className="mt-8 md:hidden animate-float">
+              <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
+            </div>
           </div>
         </div>
 
-        {/* Scroll Indicator - Positioned absolutely at the bottom to match production */}
-        <motion.div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-        >
+        {/* Desktop Scroll Indicator - Absolutely at bottom */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:block animate-float">
           <span className="theme-text text-sm theme-transition opacity-70">Scroll to explore</span>
-        </motion.div>
+        </div>
 
 
       </section>

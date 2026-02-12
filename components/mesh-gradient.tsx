@@ -29,33 +29,22 @@ export function MeshGradient({ className = "", animate = true }: MeshGradientPro
                 className="absolute inset-0 opacity-30 will-change-transform"
                 style={{
                     background: `
-            radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 0.3) 0px, transparent 50%),
-            radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 0.2) 0px, transparent 50%),
-            radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 0.2) 0px, transparent 50%),
-            radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 0.3) 0px, transparent 50%),
-            radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 0.2) 0px, transparent 50%),
-            radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 0.3) 0px, transparent 50%),
-            radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 0.2) 0px, transparent 50%)
+            radial-gradient(at 27% 37%, hsla(215, 30%, 65%, 0.15) 0px, transparent 50%),
+            radial-gradient(at 97% 21%, hsla(125, 30%, 75%, 0.1) 0px, transparent 50%),
+            radial-gradient(at 52% 99%, hsla(354, 30%, 65%, 0.1) 0px, transparent 50%),
+            radial-gradient(at 10% 29%, hsla(256, 30%, 70%, 0.15) 0px, transparent 50%),
+            radial-gradient(at 97% 96%, hsla(38, 30%, 75%, 0.1) 0px, transparent 50%),
+            radial-gradient(at 33% 50%, hsla(222, 30%, 75%, 0.15) 0px, transparent 50%),
+            radial-gradient(at 79% 53%, hsla(343, 30%, 80%, 0.1) 0px, transparent 50%)
           `,
                 }}
-                animate={
-                    shouldAnimate
-                        ? {
-                            scale: [1, 1.1, 1],
-                            rotate: [0, 5, 0],
-                        }
-                        : {}
-                }
-                transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear",
-                }}
+                animate={{}}
+                transition={{}}
             />
 
             {/* Animated gradient orbs */}
             <motion.div
-                className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full filter blur-3xl opacity-20"
+                className="absolute top-0 -left-4 w-72 h-72 bg-purple-400/10 rounded-full filter blur-3xl"
                 animate={
                     shouldAnimate
                         ? {
@@ -73,7 +62,7 @@ export function MeshGradient({ className = "", animate = true }: MeshGradientPro
             />
 
             <motion.div
-                className="absolute top-0 -right-4 w-72 h-72 bg-primary rounded-full filter blur-3xl opacity-20"
+                className="absolute top-0 -right-4 w-72 h-72 bg-primary/10 rounded-full filter blur-3xl"
                 animate={
                     shouldAnimate
                         ? {
@@ -91,7 +80,7 @@ export function MeshGradient({ className = "", animate = true }: MeshGradientPro
             />
 
             <motion.div
-                className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full filter blur-3xl opacity-20"
+                className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-400/10 rounded-full filter blur-3xl"
                 animate={
                     shouldAnimate
                         ? {
