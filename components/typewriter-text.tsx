@@ -21,68 +21,44 @@ export const TypewriterText = memo(function TypewriterText({
 }: TypewriterTextProps) {
     const [displayText, setDisplayText] = useState("")
     const [textIndex, setTextIndex] = useState(0)
-    const [isDeleting, setIsDeleting] = useState(false)
-    const [isPaused, setIsPaused] = useState(false)
-    const lastTimeRef = useRef<number>(0)
-    const rafRef = useRef<number>()
+    const [phase, setPhase] = useState<"typing" | "paused" | "deleting">("typing")
 
-    // Find the longest text to ensure the ghost container covers the maximum possible area
+    // Find the longest text for ghost container
     const longestText = useMemo(() => {
         return texts.reduce((a, b) => (a.length > b.length ? a : b), "")
     }, [texts])
 
-    const getTypingDelay = useCallback(() => {
-        if (isPaused) return pauseDuration
-        return isDeleting ? deletingSpeed : typingSpeed
-    }, [isDeleting, isPaused, typingSpeed, deletingSpeed, pauseDuration])
-
     useEffect(() => {
         const fullText = texts[textIndex]
+        let timer: ReturnType<typeof setTimeout>
 
-        const animate = (currentTime: number) => {
-            if (!lastTimeRef.current) lastTimeRef.current = currentTime
-            const elapsed = currentTime - lastTimeRef.current
-            const delay = getTypingDelay()
-
-            if (elapsed >= delay) {
-                lastTimeRef.current = currentTime
-
-                if (isPaused) {
-                    setIsPaused(false)
-                    setIsDeleting(true)
-                } else if (!isDeleting) {
-                    if (displayText.length < fullText.length) {
-                        setDisplayText(fullText.slice(0, displayText.length + 1))
-                    } else {
-                        setIsPaused(true)
-                    }
-                } else {
-                    if (displayText.length > 0) {
-                        setDisplayText(displayText.slice(0, -1))
-                    } else {
-                        setIsDeleting(false)
-                        setTextIndex((prev) => (prev + 1) % texts.length)
-                    }
-                }
+        if (phase === "typing") {
+            if (displayText.length < fullText.length) {
+                timer = setTimeout(() => {
+                    setDisplayText(fullText.slice(0, displayText.length + 1))
+                }, typingSpeed)
+            } else {
+                timer = setTimeout(() => setPhase("paused"), 0)
             }
-
-            rafRef.current = requestAnimationFrame(animate)
+        } else if (phase === "paused") {
+            timer = setTimeout(() => setPhase("deleting"), pauseDuration)
+        } else if (phase === "deleting") {
+            if (displayText.length > 0) {
+                timer = setTimeout(() => {
+                    setDisplayText(displayText.slice(0, -1))
+                }, deletingSpeed)
+            } else {
+                setTextIndex((prev) => (prev + 1) % texts.length)
+                setPhase("typing")
+            }
         }
 
-        rafRef.current = requestAnimationFrame(animate)
-
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current)
-        }
-    }, [displayText, isDeleting, isPaused, textIndex, texts, getTypingDelay])
+        return () => clearTimeout(timer)
+    }, [displayText, phase, textIndex, texts, typingSpeed, deletingSpeed, pauseDuration])
 
     return (
         <span className="inline-grid grid-cols-1 grid-rows-1 items-center justify-items-center">
-            {/* 
-                GHOST FOOTPRINT
-                Reserves the maximum width/height required by any of the strings.
-                This prevents the layout from jumping horizontally or vertically.
-            */}
+            {/* Ghost footprint — reserves max width/height, prevents CLS */}
             <span
                 className={`invisible pointer-events-none select-none col-start-1 row-start-1 ${className}`}
                 aria-hidden="true"
@@ -91,17 +67,13 @@ export const TypewriterText = memo(function TypewriterText({
                 <span className="ml-1 opacity-0">|</span>
             </span>
 
-            {/* 
-                INTERACTIVE TYPING LAYER
-                Positioned in the same grid cell to overlay the footprint exactly.
-            */}
-            <span className={`col-start-1 row-start-1 text-center will-change-contents ${className}`}>
+            {/* Visible typing layer */}
+            <span className={`col-start-1 row-start-1 text-center ${className}`}>
                 {displayText}
                 <span
-                    className={`inline-block animate-pulse ml-1 ${cursorClassName}`}
+                    className={`inline-block ml-1 ${cursorClassName}`}
                     style={{
-                        animationDuration: '1s',
-                        animationTimingFunction: 'steps(2, start)',
+                        animation: 'pulse 1s steps(2, start) infinite',
                     }}
                 >
                     |

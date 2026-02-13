@@ -4,7 +4,6 @@ import { motion, useScroll } from "framer-motion"
 import { servicesData, serviceCategories } from "@/lib/services-data"
 import Link from "next/link"
 import { MeshGradient } from "@/components/mesh-gradient"
-import { ParticleBackground } from "@/components/particle-background"
 import { ArrowRight, ChevronRight, Zap } from "lucide-react"
 import { useRef, useState, useEffect } from "react"
 import { GlobalChronometer } from "@/components/services/global-chronometer"
@@ -45,7 +44,6 @@ export default function ServicesPage() {
                     <MeshGradient />
                     <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 pointer-events-none" />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90" />
-                    <ParticleBackground particleCount={20} />
                 </div>
 
                 <div className="container relative z-10 mx-auto px-6 text-center">

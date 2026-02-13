@@ -5,9 +5,9 @@ import { useRef, useState } from "react"
 import { useThemeContext } from "@/context/theme-context"
 
 const stats = [
-  { number: 4, suffix: "+", label: "Years of Hands-On Experience", icon: "⭐" },
-  { number: 20, suffix: "+", label: "Software Projects Developed", icon: "🚀" },
-  { number: 5, suffix: "+", label: "Countries Served Worldwide", icon: "🌍" },
+  { number: 4, suffix: "+", label: "Years of Hands-On Experience" },
+  { number: 20, suffix: "+", label: "Software Projects Developed" },
+  { number: 5, suffix: "+", label: "Countries Served Worldwide" },
 ]
 
 const Counter = ({ value, suffix }: { value: number; suffix: string }) => {
@@ -75,7 +75,6 @@ export function StatsSection() {
               transition={{ duration: 0.5, delay: index * 0.2 }}
               className="text-center space-y-4"
             >
-              <span className="text-4xl">{stat.icon}</span>
               <Counter value={stat.number} suffix={stat.suffix} />
               <motion.p
                 className="text-xl theme-text opacity-70 theme-transition"

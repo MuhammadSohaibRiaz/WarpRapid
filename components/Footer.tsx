@@ -5,7 +5,6 @@ import Image from "next/image"
 import { Github, Twitter, Linkedin, Mail, Facebook, Instagram, ArrowRight } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { servicesData } from "@/lib/services-data"
-import { ParticleBackground } from "./particle-background"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -13,10 +12,6 @@ export function Footer() {
 
   return (
     <footer className="theme-bg border-t border-primary/10 py-12 theme-transition relative overflow-hidden">
-      {/* Background Effect for Consistency */}
-      <div className="absolute inset-0 pointer-events-none opacity-80">
-        <ParticleBackground particleCount={12} />
-      </div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
