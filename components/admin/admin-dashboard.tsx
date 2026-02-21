@@ -317,19 +317,25 @@ export default function AdminDashboard() {
       return
     }
     try {
+      const slug = projectFormData.slug || slugify(projectFormData.title)
+
+      // Sanitize payload: remove read-only fields
+      const { id, created_at, updated_at, ...cleanData } = projectFormData as any;
+      const payload = { ...cleanData, slug };
+
       if (editingProject) {
-        const updated = await cms.updateProject(editingProject.id, projectFormData)
+        const updated = await cms.updateProject(editingProject.id, payload)
         setProjects((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
         toast.success("Project Updated", "Project has been successfully updated")
       } else {
-        const created = await cms.addProject(projectFormData as any)
+        const created = await cms.addProject(payload as any)
         setProjects((prev) => [...prev, created])
         toast.success("Project Created", "New project has been added successfully")
       }
       resetProjectForm()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving project:", error)
-      toast.error("Save Failed", "Error saving project. Please try again.")
+      toast.error("Save Failed", error.message || "Error saving project. Please try again.")
     }
   }
 
@@ -411,20 +417,24 @@ export default function AdminDashboard() {
     }
     try {
       const slug = blogFormData.slug || slugify(blogFormData.title || "")
-      const formDataWithSlug = { ...blogFormData, slug }
+
+      // Sanitize payload: remove read-only fields
+      const { id, created_at, updated_at, ...cleanData } = blogFormData as any;
+      const payload = { ...cleanData, slug };
+
       if (editingBlogPost) {
-        const updated = await cms.updateBlogPost(editingBlogPost.id, formDataWithSlug)
+        const updated = await cms.updateBlogPost(editingBlogPost.id, payload)
         setBlogPosts((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
         toast.success("Blog Updated", "Blog post has been successfully updated")
       } else {
-        const created = await cms.addBlogPost(formDataWithSlug as any)
+        const created = await cms.addBlogPost(payload as any)
         setBlogPosts((prev) => [created, ...prev])
         toast.success("Blog Created", "New blog post has been published successfully")
       }
       resetBlogForm()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving blog post:", error)
-      toast.error("Save Failed", "Error saving blog post. Please try again.")
+      toast.error("Save Failed", error.message || "Error saving blog post. Please try again.")
     }
   }
 
@@ -492,20 +502,23 @@ export default function AdminDashboard() {
     }
 
     try {
+      // Sanitize payload: remove read-only fields
+      const { id, created_at, updated_at, ...payload } = testimonialFormData as any;
+
       if (editingTestimonial) {
-        const updated = await cms.updateReview(editingTestimonial.id, testimonialFormData)
+        const updated = await cms.updateReview(editingTestimonial.id, payload)
         setTestimonials((prev) => prev.map((t) => (t.id === updated.id ? updated : t)))
         toast.success("Testimonial Updated", "Testimonial has been successfully updated")
       } else {
-        const created = await cms.addReview(testimonialFormData as any)
+        const created = await cms.addReview(payload as any)
         setTestimonials((prev) => [created, ...prev])
         toast.success("Testimonial Created", "New testimonial has been added successfully")
       }
       setIsTestimonialFormOpen(false)
       setEditingTestimonial(null)
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving testimonial:", error)
-      toast.error("Save Failed", "Error saving testimonial. Please try again.")
+      toast.error("Save Failed", error.message || "Error saving testimonial. Please try again.")
     }
   }
 
@@ -1859,20 +1872,23 @@ export default function AdminDashboard() {
               toast.warning("Missing Information", "Name and logo are required")
               return
             }
+            // Sanitize payload: remove read-only fields
+            const { id, created_at, updated_at, ...payload } = partnerFormData as any;
+
             if (editingPartner) {
-              const updated = await cms.updatePartner(editingPartner.id, partnerFormData)
+              const updated = await cms.updatePartner(editingPartner.id, payload)
               setPartners((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
               toast.success("Partner Updated", "Partner has been successfully updated")
             } else {
-              const created = await cms.addPartner(partnerFormData as any)
+              const created = await cms.addPartner(payload as any)
               setPartners((prev) => [created, ...prev])
               toast.success("Partner Added", "New partner has been added successfully")
             }
             setIsPartnerFormOpen(false)
             setEditingPartner(null)
-          } catch (e) {
+          } catch (e: any) {
             console.error(e)
-            toast.error("Save Failed", "Error saving partner. Please try again.")
+            toast.error("Save Failed", e.message || "Error saving partner. Please try again.")
           }
         }}
         editingPartner={editingPartner}

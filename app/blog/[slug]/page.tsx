@@ -125,11 +125,8 @@ export default async function BlogPostPage({ params }: Props) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidnextech.com'
   const fullUrl = `${baseUrl}/blog/${params.slug}`
 
-  // Fetch related posts
-  const allPosts = await BlogCMS.getAllBlogPosts()
-  const relatedPosts = allPosts
-    .filter(p => p.id !== post.id && p.is_published)
-    .slice(0, 3)
+  // Fetch related posts (optimized to fetch only metadata)
+  const relatedPosts = await BlogCMS.getRelatedBlogPosts(post.id, 3)
 
   return (
     <>

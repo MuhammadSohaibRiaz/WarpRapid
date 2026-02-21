@@ -12,7 +12,7 @@ import { SocialShare } from "@/components/blog/social-share"
 import { RelatedPosts } from "@/components/blog/related-posts"
 import { TableOfContents } from "@/components/blog/table-of-contents"
 import { useThemeContext } from "@/context/theme-context"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
@@ -73,8 +73,11 @@ function FAQItem({ faq, index, isDark }: { faq: { question: string, answer: stri
 }
 
 // Separate component for reading progress to isolate scroll-triggered renders
-function ReadingProgress({ readingTime }: { readingTime: number }) {
-    const { scrollYProgress } = useScroll()
+function ReadingProgress({ readingTime, contentRef }: { readingTime: number, contentRef: React.RefObject<HTMLElement | null> }) {
+    const { scrollYProgress } = useScroll({
+        target: contentRef,
+        offset: ["start 85%", "end end"]
+    })
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
         damping: 30,
@@ -92,18 +95,18 @@ function ReadingProgress({ readingTime }: { readingTime: number }) {
     const remainingTime = Math.ceil(readingTime * (1 - scrollPercent / 100))
 
     return (
-        <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+        <>
             {/* Progress Bar */}
             <motion.div
-                className="h-1 bg-gradient-to-r from-primary via-purple-500 to-pink-500 origin-left shadow-lg shadow-primary/50"
+                className="h-1 bg-gradient-to-r from-primary via-purple-500 to-pink-500 origin-left shadow-lg shadow-primary/50 fixed top-0 left-0 right-0 z-50 pointer-events-none"
                 style={{ scaleX }}
             />
 
             {/* Floating Progress Stats */}
             <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: scrollPercent > 5 ? 1 : 0, y: scrollPercent > 5 ? 0 : -20 }}
-                className="absolute top-4 right-6 bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl px-4 py-2 shadow-xl hidden md:flex items-center gap-4 pointer-events-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: scrollPercent > 0 ? 1 : 0, y: scrollPercent > 0 ? 0 : 20 }}
+                className="fixed bottom-10 right-6 md:right-10 bg-background/90 backdrop-blur-xl border border-border/50 rounded-full px-5 py-3 shadow-2xl hidden md:flex items-center gap-4 pointer-events-auto z-40"
             >
                 <div className="flex items-center gap-2 text-sm">
                     <TrendingUp className="w-4 h-4 text-primary" />
@@ -115,7 +118,7 @@ function ReadingProgress({ readingTime }: { readingTime: number }) {
                     <span>{remainingTime}min left</span>
                 </div>
             </motion.div>
-        </div>
+        </>
     )
 }
 
@@ -129,6 +132,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
     const { mode, color } = useThemeContext()
     const isDark = mode === "dark" || color === "black"
     const { scrollYProgress } = useScroll()
+    const contentRef = useRef<HTMLDivElement>(null)
 
     // Enhanced reading statistics (calc once)
     const wordCount = useMemo(() => post.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length, [post.content])
@@ -269,17 +273,19 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                 <div className="absolute inset-0 theme-glow blur-3xl theme-transition" />
             </div>
 
-            {/* Optimized Progress Bar Component */}
-            <ReadingProgress readingTime={readingTime} />
+            {/* Optimized Progress Bar Component (Replaced the Top track with NextTopLoader, kept logic) */}
 
-            {/* Floating Header Actions (Back + Share) */}
+            {/* Floating Header Actions (Back) */}
             <div className="fixed top-24 left-6 z-40 hidden md:flex items-center gap-4">
                 <Link href="/blog">
-                    <Button variant="outline" size="icon" className="rounded-full theme-bg/50 backdrop-blur-md border-border/50 hover:theme-bg">
+                    <Button variant="outline" size="icon" className="rounded-full theme-bg/50 backdrop-blur-md border-border/50 hover:theme-bg shadow-lg">
                         <ArrowLeft className="w-4 h-4" />
                     </Button>
                 </Link>
             </div>
+
+            {/* Optimized Progress Bar Component (Replaced the Top track with NextTopLoader, kept logic) */}
+            <ReadingProgress readingTime={readingTime} contentRef={contentRef} />
 
             {/* Hero Section */}
             <header className="relative w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden">
@@ -372,7 +378,8 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                 <div className="relative">
                     <div className="absolute -left-8 top-0 bottom-1/2 w-1 bg-gradient-to-b from-primary via-purple-500 to-transparent rounded-full hidden lg:block" />
 
-                    <article className="prose prose-lg md:prose-xl dark:prose-invert max-w-none 
+                    <div ref={contentRef}>
+                        <article className="prose prose-lg md:prose-xl dark:prose-invert max-w-none 
                         prose-headings:font-black prose-headings:tracking-tight prose-headings:scroll-mt-24
                         prose-h2:text-4xl prose-h2:md:text-5xl prose-h2:mb-8 prose-h2:mt-16
                         prose-h3:text-3xl prose-h3:md:text-4xl prose-h3:mb-6 prose-h3:mt-12
@@ -393,16 +400,17 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                         prose-strong:text-foreground prose-strong:font-bold
                         prose-em:text-muted-foreground prose-em:italic
                     ">
-                        <ReactMarkdown
-                            remarkPlugins={[remarkGfm]}
-                            rehypePlugins={[rehypeRaw]}
-                            components={markdownComponents}
-                        >
-                            {post.content}
-                        </ReactMarkdown>
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                rehypePlugins={[rehypeRaw]}
+                                components={markdownComponents}
+                            >
+                                {post.content}
+                            </ReactMarkdown>
 
-                        <div className="clear-both" />
-                    </article>
+                            <div className="clear-both" />
+                        </article>
+                    </div>
 
                     {post.faqs && post.faqs.length > 0 && (
                         <motion.section
@@ -513,84 +521,85 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                         </div>
                     </div>
                 </motion.div>
-            </main>
+            </main >
 
             <TableOfContents content={post.content} />
 
-            {nextPost && (
-                <section className="relative border-t border-border mt-32 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
+            {
+                nextPost && (
+                    <section className="relative border-t border-border mt-32 overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5" />
 
-                    <div className="container max-w-6xl mx-auto px-6 py-24 relative z-10">
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <p className="text-center text-muted-foreground uppercase tracking-widest text-sm font-bold mb-12 flex items-center justify-center gap-3">
-                                <span className="h-px w-12 bg-gradient-to-r from-transparent to-primary" />
-                                Continue Reading
-                                <span className="h-px w-12 bg-gradient-to-l from-transparent to-primary" />
-                            </p>
+                        <div className="container max-w-6xl mx-auto px-6 py-24 relative z-10">
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8 }}
+                            >
+                                <p className="text-center text-muted-foreground uppercase tracking-widest text-sm font-bold mb-12 flex items-center justify-center gap-3">
+                                    <span className="h-px w-12 bg-gradient-to-r from-transparent to-primary" />
+                                    Continue Reading
+                                    <span className="h-px w-12 bg-gradient-to-l from-transparent to-primary" />
+                                </p>
 
-                            <Link href={`/blog/${nextPost.slug || ''}`} className="group block">
-                                <div className="grid md:grid-cols-2 gap-12 items-center">
-                                    <motion.div
-                                        className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl"
-                                        whileHover={{ scale: 1.02 }}
-                                        transition={{ duration: 0.3 }}
-                                    >
-                                        <Image
-                                            src={nextPost.images?.[0]?.url || "/placeholder.svg"}
-                                            alt={nextPost.title}
-                                            fill
-                                            className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                <Link href={`/blog/${nextPost.slug || ''}`} className="group block">
+                                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                                        <motion.div
+                                            className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl"
+                                            whileHover={{ scale: 1.02 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <Image
+                                                src={nextPost.images?.[0]?.url || "/placeholder.svg"}
+                                                alt={nextPost.title}
+                                                fill
+                                                className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-                                        <div className="absolute top-6 right-6 bg-primary text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                            Next →
-                                        </div>
-                                    </motion.div>
-
-                                    <div className="space-y-6">
-                                        {nextPost.tags?.slice(0, 2).map((tag) => (
-                                            <span key={tag} className="inline-block px-3 py-1 rounded-lg bg-primary/10 text-primary text-sm font-semibold mr-2">
-                                                {tag}
-                                            </span>
-                                        ))}
-
-                                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black theme-text leading-tight group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-purple-500 transition-all duration-300">
-                                            {nextPost.title}
-                                        </h2>
-
-                                        {nextPost.excerpt && (
-                                            <p className="text-lg text-muted-foreground line-clamp-3">
-                                                {nextPost.excerpt}
-                                            </p>
-                                        )}
-
-                                        <div className="flex items-center gap-4 pt-4">
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <Clock className="w-4 h-4" />
-                                                <span>{Math.ceil(nextPost.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length / 200)} min</span>
+                                            <div className="absolute top-6 right-6 bg-primary text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                                                Next →
                                             </div>
-                                        </div>
+                                        </motion.div>
 
-                                        <div className="pt-4">
-                                            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-primary text-white font-bold group-hover:gap-5 transition-all duration-300 shadow-lg shadow-primary/20">
-                                                Read Article
-                                                <ArrowLeft className="w-5 h-5 rotate-180" />
+                                        <div className="space-y-6">
+                                            {nextPost.tags?.slice(0, 2).map((tag) => (
+                                                <span key={tag} className="inline-block px-3 py-1 rounded-lg bg-primary/10 text-primary text-sm font-semibold mr-2">
+                                                    {tag}
+                                                </span>
+                                            ))}
+
+                                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black theme-text leading-tight group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-purple-500 transition-all duration-300">
+                                                {nextPost.title}
+                                            </h2>
+
+                                            {nextPost.excerpt && (
+                                                <p className="text-lg text-muted-foreground line-clamp-3">
+                                                    {nextPost.excerpt}
+                                                </p>
+                                            )}
+
+                                            <div className="flex items-center gap-4 pt-4">
+                                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                    <Clock className="w-4 h-4" />
+                                                    <span>{Math.ceil(nextPost.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length / 200)} min</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="pt-4">
+                                                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-primary text-white font-bold group-hover:gap-5 transition-all duration-300 shadow-lg shadow-primary/20">
+                                                    Read Article
+                                                    <ArrowLeft className="w-5 h-5 rotate-180" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        </motion.div>
-                    </div>
-                </section>
-            )
+                                </Link>
+                            </motion.div>
+                        </div>
+                    </section>
+                )
             }
 
             <div className="theme-bg py-24 relative z-10">
@@ -607,6 +616,6 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

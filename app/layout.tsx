@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import { Inter, Space_Grotesk } from "next/font/google"
 import Header from "@/components/Header"
 import { Footer } from "@/components/Footer"
-import ProgressBar from "./components/ProgressBar"
+import NextTopLoader from "nextjs-toploader"
 import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
 import { AuthProvider } from "@/context/auth-context"
@@ -151,9 +151,7 @@ export default function RootLayout({
           <ThemeContextProvider>
             <AuthProvider>
               <div className="flex flex-col min-h-screen relative theme-bg theme-transition">
-                <Suspense fallback={null}>
-                  <ProgressBar />
-                </Suspense>
+                <NextTopLoader color="#3b82f6" showSpinner={false} />
                 <Header />
                 <main className="flex-grow" role="main">
                   {children}

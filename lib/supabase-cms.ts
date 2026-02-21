@@ -1,5 +1,6 @@
 import { supabase, type ProjectDetail, type BlogPost, type ClientReview, type TrustedPartner, type BlogComment } from "./supabase"
 import { slugify } from "./utils"
+import { cache } from "react"
 
 export type { ProjectDetail, BlogPost, ClientReview, TrustedPartner, BlogComment }
 
@@ -129,13 +130,13 @@ export class PortfolioCMS {
 
 // Blog CMS (unchanged except for import usage)
 export class BlogCMS {
-  static async getAllBlogPosts(): Promise<BlogPost[]> {
+  static getAllBlogPosts = cache(async (): Promise<BlogPost[]> => {
     const { data, error } = await supabase.from("blog_posts").select("*").order("date", { ascending: false })
     if (error) throw error
     return data || []
-  }
+  })
 
-  static async getPublishedBlogPosts(): Promise<BlogPost[]> {
+  static getPublishedBlogPosts = cache(async (): Promise<BlogPost[]> => {
     const { data, error } = await supabase
       .from("blog_posts")
       .select("*")
@@ -143,9 +144,9 @@ export class BlogCMS {
       .order("date", { ascending: false })
     if (error) throw error
     return data || []
-  }
+  })
 
-  static async getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  static getBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
     const { data, error } = await supabase
       .from("blog_posts")
       .select("*")
@@ -154,7 +155,19 @@ export class BlogCMS {
       .single()
     if (error) throw error
     return data
-  }
+  })
+
+  static getRelatedBlogPosts = cache(async (currentPostId: number, limit: number = 3): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, images, author, date, tags, is_published")
+      .eq("is_published", true)
+      .neq("id", currentPostId)
+      .order("date", { ascending: false })
+      .limit(limit)
+    if (error) throw error
+    return data || []
+  })
 
   static async addBlogPost(post: Omit<BlogPost, "id" | "created_at" | "updated_at">): Promise<BlogPost> {
     const slug = post.slug || slugify(post.title)
@@ -450,6 +463,7 @@ export function useSupabaseCMS() {
     toggleBlogPublishStatus: BlogCMS.toggleBlogPublishStatus,
     searchBlogPosts: BlogCMS.searchBlogPosts,
     getBlogPostsByTag: BlogCMS.getBlogPostsByTag,
+    getRelatedBlogPosts: BlogCMS.getRelatedBlogPosts,
 
     // Reviews
     getAllReviews: ReviewsCMS.getAllReviews,
