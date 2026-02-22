@@ -135,7 +135,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
     const contentRef = useRef<HTMLDivElement>(null)
 
     // Enhanced reading statistics (calc once)
-    const wordCount = useMemo(() => post.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length, [post.content])
+    const wordCount = useMemo(() => (post.content || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length, [post.content])
     const readingTime = Math.ceil(wordCount / 200)
 
     // Parallax effects for hero (Framermotion handles these without parent re-renders)
@@ -583,7 +583,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                                             <div className="flex items-center gap-4 pt-4">
                                                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                                     <Clock className="w-4 h-4" />
-                                                    <span>{Math.ceil(nextPost.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length / 200)} min</span>
+                                                    <span>{Math.ceil(((nextPost.content || nextPost.excerpt || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length) / 200)} min</span>
                                                 </div>
                                             </div>
 
