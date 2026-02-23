@@ -3,10 +3,10 @@
 import Link from "next/link"
 import { motion, useScroll, useTransform } from "framer-motion"
 import type { BlogPost } from "@/lib/supabase-cms"
+import Image from "next/image"
 import { formatDate } from "@/lib/utils"
 import { ArrowUpRight, Calendar, User, Tag, Clock } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
-import Image from "next/image"
 
 // Animation variants
 const fadeInUp = {
@@ -208,13 +208,13 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                 >
                   <Link href={`/blog/${post.slug}`} className="flex flex-col h-full">
                     {/* Image */}
-                    <div className={`relative overflow-hidden ${isWide ? 'h-64 md:h-80' : 'h-64'}`}>
+                    <div className={`relative overflow-hidden ${isWide ? "h-64 md:h-80" : "h-64"}`}>
                       <Image
                         src={post.images?.[0]?.url || "/placeholder.svg"}
                         alt={post.title}
                         fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                         sizes={isWide ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 

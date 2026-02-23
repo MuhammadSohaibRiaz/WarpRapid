@@ -568,12 +568,11 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                                             whileHover={{ scale: 1.02 }}
                                             transition={{ duration: 0.3 }}
                                         >
-                                            <Image
+                                            <img
                                                 src={blogImageUrl(nextPost.images?.[0]?.url)}
                                                 alt={nextPost.title}
-                                                fill
-                                                loading="lazy"
-                                                className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                loading="eager"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
