@@ -130,20 +130,35 @@ export class PortfolioCMS {
 
 // Blog CMS (unchanged except for import usage)
 export class BlogCMS {
+  /** Admin list: no content for fast load; use getBlogPostById when editing */
   static getAllBlogPosts = cache(async (): Promise<BlogPost[]> => {
-    const { data, error } = await supabase.from("blog_posts").select("*").order("date", { ascending: false })
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, images, author, date, tags, is_published, created_at, updated_at, seo_title, seo_description, faqs, cta")
+      .order("date", { ascending: false })
     if (error) throw error
-    return data || []
+    return (data || []) as BlogPost[]
   })
 
+  /** List fields only (no content) for fast list/SSG payloads */
   static getPublishedBlogPosts = cache(async (): Promise<BlogPost[]> => {
     const { data, error } = await supabase
       .from("blog_posts")
-      .select("*")
+      .select("id, title, slug, excerpt, images, author, date, tags, is_published, created_at, updated_at, seo_title, seo_description, faqs, cta")
       .eq("is_published", true)
       .order("date", { ascending: false })
     if (error) throw error
-    return data || []
+    return (data || []) as BlogPost[]
+  })
+
+  static getBlogPostById = cache(async (id: number): Promise<BlogPost | null> => {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("id", id)
+      .single()
+    if (error) throw error
+    return data
   })
 
   static getBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
@@ -455,6 +470,7 @@ export function useSupabaseCMS() {
 
     // Blog
     getAllBlogPosts: BlogCMS.getAllBlogPosts,
+    getBlogPostById: BlogCMS.getBlogPostById,
     getPublishedBlogPosts: BlogCMS.getPublishedBlogPosts,
     getBlogPostBySlug: BlogCMS.getBlogPostBySlug,
     addBlogPost: BlogCMS.addBlogPost,

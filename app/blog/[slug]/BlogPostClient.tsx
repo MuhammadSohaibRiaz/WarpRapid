@@ -3,19 +3,32 @@
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import { ArrowLeft, Clock, Calendar, User, Share2, MessageCircle, BookOpen, TrendingUp, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatDate } from "@/lib/utils"
 import type { BlogPost } from "@/lib/supabase-cms"
-import { CommentSection } from "@/components/blog/comment-section"
 import { SocialShare } from "@/components/blog/social-share"
 import { RelatedPosts } from "@/components/blog/related-posts"
-import { TableOfContents } from "@/components/blog/table-of-contents"
 import { useThemeContext } from "@/context/theme-context"
 import { useState, useEffect, useMemo, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
+// Use raw image URLs so images always display (Supabase transform URLs may 404 if Image Transforms not enabled)
+function blogImageUrl(url: string | undefined): string {
+  return url || "/placeholder.svg"
+}
+
+const CommentSection = dynamic(
+  () => import("@/components/blog/comment-section").then((m) => m.CommentSection),
+  { ssr: false }
+)
+
+const TableOfContents = dynamic(
+  () => import("@/components/blog/table-of-contents").then((m) => m.TableOfContents),
+  { ssr: false }
+)
 
 // Interactive FAQ Component
 function FAQItem({ faq, index, isDark }: { faq: { question: string, answer: string }, index: number, isDark: boolean }) {
@@ -61,7 +74,7 @@ function FAQItem({ faq, index, isDark }: { faq: { question: string, answer: stri
                     >
                         <div className="px-8 pb-8 flex items-start gap-3">
                             <span className="text-purple-500 font-bold mt-1">A.</span>
-                            <div className={`text-lg leading-relaxed ${isDark ? 'text-blue-100/80' : 'text-muted-foreground'}`}>
+                            <div className={`text-lg leading-relaxed ${isDark ? "text-blue-100/80" : "text-muted-foreground"}`}>
                                 {faq.answer}
                             </div>
                         </div>
@@ -76,7 +89,9 @@ function FAQItem({ faq, index, isDark }: { faq: { question: string, answer: stri
 function ReadingProgress({ readingTime, contentRef }: { readingTime: number, contentRef: React.RefObject<HTMLElement | null> }) {
     const { scrollYProgress } = useScroll({
         target: contentRef,
-        offset: ["start 85%", "end end"]
+        // Start at 0% when the article starts at top of viewport,
+        // so the progress bar reflects actual reading progress.
+        offset: ["start start", "end end"]
     })
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
@@ -135,7 +150,10 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
     const contentRef = useRef<HTMLDivElement>(null)
 
     // Enhanced reading statistics (calc once)
-    const wordCount = useMemo(() => (post.content || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length, [post.content])
+    const wordCount = useMemo(
+        () => (post.content || "").replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length,
+        [post.content]
+    )
     const readingTime = Math.ceil(wordCount / 200)
 
     // Parallax effects for hero (Framermotion handles these without parent re-renders)
@@ -146,7 +164,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
     const markdownComponents = useMemo(() => ({
         // Custom image component to handle [Image:X], [Image:X:left], [Image:X:right]
         p: ({ children }: any) => {
-            if (typeof children === 'string' && /^\[Image:\d+(:(left|right))?\]$/.test(children)) {
+            if (typeof children === "string" && /^\[Image:\d+(:(left|right))?\]$/.test(children)) {
                 const match = children.match(/\[Image:(\d+)(:(left|right))?\]/)
                 if (!match) return <p>{children}</p>
 
@@ -166,7 +184,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                             >
                                 <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-border/50 bg-muted/5">
                                     <Image
-                                        src={img.url}
+                                        src={blogImageUrl(img.url)}
                                         alt={img.alt || post.title}
                                         width={1200}
                                         height={675}
@@ -183,7 +201,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                         )
                     }
 
-                    if (position === 'right') {
+                    if (position === "right") {
                         return (
                             <motion.figure
                                 initial={{ opacity: 0, y: 20 }}
@@ -194,7 +212,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                             >
                                 <div className="relative w-full rounded-2xl overflow-hidden shadow-xl border border-border/50 bg-muted/5">
                                     <Image
-                                        src={img.url}
+                                        src={blogImageUrl(img.url)}
                                         alt={img.alt || post.title}
                                         width={600}
                                         height={450}
@@ -221,7 +239,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                         >
                             <div className="relative w-full rounded-2xl overflow-hidden shadow-xl border border-border/50 bg-muted/5">
                                 <Image
-                                    src={img.url}
+                                    src={blogImageUrl(img.url)}
                                     alt={img.alt || post.title}
                                     width={600}
                                     height={450}
@@ -251,7 +269,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                 className="relative w-full my-12 rounded-3xl overflow-hidden shadow-2xl border border-border/50 bg-muted/5 clear-both"
             >
                 <Image
-                    src={src || "/placeholder.svg"}
+                    src={blogImageUrl(src)}
                     alt={alt || post.title}
                     width={1200}
                     height={675}
@@ -294,7 +312,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                     style={{ scale: heroScale, y: heroY }}
                 >
                     <Image
-                        src={post.images?.[0]?.url || "/placeholder.svg"}
+                        src={blogImageUrl(post.images?.[0]?.url)}
                         alt={post.images?.[0]?.alt || post.title}
                         fill
                         priority
@@ -412,7 +430,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                         </article>
                     </div>
 
-                    {post.faqs && post.faqs.length > 0 && (
+                        {post.faqs && post.faqs.length > 0 && (
                         <motion.section
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -512,12 +530,12 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                                 <h3 className="text-2xl font-bold theme-text mb-2">Enjoyed this article?</h3>
                                 <p className="text-muted-foreground">Share it with your network and help others discover it too!</p>
                             </div>
-                            <SocialShare
-                                title={post.title}
-                                url={fullUrl}
-                                description={post.excerpt}
-                                hashtags={post.tags}
-                            />
+                        <SocialShare
+                            title={post.title}
+                            url={fullUrl}
+                            description={post.excerpt}
+                            hashtags={post.tags}
+                        />
                         </div>
                     </div>
                 </motion.div>
@@ -551,9 +569,10 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                                             transition={{ duration: 0.3 }}
                                         >
                                             <Image
-                                                src={nextPost.images?.[0]?.url || "/placeholder.svg"}
+                                                src={blogImageUrl(nextPost.images?.[0]?.url)}
                                                 alt={nextPost.title}
                                                 fill
+                                                loading="lazy"
                                                 className="object-cover group-hover:scale-110 transition-transform duration-700"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

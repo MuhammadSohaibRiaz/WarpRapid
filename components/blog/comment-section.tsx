@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useThemeContext } from "@/context/theme-context"
 import { MessageSquare, Send, User, Calendar as CalendarIcon, ShieldCheck } from "lucide-react"
-import { useSupabaseCMS, type BlogComment } from "@/lib/supabase-cms"
+import type { BlogComment } from "@/lib/supabase-cms"
+import { useSupabaseCMS } from "@/lib/hooks/use-supabase-cms"
 import { formatDate } from "@/lib/utils"
 
 interface CommentFormData {

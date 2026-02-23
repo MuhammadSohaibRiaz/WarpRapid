@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { BlogCMS, BlogPost } from "@/lib/supabase-cms"
+import type { BlogPost } from "@/lib/supabase-cms"
 import { formatDate } from "@/lib/utils"
 import { ArrowUpRight, Calendar, User, Tag, Clock } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
@@ -12,20 +12,24 @@ import Image from "next/image"
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 }
+  transition: { duration: 0.5 },
 }
 
 const staggerContainer = {
   animate: {
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 }
 
-export default function BlogClient() {
-  const [posts, setPosts] = useState<BlogPost[]>([])
-  const [loading, setLoading] = useState(true)
+interface BlogClientProps {
+  initialPosts?: BlogPost[]
+}
+
+export default function BlogClient({ initialPosts }: BlogClientProps) {
+  const [posts, setPosts] = useState<BlogPost[]>(initialPosts || [])
+  const [loading, setLoading] = useState(!initialPosts)
   const containerRef = useRef(null)
 
   // Scroll parallax for header
@@ -37,9 +41,14 @@ export default function BlogClient() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   useEffect(() => {
+    // Fallback: if no initial posts were provided, fetch via a lightweight API route.
+    if (initialPosts) return
+
     async function loadPosts() {
       try {
-        const data = await BlogCMS.getPublishedBlogPosts()
+        const res = await fetch("/api/blog-list")
+        if (!res.ok) throw new Error("Failed to load blog posts")
+        const data = (await res.json()) as BlogPost[]
         setPosts(data)
       } catch (error) {
         console.error("Failed to load blog posts", error)
@@ -47,8 +56,9 @@ export default function BlogClient() {
         setLoading(false)
       }
     }
+
     loadPosts()
-  }, [])
+  }, [initialPosts])
 
   if (loading) {
     return (

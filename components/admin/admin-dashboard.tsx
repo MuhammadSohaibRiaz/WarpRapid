@@ -20,13 +20,14 @@ import {
   FileText,
   Briefcase,
   MessageSquare,
+  MessageCircle,
   UploadCloud,
   Star,
   FileEdit,
 } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { useSupabaseCMS } from "@/lib/supabase-cms"
-import type { ProjectDetail, BlogPost, ClientReview, ProjectImage, TrustedPartner } from "@/lib/supabase"
+import type { ProjectDetail, BlogPost, BlogComment, ClientReview, ProjectImage, TrustedPartner } from "@/lib/supabase"
 import { PartnerFormModal } from "@/components/admin/partners/partner-form-modal"
 import { PartnerCard } from "@/components/admin/partners/partner-card"
 import { slugify } from "@/lib/utils"
@@ -47,9 +48,10 @@ export default function AdminDashboard() {
   const toast = useAdminToast()
 
   // State management
-  const [activeTab, setActiveTab] = useState<"projects" | "blog" | "testimonials" | "partners" | "drafts">("projects")
+  const [activeTab, setActiveTab] = useState<"projects" | "blog" | "comments" | "testimonials" | "partners" | "drafts">("projects")
   const [projects, setProjects] = useState<ProjectDetail[]>([])
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [comments, setComments] = useState<BlogComment[]>([])
   const [testimonials, setTestimonials] = useState<ClientReview[]>([])
   const [partners, setPartners] = useState<TrustedPartner[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -185,14 +187,16 @@ export default function AdminDashboard() {
   const loadData = async () => {
     try {
       setIsLoading(true)
-      const [projectsData, blogData, testimonialsData, partnersData] = await Promise.all([
+      const [projectsData, blogData, commentsData, testimonialsData, partnersData] = await Promise.all([
         cms.getAllProjects(),
         cms.getAllBlogPosts(),
+        cms.getAllComments(),
         cms.getAllReviews(),
         cms.getAllPartners(),
       ])
       setProjects(projectsData)
       setBlogPosts(blogData)
+      setComments(commentsData)
       setTestimonials(testimonialsData)
       setPartners(partnersData)
     } catch (error) {
@@ -227,6 +231,16 @@ export default function AdminDashboard() {
       (filterStatus === "Published" && post.is_published) ||
       (filterStatus === "Draft" && !post.is_published)
 
+    return matchesSearch && matchesStatus
+  })
+
+  const filteredComments = comments.filter((c) => {
+    const haystack = `${c.post_slug} ${c.name} ${c.email} ${c.content}`.toLowerCase()
+    const matchesSearch = haystack.includes(searchTerm.toLowerCase())
+    const matchesStatus =
+      filterStatus === "All" ||
+      (filterStatus === "Approved" && c.is_approved) ||
+      (filterStatus === "Pending" && !c.is_approved)
     return matchesSearch && matchesStatus
   })
 
@@ -385,10 +399,18 @@ export default function AdminDashboard() {
     clearBlogDraft()
   }, [clearBlogDraft])
 
-  const handleEditBlogPost = (post: BlogPost) => {
-    setBlogFormData(post)
-    setEditingBlogPost(post)
-    setIsBlogFormOpen(true)
+  const handleEditBlogPost = async (post: BlogPost) => {
+    try {
+      const full = await cms.getBlogPostById(post.id)
+      if (full) {
+        setBlogFormData(full)
+        setEditingBlogPost(full)
+        setIsBlogFormOpen(true)
+      }
+    } catch (e) {
+      console.error("Failed to load blog post for edit", e)
+      toast.error("Could not load post", "Please try again.")
+    }
   }
 
   const handleAddBlogClick = () => {
@@ -732,6 +754,19 @@ export default function AdminDashboard() {
               <span className="bg-white/20 px-2 py-1 rounded-full text-xs">{blogPosts.length}</span>
             </button>
             <button
+              onClick={() => setActiveTab("comments")}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${activeTab === "comments"
+                ? "bg-primary text-white shadow-sm"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                }`}
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Comments</span>
+              <span className="bg-white/20 px-2 py-1 rounded-full text-xs">
+                {comments.filter((c) => !c.is_approved).length}
+              </span>
+            </button>
+            <button
               onClick={() => setActiveTab("testimonials")}
               className={`flex items-center space-x-2 px-4 py-2 rounded-md font-medium transition-all whitespace-nowrap ${activeTab === "testimonials"
                 ? "bg-primary text-white shadow-sm"
@@ -855,7 +890,12 @@ export default function AdminDashboard() {
                       exit={{ opacity: 0, y: -10 }}
                       className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-[100]`}
                     >
-                      {["All", "Published", "Draft"].map((status) => (
+                      {(activeTab === "comments"
+                        ? ["All", "Pending", "Approved"]
+                        : activeTab === "drafts"
+                          ? ["All"]
+                          : ["All", "Published", "Draft"]
+                      ).map((status) => (
                         <button
                           key={status}
                           onClick={() => {
@@ -874,18 +914,27 @@ export default function AdminDashboard() {
             </div>
 
             {/* Add Button */}
-            <Button
-              onClick={() => {
-                if (activeTab === "projects") handleAddProjectClick()
-                else if (activeTab === "blog") handleAddBlogClick()
-                else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
-                else if (activeTab === "partners") setIsPartnerFormOpen(true)
-              }}
-              className="bg-primary hover:bg-primary/90 text-white"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add {activeTab === "projects" ? "Project" : activeTab === "blog" ? "Blog Post" : "Testimonial"}
-            </Button>
+            {activeTab !== "drafts" && activeTab !== "comments" && (
+              <Button
+                onClick={() => {
+                  if (activeTab === "projects") handleAddProjectClick()
+                  else if (activeTab === "blog") handleAddBlogClick()
+                  else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
+                  else if (activeTab === "partners") setIsPartnerFormOpen(true)
+                }}
+                className="bg-primary hover:bg-primary/90 text-white"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add{" "}
+                {activeTab === "projects"
+                  ? "Project"
+                  : activeTab === "blog"
+                    ? "Blog Post"
+                    : activeTab === "partners"
+                      ? "Partner"
+                      : "Testimonial"}
+              </Button>
+            )}
           </div>
 
           {/* Stats */}
@@ -899,6 +948,8 @@ export default function AdminDashboard() {
                   ? projects.length
                   : activeTab === "blog"
                     ? blogPosts.length
+                    : activeTab === "comments"
+                      ? comments.length
                     : activeTab === "testimonials"
                       ? testimonials.length
                       : activeTab === "partners"
@@ -906,11 +957,22 @@ export default function AdminDashboard() {
                         : (typeof window !== "undefined" ? (localStorage.getItem("wr-project-draft") ? 1 : 0) + (localStorage.getItem("wr-blog-draft") ? 1 : 0) : 0)}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">
-                Total {activeTab === "projects" ? "Projects" : activeTab === "blog" ? "Posts" : activeTab === "testimonials" ? "Testimonials" : activeTab === "partners" ? "Partners" : "Drafts"}
+                Total{" "}
+                {activeTab === "projects"
+                  ? "Projects"
+                  : activeTab === "blog"
+                    ? "Posts"
+                    : activeTab === "comments"
+                      ? "Comments"
+                      : activeTab === "testimonials"
+                        ? "Testimonials"
+                        : activeTab === "partners"
+                          ? "Partners"
+                          : "Drafts"}
               </div>
             </button>
             <button
-              onClick={() => setFilterStatus("Published")}
+              onClick={() => setFilterStatus(activeTab === "comments" ? "Approved" : "Published")}
               className="text-center group hover:scale-105 transition-transform"
             >
               <div className="text-2xl font-bold text-green-500 group-hover:text-green-400">
@@ -918,14 +980,18 @@ export default function AdminDashboard() {
                   ? projects.filter((p) => p.is_published).length
                   : activeTab === "blog"
                     ? blogPosts.filter((p) => p.is_published).length
+                    : activeTab === "comments"
+                      ? comments.filter((c) => c.is_approved).length
                     : activeTab === "testimonials"
                       ? testimonials.filter((p) => p.is_published).length
                       : partners.filter((p) => p.is_published).length}
               </div>
-              <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">Published</div>
+              <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">
+                {activeTab === "comments" ? "Approved" : "Published"}
+              </div>
             </button>
             <button
-              onClick={() => setFilterStatus("Draft")}
+              onClick={() => setFilterStatus(activeTab === "comments" ? "Pending" : "Draft")}
               className="text-center group hover:scale-105 transition-transform"
             >
               <div className="text-2xl font-bold text-yellow-500 group-hover:text-yellow-400">
@@ -933,11 +999,15 @@ export default function AdminDashboard() {
                   ? projects.filter((p) => !p.is_published).length
                   : activeTab === "blog"
                     ? blogPosts.filter((p) => !p.is_published).length
+                    : activeTab === "comments"
+                      ? comments.filter((c) => !c.is_approved).length
                     : activeTab === "testimonials"
                       ? testimonials.filter((p) => !p.is_published).length
                       : partners.filter((p) => !p.is_published).length}
               </div>
-              <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">Drafts</div>
+              <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">
+                {activeTab === "comments" ? "Pending" : "Drafts"}
+              </div>
             </button>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-500">
@@ -945,6 +1015,8 @@ export default function AdminDashboard() {
                   ? filteredProjects.length
                   : activeTab === "blog"
                     ? filteredBlogPosts.length
+                    : activeTab === "comments"
+                      ? filteredComments.length
                     : activeTab === "testimonials"
                       ? filteredTestimonials.length
                       : activeTab === "partners"
@@ -1142,16 +1214,73 @@ export default function AdminDashboard() {
               <BlogCard
                 key={post.id}
                 post={post}
-                onEdit={(p) => {
-                  setEditingBlogPost(p)
-                  setBlogFormData(p)
-                  setIsBlogFormOpen(true)
-                }}
+                onEdit={(p) => handleEditBlogPost(p)}
                 onTogglePublish={handleToggleBlogPublish}
                 onDelete={handleDeleteBlogPost}
                 cardBgClass={theme.cardBg}
                 index={index}
               />
+            ))}
+
+          {/* Comments Grid */}
+          {activeTab === "comments" &&
+            filteredComments.map((c, index) => (
+              <motion.div
+                key={c.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.03 }}
+                className={`${theme.cardBg} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col border ${c.is_approved ? "border-green-500/20" : "border-yellow-500/30"}`}
+              >
+                <div className="p-5 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-bold theme-text truncate">{c.name}</span>
+                        <span className="text-xs theme-text opacity-60 truncate">{c.email}</span>
+                        <span className={`text-[10px] px-2 py-1 rounded-full font-semibold ${c.is_approved ? "bg-green-500/15 text-green-600" : "bg-yellow-500/15 text-yellow-600"}`}>
+                          {c.is_approved ? "APPROVED" : "PENDING"}
+                        </span>
+                      </div>
+                      <div className="text-xs theme-text opacity-60 mt-1">
+                        Post: <span className="font-mono">{c.post_slug}</span> • {new Date(c.created_at).toLocaleString()}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {!c.is_approved && (
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                          onClick={async () => {
+                            const updated = await cms.approveComment(c.id)
+                            setComments((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
+                            toast.success("Approved", "Comment is now public.")
+                          }}
+                        >
+                          Approve
+                        </Button>
+                      )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-red-600 hover:text-red-700"
+                        onClick={async () => {
+                          if (!confirm("Delete this comment?")) return
+                          await cms.deleteComment(c.id)
+                          setComments((prev) => prev.filter((x) => x.id !== c.id))
+                          toast.success("Deleted", "Comment removed.")
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="text-sm theme-text opacity-80 whitespace-pre-wrap">
+                    {c.content}
+                  </div>
+                </div>
+              </motion.div>
             ))}
 
           {/* Testimonials Grid (modularized) */}
@@ -1206,17 +1335,32 @@ export default function AdminDashboard() {
         {/* Empty State */}
         {((activeTab === "projects" && filteredProjects.length === 0) ||
           (activeTab === "blog" && filteredBlogPosts.length === 0) ||
+          (activeTab === "comments" && filteredComments.length === 0) ||
           (activeTab === "testimonials" && filteredTestimonials.length === 0) ||
           (activeTab === "partners" && filteredPartners.length === 0)) && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
-              <div className="text-6xl mb-4">{activeTab === "projects" ? "📁" : activeTab === "blog" ? "📝" : "💬"}</div>
+              <div className="text-6xl mb-4">
+                {activeTab === "projects" ? "📁" : activeTab === "blog" ? "📝" : activeTab === "comments" ? "💬" : "⭐"}
+              </div>
               <h3 className="text-xl font-semibold theme-text mb-2 theme-transition">
-                No {activeTab === "projects" ? "projects" : activeTab === "blog" ? "blog posts" : activeTab === "testimonials" ? "testimonials" : "partners"} found
+                No{" "}
+                {activeTab === "projects"
+                  ? "projects"
+                  : activeTab === "blog"
+                    ? "blog posts"
+                    : activeTab === "comments"
+                      ? "comments"
+                      : activeTab === "testimonials"
+                        ? "testimonials"
+                        : "partners"}{" "}
+                found
               </h3>
               <p className="theme-text opacity-70 theme-transition">
                 {searchTerm || filterCategory !== "All" || filterStatus !== "All"
                   ? "Try adjusting your filters"
-                  : `Create your first ${activeTab === "projects" ? "project" : activeTab === "blog" ? "blog post" : activeTab === "testimonials" ? "testimonial" : "partner"} to get started`}
+                  : activeTab === "comments"
+                    ? "New comments will appear here for moderation."
+                    : `Create your first ${activeTab === "projects" ? "project" : activeTab === "blog" ? "blog post" : activeTab === "testimonials" ? "testimonial" : "partner"} to get started`}
               </p>
             </motion.div>
           )}
