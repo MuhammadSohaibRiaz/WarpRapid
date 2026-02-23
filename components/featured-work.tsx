@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useSupabaseCMS } from "@/lib/supabase-cms"
 import type { ProjectDetail } from "@/lib/supabase"
 import { ArrowRight, ChevronRight, Briefcase, ExternalLink } from "lucide-react"
+import Image from "next/image"
 
 export function FeaturedWorkSection() {
   const cms = useSupabaseCMS()
@@ -56,9 +57,8 @@ export function FeaturedWorkSection() {
           </Link>
         </div>
 
-        {/* Vertical Stacking Cards */}
-        {/* Added pb-[40vh] to ensures the last card has enough scroll room to fully overlap before the section ends */}
-        <div className="flex flex-col items-center w-full pb-12 md:pb-[40vh]">
+        {/* Mobile: keep the current stacking cards experience */}
+        <div className="md:hidden flex flex-col items-center w-full pb-12">
           {projects.map((project, i) => (
             <Card
               key={project.id}
@@ -67,6 +67,15 @@ export function FeaturedWorkSection() {
               total={projects.length}
             />
           ))}
+        </div>
+
+        {/* Desktop: new clean alternating layout (no sticky/scroll transforms) */}
+        <div className="hidden md:block">
+          <div className="space-y-16 lg:space-y-24">
+            {projects.map((project, i) => (
+              <DesktopRow key={project.id} project={project} index={i} />
+            ))}
+          </div>
         </div>
 
         {/* Mobile View All Link */}
@@ -78,6 +87,94 @@ export function FeaturedWorkSection() {
 
       </div>
     </section>
+  )
+}
+
+function DesktopRow({ project, index }: { project: ProjectDetail; index: number }) {
+  const reverse = index % 2 === 1
+  const image = project.images?.[0]?.url || "/placeholder.svg"
+  const description = project.description || project.long_description || ""
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="relative"
+    >
+      <div className="grid grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div className={`col-span-7 ${reverse ? "order-2" : "order-1"}`}>
+          <Link href={`/case-studies/${project.slug ?? ""}`} className="group block">
+            <div className="relative w-full aspect-[16/10] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl bg-muted/10">
+              <Image
+                src={image}
+                alt={project.title}
+                fill
+                sizes="(max-width: 1024px) 58vw, 640px"
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                priority={index === 0}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent opacity-80 group-hover:opacity-70 transition-opacity" />
+            </div>
+          </Link>
+        </div>
+
+        <div className={`col-span-5 ${reverse ? "order-1" : "order-2"}`}>
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest">
+                {project.category}
+              </span>
+              <span className="text-xs theme-text/50 font-semibold uppercase tracking-widest">
+                Featured #{index + 1}
+              </span>
+            </div>
+
+            <h3 className="text-3xl lg:text-4xl font-black theme-text tracking-tight leading-tight">
+              {project.title}
+            </h3>
+
+            {description && (
+              <p className="text-lg theme-text/70 leading-relaxed line-clamp-4">
+                {description}
+              </p>
+            )}
+
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              {project.technology?.slice(0, 5).map((tech) => (
+                <span
+                  key={tech}
+                  className="text-[11px] font-bold theme-text/70 px-3 py-1 rounded-full bg-white/5 border border-white/10 uppercase tracking-wider"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-4 pt-4">
+              <Link
+                href={`/case-studies/${project.slug ?? ""}`}
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow"
+              >
+                View Case Study <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              {project.live_url && (
+                <a
+                  href={project.live_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-white/15 bg-white/5 theme-text font-bold text-xs uppercase tracking-widest hover:bg-white/10 transition-colors"
+                >
+                  Live <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   )
 }
 
