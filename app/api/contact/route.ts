@@ -20,7 +20,7 @@ export async function POST(req: Request) {
             );
         }
 
-        // Email to the company
+        // Email to the company..
         const data = await resend.emails.send({
             from: 'RapidNexTech <notifications@rapidnextech.com>', // Matches working Loveable pattern
             to: ['sohaib@rapidnextech.com'], // Sent to confirmed working inbox
