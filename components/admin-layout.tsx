@@ -112,25 +112,28 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div className="min-h-screen theme-bg theme-transition">
-      {/* Admin Header */}
-      <div className={`${getCardBgClass()} backdrop-blur-md border-b shadow-lg theme-transition sticky top-0 z-40`}>
-        <div className="container mx-auto px-6 py-4">
+      {/* Admin Sub-Header (below main site header) */}
+      <div className={`${getCardBgClass()} backdrop-blur-md border-b shadow-md theme-transition`}>
+        <div className="container mx-auto px-6 py-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
-                <Shield className="w-4 h-4 text-white" />
+            <div className="flex items-center space-x-3">
+              <div className="w-7 h-7 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                <Shield className="w-3.5 h-3.5 text-white" />
               </div>
               <div>
-                <h1 className={`text-lg font-bold ${getTextClass()} theme-transition`}>Admin Panel</h1>
-                <p className={`text-xs ${getSecondaryTextClass()} theme-transition`}>RapidNexTech CMS</p>
+                <h1 className={`text-sm font-bold ${getTextClass()} theme-transition`}>Admin Panel</h1>
+                <p className={`text-[10px] ${getSecondaryTextClass()} theme-transition`}>RapidNexTech CMS</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               {/* Session Timer */}
-              <div className="flex items-center space-x-2">
-                <Clock className={`w-4 h-4 ${timeRemaining <= WARNING_TIME ? "text-orange-500" : "text-primary"}`} />
-                <span className={`text-sm font-mono ${getTextClass()} theme-transition`}>
+              <div className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs ${timeRemaining <= WARNING_TIME
+                  ? "bg-orange-500/10 border border-orange-500/30"
+                  : "bg-primary/10 border border-primary/20"
+                }`}>
+                <Clock className={`w-3.5 h-3.5 ${timeRemaining <= WARNING_TIME ? "text-orange-500" : "text-primary"}`} />
+                <span className={`font-mono font-medium ${getTextClass()} theme-transition`}>
                   {formatTime(timeRemaining)}
                 </span>
               </div>
@@ -140,7 +143,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"
+                  className="w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse"
                 />
               )}
 
@@ -149,9 +152,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 onClick={handleLogout}
                 variant="outline"
                 size="sm"
-                className={`${getTextClass()} bg-transparent border-red-500 hover:bg-red-500 hover:text-white hover:border-red-600 transition-colors duration-200`}
+                className={`${getTextClass()} bg-transparent border-red-500/50 hover:bg-red-500 hover:text-white hover:border-red-600 transition-colors duration-200 h-7 text-xs px-3`}
               >
-                <LogOut className="w-4 h-4 mr-2" />
+                <LogOut className="w-3.5 h-3.5 mr-1.5" />
                 Logout
               </Button>
 

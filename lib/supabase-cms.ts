@@ -453,9 +453,45 @@ export class BlogCommentsCMS {
   }
 }
 
+// Storage CMS
+export class StorageCMS {
+  static async uploadImage(file: File | Blob, bucket: string = "blog-images", customName?: string): Promise<string> {
+    const fileName = customName || `${Date.now()}-${file instanceof File ? file.name : 'image.jpg'}`
+
+    // Explicit check for required parameters
+    if (!file) throw new Error("No file or blob provided for upload")
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(fileName, file, {
+        cacheControl: '31536000',
+        upsert: false,
+        contentType: file.type || 'image/jpeg'
+      })
+
+    if (error) {
+      console.error(`[StorageCMS] Upload to bucket "${bucket}" failed:`, error)
+      // Check for specific error types
+      if (error.message.includes("bucket not found")) {
+        throw new Error(`Supabase storage bucket "${bucket}" was not found. Please create it in your Supabase dashboard.`)
+      }
+      throw error
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(fileName)
+
+    return publicUrlData.publicUrl
+  }
+}
+
 // Combined CMS
 export function useSupabaseCMS() {
   return {
+    // Storage
+    uploadImage: StorageCMS.uploadImage,
+
     // Portfolio
     getAllProjects: PortfolioCMS.getAllProjects,
     getPublishedProjects: PortfolioCMS.getPublishedProjects,
@@ -468,7 +504,7 @@ export function useSupabaseCMS() {
     togglePublishStatus: PortfolioCMS.togglePublishStatus,
     toggleProjectFeaturedStatus: PortfolioCMS.toggleProjectFeaturedStatus,
 
-    // Blog
+    // Blog (rest unchanged)
     getAllBlogPosts: BlogCMS.getAllBlogPosts,
     getBlogPostById: BlogCMS.getBlogPostById,
     getPublishedBlogPosts: BlogCMS.getPublishedBlogPosts,

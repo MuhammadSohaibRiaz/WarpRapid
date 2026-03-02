@@ -24,6 +24,10 @@ import {
   UploadCloud,
   Star,
   FileEdit,
+  Sparkles,
+  Loader2,
+  Copy,
+  AlertTriangle,
 } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { useSupabaseCMS } from "@/lib/supabase-cms"
@@ -40,6 +44,7 @@ import { CATEGORIES, TECHNOLOGIES, BLOG_TAGS } from "@/lib/constants"
 import { getThemeClasses } from "@/lib/theme-utils"
 import { useAdminToast } from "@/hooks/use-admin-toast"
 import { AdminToastContainer } from "@/components/admin/admin-toast"
+import { generateBlogPost } from "@/lib/ai-blog-generator"
 
 export default function AdminDashboard() {
   const { mode, color } = useThemeContext()
@@ -80,6 +85,26 @@ export default function AdminDashboard() {
   const [bulkUploading, setBulkUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [techSearchTerm, setTechSearchTerm] = useState("")
+
+  // AI Blog Generation states
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false)
+  const [aiTopic, setAiTopic] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generationStatus, setGenerationStatus] = useState("")
+  const [generatedPrompt, setGeneratedPrompt] = useState<string | null>(null)
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean
+    title: string
+    message: string
+    onConfirm: () => void
+    confirmText?: string
+    variant?: "danger" | "warning" | "primary"
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => { },
+  })
 
   // Project form data
   const [projectFormData, setProjectFormData] = useState<Partial<ProjectDetail>>({
@@ -417,6 +442,54 @@ export default function AdminDashboard() {
     setIsBlogFormOpen(true)
   }
 
+  // AI Blog Generation handler
+  const handleGenerateAIBlog = async () => {
+    try {
+      setIsGenerating(true)
+      setGenerationStatus("🧠 AI is writing your blog post...")
+
+      const generated = await generateBlogPost(aiTopic || undefined, (status) => {
+        setGenerationStatus(status)
+      })
+
+      setGenerationStatus("💾 Saving to database...")
+
+      const payload = {
+        title: generated.title,
+        slug: generated.slug,
+        excerpt: generated.excerpt,
+        content: generated.content,
+        tags: generated.tags,
+        author: "RapidNexTech Team",
+        date: new Date().toISOString().split("T")[0],
+        is_published: true,
+        seo_title: generated.seo_title,
+        seo_description: generated.seo_description,
+        images: [{
+          id: 1,
+          url: generated.image_url,
+          alt: generated.title,
+          caption: "",
+        }],
+        faqs: generated.faqs || [],
+        cta: generated.cta || null,
+      }
+
+      const created = await cms.addBlogPost(payload as any)
+      setBlogPosts((prev) => [created, ...prev])
+
+      setGeneratedPrompt(generated.image_prompt)
+      setGenerationStatus("")
+      toast.success("AI Blog Created! 🎉", `"${generated.title}" has been created.`)
+    } catch (error: any) {
+      console.error("AI Generation Error:", error)
+      toast.error("Generation Failed", error.message || "Something went wrong. Please try again.")
+      setGenerationStatus("")
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
   const handleResumeBlogDraft = () => {
     const saved = localStorage.getItem("wr-blog-draft")
     if (saved) {
@@ -461,15 +534,23 @@ export default function AdminDashboard() {
   }
 
   const handleDeleteBlogPost = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this blog post?")) return
-    try {
-      await cms.deleteBlogPost(id)
-      setBlogPosts((prev) => prev.filter((b) => b.id !== id))
-      toast.success("Blog Deleted", "Blog post has been successfully removed")
-    } catch (error) {
-      console.error("Error deleting blog post:", error)
-      toast.error("Delete Failed", "Error deleting blog post. Please try again.")
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: "Delete Blog Post",
+      message: "Are you sure you want to delete this blog post? This action cannot be undone.",
+      confirmText: "Delete",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          await cms.deleteBlogPost(id)
+          setBlogPosts((prev) => prev.filter((b) => b.id !== id))
+          toast.success("Blog Deleted", "Blog post has been successfully removed")
+        } catch (error) {
+          console.error("Error deleting blog post:", error)
+          toast.error("Delete Failed", "Error deleting blog post. Please try again.")
+        }
+      }
+    })
   }
 
   const handleToggleBlogPublish = async (id: number) => {
@@ -545,15 +626,23 @@ export default function AdminDashboard() {
   }
 
   const handleDeleteTestimonial = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this testimonial?")) return
-    try {
-      await cms.deleteReview(id)
-      setTestimonials((prev) => prev.filter((t) => t.id !== id))
-      toast.success("Testimonial Deleted", "Testimonial has been successfully removed")
-    } catch (error) {
-      console.error("Error deleting testimonial:", error)
-      toast.error("Delete Failed", "Error deleting testimonial. Please try again.")
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: "Delete Testimonial",
+      message: "Are you sure you want to delete this testimonial? This action cannot be undone.",
+      confirmText: "Delete",
+      variant: "danger",
+      onConfirm: async () => {
+        try {
+          await cms.deleteReview(id)
+          setTestimonials((prev) => prev.filter((t) => t.id !== id))
+          toast.success("Testimonial Deleted", "Testimonial has been successfully removed")
+        } catch (error) {
+          console.error("Error deleting testimonial:", error)
+          toast.error("Delete Failed", "Error deleting testimonial. Please try again.")
+        }
+      }
+    })
   }
 
   const handleToggleTestimonialPublish = async (id: number) => {
@@ -915,25 +1004,36 @@ export default function AdminDashboard() {
 
             {/* Add Button */}
             {activeTab !== "drafts" && activeTab !== "comments" && (
-              <Button
-                onClick={() => {
-                  if (activeTab === "projects") handleAddProjectClick()
-                  else if (activeTab === "blog") handleAddBlogClick()
-                  else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
-                  else if (activeTab === "partners") setIsPartnerFormOpen(true)
-                }}
-                className="bg-primary hover:bg-primary/90 text-white"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add{" "}
-                {activeTab === "projects"
-                  ? "Project"
-                  : activeTab === "blog"
-                    ? "Blog Post"
-                    : activeTab === "partners"
-                      ? "Partner"
-                      : "Testimonial"}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    if (activeTab === "projects") handleAddProjectClick()
+                    else if (activeTab === "blog") handleAddBlogClick()
+                    else if (activeTab === "testimonials") setIsTestimonialFormOpen(true)
+                    else if (activeTab === "partners") setIsPartnerFormOpen(true)
+                  }}
+                  className="bg-primary hover:bg-primary/90 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add{" "}
+                  {activeTab === "projects"
+                    ? "Project"
+                    : activeTab === "blog"
+                      ? "Blog Post"
+                      : activeTab === "partners"
+                        ? "Partner"
+                        : "Testimonial"}
+                </Button>
+                {activeTab === "blog" && (
+                  <Button
+                    onClick={() => setIsAIModalOpen(true)}
+                    className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-violet-500/25"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate AI Blog
+                  </Button>
+                )}
+              </div>
             )}
           </div>
 
@@ -950,11 +1050,11 @@ export default function AdminDashboard() {
                     ? blogPosts.length
                     : activeTab === "comments"
                       ? comments.length
-                    : activeTab === "testimonials"
-                      ? testimonials.length
-                      : activeTab === "partners"
-                        ? partners.length
-                        : (typeof window !== "undefined" ? (localStorage.getItem("wr-project-draft") ? 1 : 0) + (localStorage.getItem("wr-blog-draft") ? 1 : 0) : 0)}
+                      : activeTab === "testimonials"
+                        ? testimonials.length
+                        : activeTab === "partners"
+                          ? partners.length
+                          : (typeof window !== "undefined" ? (localStorage.getItem("wr-project-draft") ? 1 : 0) + (localStorage.getItem("wr-blog-draft") ? 1 : 0) : 0)}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">
                 Total{" "}
@@ -982,9 +1082,9 @@ export default function AdminDashboard() {
                     ? blogPosts.filter((p) => p.is_published).length
                     : activeTab === "comments"
                       ? comments.filter((c) => c.is_approved).length
-                    : activeTab === "testimonials"
-                      ? testimonials.filter((p) => p.is_published).length
-                      : partners.filter((p) => p.is_published).length}
+                      : activeTab === "testimonials"
+                        ? testimonials.filter((p) => p.is_published).length
+                        : partners.filter((p) => p.is_published).length}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">
                 {activeTab === "comments" ? "Approved" : "Published"}
@@ -1001,9 +1101,9 @@ export default function AdminDashboard() {
                     ? blogPosts.filter((p) => !p.is_published).length
                     : activeTab === "comments"
                       ? comments.filter((c) => !c.is_approved).length
-                    : activeTab === "testimonials"
-                      ? testimonials.filter((p) => !p.is_published).length
-                      : partners.filter((p) => !p.is_published).length}
+                      : activeTab === "testimonials"
+                        ? testimonials.filter((p) => !p.is_published).length
+                        : partners.filter((p) => !p.is_published).length}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition group-hover:opacity-100">
                 {activeTab === "comments" ? "Pending" : "Drafts"}
@@ -1017,11 +1117,11 @@ export default function AdminDashboard() {
                     ? filteredBlogPosts.length
                     : activeTab === "comments"
                       ? filteredComments.length
-                    : activeTab === "testimonials"
-                      ? filteredTestimonials.length
-                      : activeTab === "partners"
-                        ? filteredPartners.length
-                        : (typeof window !== "undefined" ? (localStorage.getItem("wr-project-draft") ? 1 : 0) + (localStorage.getItem("wr-blog-draft") ? 1 : 0) : 0)}
+                      : activeTab === "testimonials"
+                        ? filteredTestimonials.length
+                        : activeTab === "partners"
+                          ? filteredPartners.length
+                          : (typeof window !== "undefined" ? (localStorage.getItem("wr-project-draft") ? 1 : 0) + (localStorage.getItem("wr-blog-draft") ? 1 : 0) : 0)}
               </div>
               <div className="text-sm theme-text opacity-70 theme-transition">Filtered</div>
             </div>
@@ -1198,7 +1298,25 @@ export default function AdminDashboard() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDeleteProject(project.id)}
+                      onClick={() => {
+                        setConfirmModal({
+                          isOpen: true,
+                          title: "Delete Project",
+                          message: "Are you sure you want to delete this project? This action cannot be undone.",
+                          confirmText: "Delete",
+                          variant: "danger",
+                          onConfirm: async () => {
+                            try {
+                              await cms.deleteProject(project.id)
+                              setProjects((prev) => prev.filter((p) => p.id !== project.id))
+                              toast.success("Project Deleted", "Project has been successfully removed")
+                            } catch (error) {
+                              console.error("Error deleting project:", error)
+                              toast.error("Delete Failed", "Error deleting project. Please try again.")
+                            }
+                          }
+                        })
+                      }}
                       className="text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -1264,11 +1382,19 @@ export default function AdminDashboard() {
                         size="sm"
                         variant="outline"
                         className="text-red-600 hover:text-red-700"
-                        onClick={async () => {
-                          if (!confirm("Delete this comment?")) return
-                          await cms.deleteComment(c.id)
-                          setComments((prev) => prev.filter((x) => x.id !== c.id))
-                          toast.success("Deleted", "Comment removed.")
+                        onClick={() => {
+                          setConfirmModal({
+                            isOpen: true,
+                            title: "Delete Comment",
+                            message: "Are you sure you want to delete this comment? This action cannot be undone.",
+                            confirmText: "Delete",
+                            variant: "danger",
+                            onConfirm: async () => {
+                              await cms.deleteComment(c.id)
+                              setComments((prev) => prev.filter((x) => x.id !== c.id))
+                              toast.success("Deleted", "Comment removed.")
+                            }
+                          })
                         }}
                       >
                         Delete
@@ -1321,10 +1447,19 @@ export default function AdminDashboard() {
                   const updated = await cms.togglePartnerFeaturedStatus(id)
                   setPartners((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
                 }}
-                onDelete={async (id) => {
-                  if (!confirm("Delete this partner?")) return
-                  await cms.deletePartner(id)
-                  setPartners((prev) => prev.filter((x) => x.id !== id))
+                onDelete={(id) => {
+                  setConfirmModal({
+                    isOpen: true,
+                    title: "Delete Partner",
+                    message: "Are you sure you want to delete this partner? This action cannot be undone.",
+                    confirmText: "Delete",
+                    variant: "danger",
+                    onConfirm: async () => {
+                      await cms.deletePartner(id)
+                      setPartners((prev) => prev.filter((x) => x.id !== id))
+                      toast.success("Deleted", "Partner removed.")
+                    }
+                  })
                 }}
                 cardBgClass={theme.cardBg}
                 index={index}
@@ -1982,7 +2117,7 @@ export default function AdminDashboard() {
         editingPost={editingBlogPost}
         formData={blogFormData}
         setFormData={(updater) => setBlogFormData((prev) => updater(prev))}
-        blogTags={BLOG_TAGS}
+        blogTags={[...BLOG_TAGS]}
         slugify={slugify}
       />
 
@@ -1995,7 +2130,7 @@ export default function AdminDashboard() {
         }}
         onSave={handleSaveTestimonial}
         editingTestimonial={editingTestimonial}
-        categories={CATEGORIES}
+        categories={[...CATEGORIES]}
         formData={testimonialFormData}
         setFormData={(updater) => setTestimonialFormData((prev) => updater(prev))}
       />
@@ -2039,6 +2174,190 @@ export default function AdminDashboard() {
         formData={partnerFormData}
         setFormData={(updater) => setPartnerFormData((prev) => updater(prev))}
       />
+      {/* AI Blog Generation Modal */}
+      <AnimatePresence>
+        {isAIModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => !isGenerating && setIsAIModalOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className={`${theme.cardBg} backdrop-blur-md rounded-xl p-8 w-full max-w-lg shadow-2xl border border-violet-500/20`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <h2 className="text-xl font-bold theme-text theme-transition">
+                    Generate AI Blog Post
+                  </h2>
+                </div>
+                {!isGenerating && (
+                  <Button variant="ghost" size="icon" onClick={() => setIsAIModalOpen(false)}>
+                    <X className="w-5 h-5" />
+                  </Button>
+                )}
+              </div>
+
+              {generatedPrompt ? (
+                <div className="space-y-6">
+                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-center">
+                    <p className="text-sm theme-text font-medium text-green-600 dark:text-green-400">Blog Created Successfully! 🎉</p>
+                    <p className="text-xs theme-text opacity-70 mt-1">Below is your AI-generated image prompt.</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold theme-text border-none">Manual Image Prompt:</label>
+                    <div className="p-4 rounded-lg bg-secondary/20 theme-text text-sm theme-transition relative border border-border/50">
+                      <p className="italic leading-relaxed">"{generatedPrompt}"</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button
+                      className="flex-1 bg-violet-600 hover:bg-violet-700 text-white"
+                      onClick={() => {
+                        navigator.clipboard.writeText(generatedPrompt || "")
+                        toast.success("Copied!", "Prompt copied to clipboard.")
+                      }}
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copy Prompt
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1 theme-text"
+                      onClick={() => {
+                        setIsAIModalOpen(false)
+                        setGeneratedPrompt(null)
+                        setAiTopic("")
+                      }}
+                    >
+                      Done
+                    </Button>
+                  </div>
+
+                  <p className="text-[10px] theme-text opacity-50 text-center italic">
+                    Use this prompt on Pollinations.ai or Hugging Face, then upload the result to this blog post.
+                  </p>
+                </div>
+              ) : isGenerating ? (
+                <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                  <div className="relative">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 animate-pulse flex items-center justify-center">
+                      <Sparkles className="w-8 h-8 text-white animate-spin" style={{ animationDuration: "3s" }} />
+                    </div>
+                  </div>
+                  <p className="text-lg font-medium theme-text theme-transition text-center">
+                    {generationStatus}
+                  </p>
+                  <p className="text-xs opacity-50 theme-text text-center">
+                    This usually takes 10-20 seconds. Please don&apos;t close this window.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                      Topic / Keyword <span className="opacity-50">(optional)</span>
+                    </label>
+                    <Input
+                      value={aiTopic}
+                      onChange={(e) => setAiTopic(e.target.value)}
+                      placeholder="e.g., How AI is Transforming Mobile App Development"
+                      className="theme-text bg-transparent"
+                    />
+                    <p className="text-xs opacity-50 theme-text mt-2">
+                      Leave empty and the AI will pick a trending software development topic.
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-violet-500/10 border border-violet-500/20">
+                    <p className="text-xs theme-text opacity-70">
+                      <strong>What happens:</strong> The AI will write a full blog post with title, SEO metadata,
+                      Markdown content, tags, FAQs, and auto-generate a cover image. The post will be saved and
+                      published immediately.
+                    </p>
+                  </div>
+
+                  <Button
+                    onClick={handleGenerateAIBlog}
+                    className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white h-12 text-base shadow-lg shadow-violet-500/25"
+                  >
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Generate & Publish
+                  </Button>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Custom Confirmation Modal */}
+      <AnimatePresence mode="wait">
+        {confirmModal.isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4"
+            onClick={() => setConfirmModal((prev) => ({ ...prev, isOpen: false }))}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className={`${theme.cardBg} backdrop-blur-md rounded-xl p-8 w-full max-w-md shadow-2xl border border-border/20 theme-transition`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className={`p-4 rounded-full mb-6 ${confirmModal.variant === "danger" ? "bg-red-500/10 text-red-500" :
+                  confirmModal.variant === "warning" ? "bg-yellow-500/10 text-yellow-500" :
+                    "bg-primary/10 text-primary"
+                  }`}>
+                  <AlertTriangle className="w-10 h-10" />
+                </div>
+
+                <h3 className="text-2xl font-bold theme-text mb-2">{confirmModal.title}</h3>
+                <p className="theme-text opacity-70 mb-8 leading-relaxed">
+                  {confirmModal.message}
+                </p>
+
+                <div className="flex gap-4 w-full">
+                  <Button
+                    variant="outline"
+                    className="flex-1 theme-text theme-transition py-6 text-base font-semibold"
+                    onClick={() => setConfirmModal((prev) => ({ ...prev, isOpen: false }))}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className={`flex-1 py-6 text-base font-semibold ${confirmModal.variant === "danger" ? "bg-red-600 hover:bg-red-700 shadow-lg shadow-red-600/20" :
+                      confirmModal.variant === "warning" ? "bg-yellow-600 hover:bg-yellow-700 shadow-lg shadow-yellow-600/20" :
+                        "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
+                      } text-white`}
+                    onClick={() => {
+                      confirmModal.onConfirm()
+                      setConfirmModal((prev) => ({ ...prev, isOpen: false }))
+                    }}
+                  >
+                    {confirmModal.confirmText || "Confirm"}
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

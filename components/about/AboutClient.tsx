@@ -187,33 +187,33 @@ export default function AboutClient() {
         </section>
 
         {/* Meet the Team - Professional Profile Cards (Moved Up) */}
-        <section className="container mx-auto px-6 pb-24">
+        <section className="container mx-auto px-6 pb-20">
           <SectionHeading title="Meet Our Leadership" subtitle="Engineers at heart, building for the future." />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
               { name: "Muhammad Sohaib Riaz", role: "Founder & CEO", bio: "Visionary leader focused on scalable architecture and business impact.", image: "/muhammad-sohaib-riaz.jpg" },
               { name: "Sohail Riaz", role: "Chief Technology Advisor", bio: "Expert in distributed systems and enterprise-grade security.", image: "/sohail-riaz.jpeg" },
-              { name: "Jehanzaib Javed", role: "Lead Full Stack Engineer", bio: "Master of efficient, clean code and high-performance UI.", image: "/jehanzaib-javed.JPG" }
+              { name: "Jehanzaib Javed", role: "Lead Full Stack Engineer", bio: "Master of efficient, clean code and high-performance UI.", image: "/jehanzaib-javed.JPG" },
+              { name: "Muhammad Abdul Rehman", role: "Business Development Manager", bio: "Strategist focused on growth, partnerships, and global client relations.", image: "/muhammad-abdul-rehman.jpeg" }
             ].map((member, i) => (
               <motion.div
                 key={member.name}
-                whileHover={{ y: -10 }}
-                className={`group rounded-3xl overflow-hidden ${surface} shadow-lg`}
+                whileHover={{ y: -5 }}
+                className={`group rounded-2xl overflow-hidden ${surface} shadow-lg flex items-start p-4 md:p-5 gap-6`}
               >
-                <div className="relative h-80 w-full bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 border-b border-white/10">
+                <div className="relative h-28 w-28 md:h-36 md:w-36 flex-shrink-0 rounded-xl overflow-hidden border border-white/10 shadow-inner">
                   <Image
                     src={member.image}
                     alt={member.name}
                     fill
-                    className="object-contain object-bottom pt-6 transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 112px, 144px"
                   />
-                  {/* Removed dark overlay as requested */}
                 </div>
-                <div className="p-8 text-center relative">
-                  <h3 className="text-2xl font-bold theme-text mb-1">{member.name}</h3>
-                  <p className="text-primary font-medium tracking-wide text-sm uppercase mb-4">{member.role}</p>
-                  <p className="theme-text opacity-70 leading-relaxed text-sm">{member.bio}</p>
+                <div className="flex-1 text-left pt-1 md:pt-2">
+                  <h3 className="text-lg md:text-xl font-bold theme-text mb-0.5 leading-tight">{member.name}</h3>
+                  <p className="text-primary font-semibold tracking-wide text-[10px] md:text-xs uppercase mb-2">{member.role}</p>
+                  <p className="theme-text opacity-70 leading-relaxed text-[11px] md:text-xs line-clamp-2 md:line-clamp-3">{member.bio}</p>
                 </div>
               </motion.div>
             ))}

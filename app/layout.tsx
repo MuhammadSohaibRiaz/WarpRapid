@@ -2,8 +2,7 @@ import type React from "react"
 import "./globals.css"
 import type { Metadata } from "next"
 import { Inter, Space_Grotesk } from "next/font/google"
-import Header from "@/components/Header"
-import { Footer } from "@/components/Footer"
+import { ConditionalLayout } from "@/components/conditional-layout"
 import NextTopLoader from "nextjs-toploader"
 import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
@@ -67,11 +66,11 @@ export const metadata: Metadata = {
       "Transform your business with cutting-edge software solutions. Expert web development, mobile apps, and enterprise systems.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/logo-main.png",
         width: 1200,
         height: 630,
         alt: "RapidNexTech - Software Development Company",
-        type: "image/jpeg",
+        type: "image/png",
       },
     ],
   },
@@ -80,7 +79,7 @@ export const metadata: Metadata = {
     title: "RapidNexTech - Innovative Software Development Company",
     description:
       "Transform your business with cutting-edge software solutions. Expert web development, mobile apps, and enterprise systems.",
-    images: ["/og-image.jpg"],
+    images: ["/logo-main.png"],
     creator: "@RapidNexTech",
     site: "@RapidNexTech",
   },
@@ -152,11 +151,9 @@ export default function RootLayout({
             <AuthProvider>
               <div className="flex flex-col min-h-screen relative theme-bg theme-transition">
                 <NextTopLoader color="#3b82f6" showSpinner={false} />
-                <Header />
-                <main className="flex-grow" role="main">
+                <ConditionalLayout>
                   {children}
-                </main>
-                <Footer />
+                </ConditionalLayout>
               </div>
             </AuthProvider>
           </ThemeContextProvider>

@@ -29,7 +29,7 @@ interface BlogClientProps {
 
 export default function BlogClient({ initialPosts }: BlogClientProps) {
   const [posts, setPosts] = useState<BlogPost[]>(initialPosts || [])
-  const [loading, setLoading] = useState(!initialPosts)
+  const [loading, setLoading] = useState(!initialPosts || initialPosts.length === 0)
   const containerRef = useRef(null)
 
   // Scroll parallax for header
@@ -41,24 +41,23 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   useEffect(() => {
-    // Fallback: if no initial posts were provided, fetch via a lightweight API route.
-    if (initialPosts) return
-
+    // Always refetch client-side to get latest published posts
+    // This ensures newly AI-generated posts show up immediately
     async function loadPosts() {
       try {
-        const res = await fetch("/api/blog-list")
-        if (!res.ok) throw new Error("Failed to load blog posts")
-        const data = (await res.json()) as BlogPost[]
+        const { BlogCMS } = await import("@/lib/supabase-cms")
+        const data = await BlogCMS.getPublishedBlogPosts()
         setPosts(data)
       } catch (error) {
         console.error("Failed to load blog posts", error)
+        // Keep initialPosts as fallback
       } finally {
         setLoading(false)
       }
     }
 
     loadPosts()
-  }, [initialPosts])
+  }, [])
 
   if (loading) {
     return (
