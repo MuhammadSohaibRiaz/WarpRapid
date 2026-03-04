@@ -36,16 +36,16 @@ export function HeroSection() {
                     <p className="text-xl md:text-2xl theme-text mb-12 max-w-3xl mx-auto theme-transition opacity-70">
                         We help companies automate operations, launch products, and scale with confidence.
                     </p>
-                    <div className="flex flex-col sm:flex-row justify-center gap-4">
+                    <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
                         <Link
                             href="/contact"
-                            className="inline-flex items-center justify-center bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white px-8 py-4 text-lg font-bold rounded-xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-95 transition-all duration-200"
+                            className="inline-flex items-center justify-center bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold rounded-xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-95 transition-all duration-200"
                         >
                             Discuss Your Project
                         </Link>
                         <Link
                             href="/case-studies"
-                            className="inline-flex items-center justify-center border-2 border-primary bg-transparent text-primary px-8 py-4 text-lg font-bold rounded-xl hover:bg-primary/5 active:scale-95 transition-all duration-200"
+                            className="inline-flex items-center justify-center border-2 border-primary bg-transparent text-primary w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold rounded-xl hover:bg-primary/5 active:scale-95 transition-all duration-200"
                         >
                             View Case Studies
                         </Link>

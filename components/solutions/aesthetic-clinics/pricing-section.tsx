@@ -23,7 +23,7 @@ function FeatureItem({
   const [showTip, setShowTip] = useState(false)
 
   return (
-    <li className="flex items-start gap-2.5">
+    <li className={`flex items-start gap-2.5 ${showTip ? "relative z-[60]" : ""}`}>
       <Check
         className={`w-4 h-4 mt-0.5 shrink-0 ${
           highlight ? "text-primary" : "text-muted-foreground"
@@ -40,7 +40,7 @@ function FeatureItem({
           >
             <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-primary transition-colors" />
             {showTip && (
-              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 rounded-lg bg-popover border border-border px-3 py-2 text-xs text-popover-foreground shadow-xl z-50 leading-relaxed">
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 rounded-lg bg-popover border border-border px-3 py-2 text-xs text-popover-foreground shadow-2xl z-[100] leading-relaxed pointer-events-none">
                 {feature.tooltip}
               </span>
             )}
@@ -77,9 +77,9 @@ const tiers: {
       { text: "Basic Patient Inquiry Qualification" },
       { text: "Google Calendar Sync" },
       {
-        text: "Up to 200 conversations/mo",
+        text: "Up to 200 messages/mo",
         tooltip:
-          "One conversation = one unique patient thread per day. Overage billed at PKR 50/conversation.",
+          "Covers up to 200 outbound template messages (booking confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at PKR 50 each.",
       },
       { text: "Email Support" },
     ],
@@ -112,9 +112,9 @@ const tiers: {
       },
       { text: "Custom Booking Flows per Treatment" },
       {
-        text: "Up to 1,000 conversations/mo",
+        text: "Up to 1,000 messages/mo",
         tooltip:
-          "One conversation = one unique patient thread per day. Overage billed at PKR 30/conversation.",
+          "Covers up to 1,000 outbound template messages (booking confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at PKR 30 each.",
       },
       { text: "Dashboard & Analytics Portal" },
       { text: "Priority WhatsApp & Email Support" },
@@ -135,8 +135,8 @@ const tiers: {
       { text: "Patient CRM with Treatment History" },
       { text: "Revenue & Conversion Reporting" },
       {
-        text: "Unlimited conversations",
-        tooltip: "No per-conversation caps — ideal for high-volume clinics.",
+        text: "Unlimited messages",
+        tooltip: "No caps on outbound template messages or service replies — ideal for high-volume, multi-branch clinics.",
       },
       { text: "Custom Integrations (EMR, POS)" },
       { text: "Dedicated Account Manager" },
@@ -200,9 +200,9 @@ export function PricingSection() {
           {tiers.map((tier) => (
             <div
               key={tier.name}
-              className={`relative flex flex-col rounded-2xl border p-8 transition-all duration-300 ${
+              className={`relative flex flex-col rounded-2xl border p-8 transition-all duration-300 overflow-visible ${
                 tier.highlight
-                  ? "border-primary/40 bg-card shadow-xl shadow-primary/5 scale-[1.02] md:scale-105"
+                  ? "border-primary/40 bg-card shadow-xl shadow-primary/5 scale-[1.02] md:scale-105 z-10"
                   : "border-border bg-card/60 hover:border-border/80 hover:shadow-lg"
               }`}
             >
