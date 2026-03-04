@@ -8,7 +8,9 @@
 
 # production
 /build
-/out
+# static export output
+out/
+out.zip
 # debug
 npm-debug.log*
 yarn-debug.log*
