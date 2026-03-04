@@ -78,10 +78,17 @@ export function FeaturedWorkSection() {
           </div>
         </div>
 
-        {/* Mobile View All Link */}
-        <div className="mt-12 text-center md:hidden">
-          <Link href="/case-studies" className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-sm">
-            View All Case Studies <ArrowRight className="w-4 h-4" />
+        {/* Bottom CTA — View All Case Studies */}
+        <div className="mt-16 md:mt-24 flex flex-col items-center gap-4 text-center">
+          <p className="text-lg theme-text opacity-60 font-medium">
+            Want to see more of our work?
+          </p>
+          <Link
+            href="/case-studies"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-white font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all duration-200"
+          >
+            View All Case Studies
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
