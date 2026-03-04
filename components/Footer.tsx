@@ -82,6 +82,15 @@ export function Footer() {
                 </Link>
               </li>
             </ul>
+
+            <h3 className="font-bold theme-text mb-4 mt-8">Solutions</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/solutions/aesthetic-clinics" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm">
+                  Aesthetic Clinics
+                </Link>
+              </li>
+            </ul>
           </div>
 
           <div className="lg:col-span-4">

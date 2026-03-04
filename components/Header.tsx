@@ -15,6 +15,7 @@ const navigation = [
   { name: "About", href: "/about" },
   { name: "What We Do", href: "/services" },
   { name: "Case Studies", href: "/case-studies" },
+  { name: "Solutions", href: "/solutions/aesthetic-clinics" },
   { name: "Blog", href: "/blog" },
   { name: "Careers", href: "/careers" },
   { name: "Contact", href: "/contact" },

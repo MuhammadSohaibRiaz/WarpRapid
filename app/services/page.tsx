@@ -1,10 +1,10 @@
 "use client"
 
 import { motion, useScroll } from "framer-motion"
-import { servicesData, serviceCategories } from "@/lib/services-data"
+import { servicesData, serviceCategories, industrySolutions } from "@/lib/services-data"
 import Link from "next/link"
 import { MeshGradient } from "@/components/mesh-gradient"
-import { ArrowRight, ChevronRight, Zap } from "lucide-react"
+import { ArrowRight, ChevronRight, Zap, Sparkles } from "lucide-react"
 import { useRef, useState, useEffect } from "react"
 import { GlobalChronometer } from "@/components/services/global-chronometer"
 
@@ -169,6 +169,54 @@ export default function ServicesPage() {
 
             {/* Final CTA Section */}
             <section className="py-16 md:py-20 relative overflow-hidden theme-bg border-t border-border/10">
+
+                {/* Industry Solutions Callout */}
+                <div className="container mx-auto px-6 mb-16 md:mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="max-w-3xl mx-auto text-center space-y-4 mb-10"
+                    >
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20">
+                            <Sparkles className="w-3.5 h-3.5 text-violet-500" />
+                            <span className="text-xs font-bold uppercase tracking-wider text-violet-500">Industry Solutions</span>
+                        </div>
+                        <h2 className="text-2xl md:text-4xl font-black theme-text tracking-tight">
+                            Pre-Built Solutions for Your Industry
+                        </h2>
+                        <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
+                            Ready-to-deploy AI-powered systems tailored to specific verticals — faster time to value.
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        {industrySolutions.map((solution, idx) => (
+                            <motion.div
+                                key={solution.href}
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                            >
+                                <Link href={solution.href} className="group block h-full">
+                                    <div className="h-full p-6 rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group-hover:-translate-y-1">
+                                        <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                                            {solution.title}
+                                        </h3>
+                                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                                            {solution.description}
+                                        </p>
+                                        <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+                                            Learn more <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                        </span>
+                                    </div>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="container mx-auto px-6">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}

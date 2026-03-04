@@ -15,7 +15,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { serviceCategories, servicesData } from "@/lib/services-data"
+import { serviceCategories, servicesData, industrySolutions } from "@/lib/services-data"
 
 export function HeaderNav() {
     return (
@@ -37,37 +37,26 @@ export function HeaderNav() {
                         What We Do
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        <div className="w-[800px] p-6 md:w-[900px] lg:w-[1240px] bg-background/95 backdrop-blur-xl rounded-xl border border-border shadow-2xl">
-                            <div className="grid grid-cols-3 gap-12">
+                        <div className="w-[calc(100vw-6rem)] max-w-3xl p-5 bg-background/95 backdrop-blur-xl rounded-xl border border-border shadow-2xl">
+                            {/* Service Columns — compact: icon + title only */}
+                            <div className="grid grid-cols-3 gap-6">
                                 {serviceCategories.map((category) => (
-                                    <div key={category.title} className="space-y-6">
-                                        <div className="border-b border-border/50 pb-4">
-                                            <h4 className="text-sm font-bold uppercase tracking-wider text-primary mb-2">
+                                    <div key={category.title} className="space-y-2.5">
+                                        <div className="border-b border-border/50 pb-2.5">
+                                            <h4 className="text-[10px] font-bold uppercase tracking-wider text-primary">
                                                 {category.title}
                                             </h4>
-                                            <p className="text-xs text-muted-foreground leading-relaxed opacity-80">
-                                                {category.description}
-                                            </p>
                                         </div>
-                                        <ul className="space-y-1">
+                                        <ul className="space-y-0.5">
                                             {category.services.map((slug) => {
                                                 const service = servicesData[slug as keyof typeof servicesData]
                                                 return (
                                                     <li key={slug}>
                                                         <Link href={`/services/${slug}`} legacyBehavior passHref>
                                                             <NavigationMenuLink asChild>
-                                                                <a className={cn(
-                                                                    "group flex items-start gap-3 rounded-lg px-2 py-3 leading-none no-underline outline-none transition-colors hover:bg-primary/5 hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                                                )}>
-                                                                    <div className="mt-0.5 p-1.5 bg-primary/5 rounded-md group-hover:bg-primary/20 transition-colors">
-                                                                        <service.icon className="w-4 h-4 text-primary" />
-                                                                    </div>
-                                                                    <div className="flex-1">
-                                                                        <div className="text-sm font-medium theme-text group-hover:text-primary mb-1 transition-colors">{service.title}</div>
-                                                                        <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2 opacity-70">
-                                                                            {service.description}
-                                                                        </p>
-                                                                    </div>
+                                                                <a className="group flex items-center gap-2 rounded-md px-1.5 py-1.5 leading-none no-underline outline-none transition-colors hover:bg-primary/5">
+                                                                    <service.icon className="w-3.5 h-3.5 text-primary/70 group-hover:text-primary transition-colors shrink-0" />
+                                                                    <span className="text-[13px] font-medium theme-text group-hover:text-primary transition-colors whitespace-nowrap">{service.title}</span>
                                                                 </a>
                                                             </NavigationMenuLink>
                                                         </Link>
@@ -78,6 +67,34 @@ export function HeaderNav() {
                                     </div>
                                 ))}
                             </div>
+
+                            {/* Solutions Strip */}
+                            {industrySolutions.length > 0 && (
+                                <div className="mt-4 pt-4 border-t border-border/50">
+                                    <div className="flex items-center justify-between gap-4">
+                                        <div className="flex items-center gap-4">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">Solutions</span>
+                                            {industrySolutions.map((solution) => (
+                                                <Link key={solution.href} href={solution.href} legacyBehavior passHref>
+                                                    <NavigationMenuLink asChild>
+                                                        <a className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/5 hover:bg-primary/10 border border-primary/10 hover:border-primary/20 transition-all">
+                                                            <span className="text-[13px] font-medium theme-text group-hover:text-primary transition-colors">{solution.title}</span>
+                                                            <ArrowRight className="w-3 h-3 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                                                        </a>
+                                                    </NavigationMenuLink>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                        <Link href="/services" legacyBehavior passHref>
+                                            <NavigationMenuLink asChild>
+                                                <a className="text-[11px] text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+                                                    All services <ArrowRight className="w-3 h-3" />
+                                                </a>
+                                            </NavigationMenuLink>
+                                        </Link>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </NavigationMenuContent>
                 </NavigationMenuItem>

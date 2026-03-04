@@ -6,6 +6,7 @@ import { HowItWorksSection } from "@/components/solutions/aesthetic-clinics/how-
 import { FeatureDeepDiveSection } from "@/components/solutions/aesthetic-clinics/feature-deep-dive-section"
 import { WhoItsForSection } from "@/components/solutions/aesthetic-clinics/who-its-for-section"
 import { ROISection } from "@/components/solutions/aesthetic-clinics/roi-section"
+import { PricingSection } from "@/components/solutions/aesthetic-clinics/pricing-section"
 import { CTASection } from "@/components/solutions/aesthetic-clinics/cta-section"
 import { FAQSection } from "@/components/solutions/aesthetic-clinics/faq-section"
 
@@ -41,6 +42,7 @@ export default function AestheticClinicsPage() {
       <FeatureDeepDiveSection />
       <WhoItsForSection />
       <ROISection />
+      <PricingSection />
       <CTASection />
       <FAQSection />
     </main>

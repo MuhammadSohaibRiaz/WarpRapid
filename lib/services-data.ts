@@ -380,3 +380,11 @@ export const serviceCategories = [
         services: ["technical-consulting", "security-compliance", "data-analytics"],
     },
 ]
+
+export const industrySolutions = [
+    {
+        title: "Aesthetic Clinics",
+        href: "/solutions/aesthetic-clinics",
+        description: "AI-powered appointment conversion & automation for aesthetic clinics.",
+    },
+]

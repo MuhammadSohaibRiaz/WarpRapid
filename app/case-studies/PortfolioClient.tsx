@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import { ArrowUpRight, Search, X, CheckCircle2, MessageSquare, Workflow, HelpCircle, ChevronRight, Layout, Zap, Eye } from "lucide-react"
+import { ArrowUpRight, Search, X, CheckCircle2, MessageSquare, Workflow, HelpCircle, ChevronRight, Layout, Zap, Eye, Clock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useThemeContext } from "@/context/theme-context"
@@ -18,16 +18,9 @@ interface PortfolioClientProps {
   initialProjects?: ProjectDetail[]
 }
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, delay },
-})
-
 export default function PortfolioClient({ initialProjects = [] }: PortfolioClientProps) {
   const { mode, getGradient } = useThemeContext()
-  const [projects, setProjects] = useState<ProjectDetail[]>(initialProjects)
+  const [projects] = useState<ProjectDetail[]>(initialProjects)
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [searchTerm, setSearchTerm] = useState("")
   const [quickViewProject, setQuickViewProject] = useState<ProjectDetail | null>(null)
@@ -58,92 +51,107 @@ export default function PortfolioClient({ initialProjects = [] }: PortfolioClien
     return result
   }, [selectedCategory, searchTerm, sortedProjects])
 
-  // Split into Featured (Top 3 of ALL featured) and Others
-  const featuredWork = useMemo(() => sortedProjects.filter(p => p.is_featured).slice(0, 3), [sortedProjects])
+  // Top featured project for hero spotlight
+  const heroProject = useMemo(() => sortedProjects.find(p => p.is_featured) || null, [sortedProjects])
 
-  // Parallax Header
+  // Parallax
   const { scrollY } = useScroll()
-  const yText = useTransform(scrollY, [0, 500], [0, 100])
+  const yText = useTransform(scrollY, [0, 500], [0, 60])
 
   return (
     <div className="min-h-screen theme-bg theme-text theme-transition overflow-x-hidden selection:bg-primary/20">
 
-      {/* 1. Global Texture Overlay */}
+      {/* Noise Texture */}
       <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] mix-blend-overlay">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <filter id="noise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
-          </filter>
+          <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" /></filter>
           <rect width="100%" height="100%" filter="url(#noise)" />
         </svg>
       </div>
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
 
-        {/* 2. Conversion Hero */}
-        <section className="pt-32 pb-20 border-b border-border/10">
-          <motion.div style={{ y: yText }} className="max-w-5xl">
-            <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase mb-6">
-              Selected <span className="opacity-20">Work</span>
+        {/* ─── Hero ─── */}
+        <section className="pt-32 pb-16">
+          <motion.div style={{ y: yText }} className="max-w-4xl">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase mb-6">
+              Case <span className="text-primary">Studies</span>
             </h1>
-            <p className="text-xl md:text-3xl font-light text-foreground/70 leading-relaxed max-w-3xl">
-              We build production-ready products and automation systems that remove operational drag and scale with your business.
+            <p className="text-lg md:text-2xl font-light text-foreground/60 leading-relaxed max-w-2xl">
+              Production-ready systems built to remove operational drag and scale with your business.
             </p>
-
-            {/* "How to read" guide */}
-            <div className="mt-12 flex flex-wrap gap-6 md:gap-12">
-              {[
-                { label: "The Challenge", icon: Zap, text: "Identifying fixed business friction" },
-                { label: "The System", icon: Layout, text: "Custom engineering for scale" },
-                { label: "The Outcome", icon: CheckCircle2, text: "Measurable technical results" }
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-widest">{item.label}</h4>
-                    <p className="text-sm opacity-50">{item.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </motion.div>
         </section>
 
-        {/* 3. Featured Spotlight */}
-        {featuredWork.length > 0 && selectedCategory === "All" && !searchTerm && (
-          <section className="py-20">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold">Featured Case Studies</h2>
-              <div className="h-[1px] flex-grow bg-border/20 mx-8 hidden md:block" />
-              <span className="text-xs font-mono opacity-40 uppercase tracking-widest">Selected Items / 03</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {featuredWork.map((project, i) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={i}
-                  onQuickView={() => setQuickViewProject(project)}
-                  variant="featured"
-                />
-              ))}
-            </div>
+        {/* ─── Featured Hero Spotlight ─── */}
+        {heroProject && selectedCategory === "All" && !searchTerm && (
+          <section className="pb-16">
+            <Link href={`/case-studies/${heroProject.slug || slugify(heroProject.title)}`} className="group block">
+              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden border border-border/30 bg-muted/5">
+                <div className="grid grid-cols-1 lg:grid-cols-2">
+                  {/* Image */}
+                  <div className="relative aspect-[16/10] lg:aspect-auto lg:min-h-[400px]">
+                    <Image
+                      src={heroProject.images[0]?.url || "/placeholder.svg"}
+                      alt={heroProject.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
+                    />
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="px-3 py-1 bg-primary text-white rounded-full text-[10px] font-bold uppercase tracking-wider">
+                        Featured
+                      </span>
+                    </div>
+                  </div>
+                  {/* Content */}
+                  <div className="p-8 lg:p-12 flex flex-col justify-center">
+                    <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground mb-3">{heroProject.category}</span>
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight mb-4 group-hover:text-primary transition-colors">
+                      {heroProject.title}
+                    </h2>
+                    <p className="text-foreground/60 text-sm md:text-base leading-relaxed mb-6 line-clamp-3">
+                      {heroProject.description}
+                    </p>
+                    {/* Tech stack */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {heroProject.technology?.slice(0, 5).map((tech, i) => (
+                        <span key={i} className="px-3 py-1 rounded-full bg-primary/5 border border-primary/10 text-xs font-medium text-foreground/70">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    {/* Meta */}
+                    <div className="flex items-center gap-6 text-xs text-muted-foreground">
+                      {heroProject.duration && (
+                        <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {heroProject.duration}</span>
+                      )}
+                      {heroProject.team_size && (
+                        <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" /> {heroProject.team_size} engineers</span>
+                      )}
+                      <span className="flex items-center gap-1.5 text-primary font-semibold ml-auto">
+                        View case study <ArrowUpRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
           </section>
         )}
 
-        {/* 4. Filter Bar */}
-        <div className="sticky top-0 z-40 py-8 theme-bg/80 backdrop-blur-xl border-b border-theme-text/10 transition-all">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-2 md:pb-0 font-mono text-sm">
+        {/* ─── Filter Bar ─── */}
+        <div className="sticky top-0 z-40 py-5 theme-bg/90 backdrop-blur-xl border-b border-border/10 transition-all">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1 md:pb-0">
               {categories.map(cat => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 border rounded-full transition-all duration-300 whitespace-nowrap ${selectedCategory === cat
+                  className={`px-4 py-1.5 border rounded-full transition-all duration-300 whitespace-nowrap text-sm ${selectedCategory === cat
                     ? "bg-foreground text-background border-foreground"
-                    : "bg-transparent text-foreground/60 border-border/20 hover:border-foreground/50 hover:text-foreground"
+                    : "bg-transparent text-foreground/50 border-border/20 hover:border-foreground/40 hover:text-foreground"
                     }`}
                 >
                   {cat}
@@ -151,30 +159,32 @@ export default function PortfolioClient({ initialProjects = [] }: PortfolioClien
               ))}
             </div>
 
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 theme-text/40" />
-              <Input
-                placeholder="Search projects..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-10 rounded-full theme-text/5 border-transparent focus:theme-bg focus:border-theme-text/20 transition-all font-mono text-sm"
-              />
-              {searchTerm && (
-                <button onClick={() => setSearchTerm("")} className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <X className="w-3 h-3 theme-text/40 hover:theme-text" />
-                </button>
-              )}
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground font-mono whitespace-nowrap hidden sm:block">
+                {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
+              </span>
+              <div className="relative w-full md:w-56">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 h-9 rounded-full bg-muted/30 border-transparent focus:bg-background focus:border-border/30 transition-all text-sm"
+                />
+                {searchTerm && (
+                  <button onClick={() => setSearchTerm("")} className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <X className="w-3 h-3 text-muted-foreground hover:text-foreground" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* 5. Main Grid */}
-        <section className="py-20">
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold">{searchTerm || selectedCategory !== "All" ? 'Search Results' : 'All Work'}</h2>
-          </div>
+        {/* ─── Project Grid ─── */}
+        <section className="py-16">
           {filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
               {filteredProjects.map((project, index) => (
                 <ProjectCard
                   key={project.id}
@@ -187,52 +197,59 @@ export default function PortfolioClient({ initialProjects = [] }: PortfolioClien
           ) : (
             <div className="py-32 flex flex-col items-center justify-center text-center opacity-60">
               <h3 className="text-2xl font-bold mb-2">No projects found.</h3>
-              <p className="mb-6">Adjust your filters to see more work.</p>
-              <Button onClick={() => { setSearchTerm(""); setSelectedCategory("All") }} variant="outline">Clear Filters</Button>
+              <p className="mb-6 text-sm">Adjust your filters to see more work.</p>
+              <Button onClick={() => { setSearchTerm(""); setSelectedCategory("All") }} variant="outline" size="sm">Clear Filters</Button>
             </div>
           )}
         </section>
 
-        {/* 6. Engagement Model / FAQ Strip */}
-        <section className="py-20 border-t border-border/10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-            {/* Engagement Bullets */}
+        {/* ─── Process & FAQ ─── */}
+        <section className="py-16 border-t border-border/10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Process */}
             <div>
-              <h2 className="text-3xl font-bold mb-8">How We Deliver Outcomes</h2>
-              <div className="space-y-8">
+              <h2 className="text-2xl font-bold mb-6">How We Deliver</h2>
+              <div className="space-y-5">
                 {[
-                  { title: "Direct Collaboration", text: "You speak directly with engineers, not account managers. We move faster by removing layers.", icon: MessageSquare },
-                  { title: "Production-First", text: "Every feature is built with RLS policies, proper indexing, and SEO schema from Day 1.", icon: Zap },
-                  { title: "Strategic Automation", text: "We don't just build UI; we automate the operational drag behind the scenes.", icon: Workflow }
+                  { title: "Direct Collaboration", text: "You speak directly with engineers. No account managers, no layers.", icon: MessageSquare },
+                  { title: "Production-First", text: "RLS policies, proper indexing, and SEO schema from Day 1.", icon: Zap },
+                  { title: "Strategic Automation", text: "We automate the operational drag behind the UI.", icon: Workflow }
                 ].map((item, i) => (
-                  <motion.div key={i} className="flex gap-6" {...fadeUp(i * 0.1)}>
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center">
-                      <item.icon className="w-6 h-6 text-primary" />
+                  <motion.div
+                    key={i}
+                    className="flex gap-4"
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                  >
+                    <div className="shrink-0 w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center">
+                      <item.icon className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold mb-1">{item.title}</h4>
-                      <p className="theme-text opacity-60 text-sm leading-relaxed">{item.text}</p>
+                      <h4 className="text-sm font-bold mb-0.5">{item.title}</h4>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{item.text}</p>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* FAQs */}
+            {/* FAQ */}
             <div>
-              <h2 className="text-3xl font-bold mb-8">Common Questions</h2>
-              <div className="space-y-4">
+              <h2 className="text-2xl font-bold mb-6">Common Questions</h2>
+              <div className="space-y-3">
                 {[
                   { q: "How long does a typical project take?", a: "Most MVP-level systems are delivered in 6-12 weeks, while smaller automation tasks can take 2-4 weeks." },
                   { q: "What is your tech stack focus?", a: "We specialize in the T3 Stack (Next.js, TypeScript, Supabase) and React Native for mobile, ensuring 100% interoperability." },
                   { q: "Do you offer post-launch support?", a: "Yes. Every project includes a 30-day stability guarantee and optional monthly maintenance for scaling." }
                 ].map((item, i) => (
-                  <details key={i} className="group border border-border/10 rounded-2xl overflow-hidden hover:bg-theme-text/5 transition-colors">
-                    <summary className="flex items-center justify-between p-5 cursor-pointer list-none font-bold">
-                      <span className="flex items-center gap-3"><HelpCircle className="w-4 h-4 text-primary" /> {item.q}</span>
-                      <ChevronRight className="w-4 h-4 transition-transform group-open:rotate-90" />
+                  <details key={i} className="group border border-border/10 rounded-xl overflow-hidden hover:bg-muted/30 transition-colors">
+                    <summary className="flex items-center justify-between p-4 cursor-pointer list-none text-sm font-semibold">
+                      <span className="flex items-center gap-2"><HelpCircle className="w-4 h-4 text-primary shrink-0" /> {item.q}</span>
+                      <ChevronRight className="w-4 h-4 shrink-0 transition-transform group-open:rotate-90" />
                     </summary>
-                    <div className="px-5 pb-5 theme-text opacity-60 text-sm leading-relaxed">
+                    <div className="px-4 pb-4 text-muted-foreground text-sm leading-relaxed">
                       {item.a}
                     </div>
                   </details>
@@ -242,8 +259,8 @@ export default function PortfolioClient({ initialProjects = [] }: PortfolioClien
           </div>
         </section>
 
-        {/* 7. CTA Section */}
-        <div className="py-20">
+        {/* ─── CTA ─── */}
+        <div className="py-16">
           <ProjectCTA title="Want Results Like These?" description="Let's build a system that works as hard as you do." />
         </div>
 
@@ -259,108 +276,87 @@ export default function PortfolioClient({ initialProjects = [] }: PortfolioClien
           />
         )}
       </AnimatePresence>
-
     </div>
   )
 }
 
-function ProjectCard({ project, index, onQuickView, variant = "grid" }: {
+/* ─── Simplified Project Card ─── */
+function ProjectCard({ project, index, onQuickView }: {
   project: ProjectDetail,
   index: number,
   onQuickView: () => void,
-  variant?: "grid" | "featured"
 }) {
-  const isFeatured = variant === "featured"
-
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.05, ease: "easeOut" }}
-      className={`group flex flex-col relative h-full ${isFeatured
-        ? 'md:bg-theme-text/[0.03] md:p-8 md:rounded-[2.5rem] md:hover:bg-theme-text/[0.06] border border-transparent md:hover:border-primary/20 transition-all duration-500'
-        : 'p-2'
-        }`}
+      transition={{ duration: 0.5, delay: index * 0.04, ease: "easeOut" }}
+      className="group flex flex-col"
     >
-      {/* 1. Image Area */}
-      <Link href={`/case-studies/${project.slug || slugify(project.title)}`} className="block w-full mb-8">
-        <div className="relative aspect-video overflow-hidden rounded-[2rem] border border-border/50 bg-muted/5 shadow-sm group-hover:shadow-2xl transition-all duration-700">
+      {/* Image */}
+      <Link href={`/case-studies/${project.slug || slugify(project.title)}`} className="block mb-4">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border/30 bg-muted/5 group-hover:shadow-xl transition-all duration-500">
           <Image
             src={project.images[0]?.url || "/placeholder.svg"}
             alt={project.title}
             fill
-            className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority={index < 4}
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={index < 6}
           />
-
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-500 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-400 flex items-center justify-center opacity-0 group-hover:opacity-100">
             <button
               onClick={(e) => { e.preventDefault(); onQuickView(); }}
-              className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-transform"
+              className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform"
             >
-              <Eye className="w-6 h-6 text-black" />
+              <Eye className="w-5 h-5 text-black" />
             </button>
           </div>
-
-          <div className="absolute top-6 left-6 z-20">
-            <span className="px-4 py-1.5 bg-black/40 backdrop-blur-md border border-white/20 rounded-xl text-[10px] font-bold text-white uppercase tracking-wider">
+          {/* Category badge */}
+          <div className="absolute top-3 left-3 z-10">
+            <span className="px-2.5 py-1 bg-black/50 backdrop-blur-sm border border-white/10 rounded-lg text-[10px] font-semibold text-white uppercase tracking-wide">
               {project.category}
             </span>
           </div>
         </div>
       </Link>
 
-      {/* 2. Content Area */}
-      <div className="flex flex-col flex-grow space-y-6">
-        {/* Title - Fixed height to keep cards aligned */}
-        <div className="min-h-[5rem] flex flex-col justify-start">
-          <h3 className={`${isFeatured ? 'text-2xl md:text-3xl' : 'text-2xl'} font-black tracking-tighter leading-tight group-hover:text-primary transition-colors`}>
+      {/* Content */}
+      <div className="flex flex-col flex-grow">
+        <h3 className="text-lg font-bold tracking-tight leading-snug mb-2 group-hover:text-primary transition-colors">
+          <Link href={`/case-studies/${project.slug || slugify(project.title)}`}>
             {project.title}
-          </h3>
-        </div>
+          </Link>
+        </h3>
 
-        {/* Transformation - Redesigned to handle long text */}
-        {!!(project.before_items?.length || project.after_items?.length) && (
-          <div className="grid grid-cols-1 gap-2 py-4 border-y border-border/5 text-[10px] font-mono uppercase tracking-widest">
-            <div className="flex items-start gap-2 opacity-60">
-              <span className="italic shrink-0">Before:</span>
-              <span className="line-through line-clamp-2">{project.before_items?.[0] || 'Manual Process'}</span>
-            </div>
-            <div className="flex items-start gap-2 font-bold text-primary">
-              <span className="italic shrink-0 opacity-40">After:</span>
-              <span className="line-clamp-2">{project.after_items?.[0] || 'Automated System'}</span>
-            </div>
-          </div>
-        )}
+        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 mb-4">
+          {project.description}
+        </p>
 
-        {/* Story Snippets */}
-        <div className="space-y-6 flex-grow">
-          <div className="min-h-[4rem]">
-            <div className="flex items-center gap-2 mb-2">
-              <Zap className="w-3 h-3 text-primary" />
-              <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">The friction</span>
-            </div>
-            <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3 italic">
-              "{project.challenge || project.description}"
-            </p>
-          </div>
-
-          <div className="min-h-[3rem] flex flex-wrap gap-2 content-start">
-            {project.results?.slice(0, 3).map((res, i) => (
-              <span key={i} className="px-3 py-1 bg-primary/5 rounded-full font-mono text-[9px] uppercase tracking-tighter text-primary/80 border border-primary/10">
-                • {res}
-              </span>
-            ))}
-          </div>
+        {/* Tech pills */}
+        <div className="flex flex-wrap gap-1.5 mb-4 mt-auto">
+          {project.technology?.slice(0, 4).map((tech, i) => (
+            <span key={i} className="px-2 py-0.5 rounded-md bg-muted/50 text-[11px] font-medium text-foreground/60">
+              {tech}
+            </span>
+          ))}
+          {(project.technology?.length || 0) > 4 && (
+            <span className="px-2 py-0.5 rounded-md bg-muted/50 text-[11px] font-medium text-foreground/40">
+              +{project.technology.length - 4}
+            </span>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-6 border-t border-border/10">
-          <span className="text-xs font-mono theme-text/40">{project.duration}</span>
-          <Link href={`/case-studies/${project.slug || slugify(project.title)}`} className="text-[10px] font-bold theme-text/40 group-hover:theme-text/80 transition-colors uppercase tracking-widest flex items-center gap-2">
-            Case Details <ArrowUpRight className="w-4 h-4" />
+        <div className="flex items-center justify-between pt-3 border-t border-border/10">
+          <span className="text-xs text-muted-foreground">{project.duration}</span>
+          <Link
+            href={`/case-studies/${project.slug || slugify(project.title)}`}
+            className="text-xs font-semibold text-foreground/50 group-hover:text-primary transition-colors flex items-center gap-1"
+          >
+            View study <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>
@@ -368,6 +364,7 @@ function ProjectCard({ project, index, onQuickView, variant = "grid" }: {
   )
 }
 
+/* ─── Quick View Drawer (preserved) ─── */
 function QuickViewDrawer({ project, onClose, getGradient }: { project: ProjectDetail, onClose: () => void, getGradient: any }) {
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
@@ -391,73 +388,79 @@ function QuickViewDrawer({ project, onClose, getGradient }: { project: ProjectDe
 
         <div className="relative h-64 w-full">
           <Image src={project.images[0]?.url || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-theme-bg via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
         </div>
 
         <div className="p-8 space-y-8">
-          <div className="space-y-2">
+          <div className="space-y-3">
             <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest">{project.category}</span>
             <h2 className="text-3xl font-black tracking-tight leading-tight">{project.title}</h2>
-            <p className="theme-text opacity-60 text-sm">{project.description}</p>
+            <p className="text-muted-foreground text-sm">{project.description}</p>
           </div>
 
           <div className="grid grid-cols-3 gap-4 py-6 border-y border-border/10">
             <div className="text-center">
-              <span className="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Duration</span>
+              <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Duration</span>
               <span className="font-mono text-sm">{project.duration || 'N/A'}</span>
             </div>
             <div className="text-center">
-              <span className="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Team</span>
+              <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Team</span>
               <span className="font-mono text-sm">{project.team_size} Experts</span>
             </div>
             <div className="text-center">
-              <span className="block text-[10px] uppercase tracking-widest opacity-40 mb-1">Scale</span>
+              <span className="block text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Scale</span>
               <span className="font-mono text-sm">{project.client_type || 'Custom'}</span>
             </div>
           </div>
 
           <div className="space-y-6">
-            <div>
-              <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3">
-                <Zap className="w-4 h-4 text-primary" /> The challenge
-              </h4>
-              <p className="text-sm theme-text opacity-70 leading-relaxed italic border-l-2 border-primary/20 pl-4">
-                {project.challenge}
-              </p>
-            </div>
-
-            <div>
-              <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3">
-                <Layout className="w-4 h-4 text-primary" /> What We Built
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {project.features?.map((f, i) => (
-                  <span key={i} className="px-3 py-1 rounded-lg bg-theme-text/5 text-xs theme-text">{f}</span>
-                ))}
+            {project.challenge && (
+              <div>
+                <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3">
+                  <Zap className="w-4 h-4 text-primary" /> The Challenge
+                </h4>
+                <p className="text-sm text-muted-foreground leading-relaxed italic border-l-2 border-primary/20 pl-4">
+                  {project.challenge}
+                </p>
               </div>
-            </div>
+            )}
 
-            <div>
-              <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3">
-                <CheckCircle2 className="w-4 h-4 text-primary" /> Technical Outcomes
-              </h4>
-              <div className="space-y-2">
-                {project.results?.map((r, i) => (
-                  <div key={i} className="flex items-start gap-2 text-xs theme-text opacity-70">
-                    <div className="mt-1 w-1 h-1 rounded-full bg-primary" />
-                    {r}
-                  </div>
-                ))}
+            {project.features && project.features.length > 0 && (
+              <div>
+                <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3">
+                  <Layout className="w-4 h-4 text-primary" /> What We Built
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {project.features.map((f, i) => (
+                    <span key={i} className="px-3 py-1 rounded-lg bg-muted/50 text-xs">{f}</span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
+
+            {project.results && project.results.length > 0 && (
+              <div>
+                <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3">
+                  <CheckCircle2 className="w-4 h-4 text-primary" /> Outcomes
+                </h4>
+                <div className="space-y-2">
+                  {project.results.map((r, i) => (
+                    <div key={i} className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <div className="mt-1 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                      {r}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="pt-10 flex flex-col sm:flex-row gap-4">
+          <div className="pt-8 flex flex-col sm:flex-row gap-3">
             <Link href={`/case-studies/${project.slug || slugify(project.title)}`} className="flex-grow">
-              <Button className="w-full h-14 rounded-2xl bg-primary text-white font-bold">Read Full Case Study</Button>
+              <Button className="w-full h-12 rounded-xl bg-primary text-white font-bold">Read Full Case Study</Button>
             </Link>
             <Link href="/contact" className="flex-grow">
-              <Button variant="outline" className="w-full h-14 rounded-2xl font-bold">Book Strategy Call</Button>
+              <Button variant="outline" className="w-full h-12 rounded-xl font-bold">Book Strategy Call</Button>
             </Link>
           </div>
         </div>
