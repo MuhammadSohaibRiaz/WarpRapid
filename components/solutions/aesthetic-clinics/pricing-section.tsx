@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -58,6 +58,7 @@ const tiers: {
   name: string
   tagline: string
   setupFee: string
+  discountedSetupFee: string
   monthlyFee: string
   highlight: boolean
   badge?: string
@@ -67,8 +68,9 @@ const tiers: {
   {
     name: "Starter",
     tagline: "For solo-practitioner clinics just getting started",
-    setupFee: "50,000",
-    monthlyFee: "18,000",
+    setupFee: "399",
+    discountedSetupFee: "199",
+    monthlyFee: "99",
     highlight: false,
     features: [
       { text: "AI WhatsApp Auto-Responder" },
@@ -79,7 +81,7 @@ const tiers: {
       {
         text: "Up to 200 messages/mo",
         tooltip:
-          "Covers up to 200 outbound template messages (booking confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at PKR 50 each.",
+          "Covers up to 200 outbound template messages (booking confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at $0.10 each.",
       },
       { text: "Email Support" },
     ],
@@ -88,8 +90,9 @@ const tiers: {
   {
     name: "Growth",
     tagline: "For established clinics ready to scale bookings",
-    setupFee: "100,000",
-    monthlyFee: "35,000",
+    setupFee: "799",
+    discountedSetupFee: "399",
+    monthlyFee: "199",
     highlight: true,
     badge: "Most Popular",
     features: [
@@ -114,7 +117,7 @@ const tiers: {
       {
         text: "Up to 1,000 messages/mo",
         tooltip:
-          "Covers up to 1,000 outbound template messages (booking confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at PKR 30 each.",
+          "Covers up to 1,000 outbound template messages (booking confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at $0.05 each.",
       },
       { text: "Dashboard & Analytics Portal" },
       { text: "Priority WhatsApp & Email Support" },
@@ -124,8 +127,9 @@ const tiers: {
   {
     name: "Pro",
     tagline: "For multi-branch clinics & chains with complex workflows",
-    setupFee: "200,000",
-    monthlyFee: "75,000",
+    setupFee: "1,599",
+    discountedSetupFee: "799",
+    monthlyFee: "399",
     highlight: false,
     features: [
       { text: "Everything in Growth, plus:" },
@@ -174,11 +178,11 @@ export function PricingSection() {
             </div>
             <div className="pt-4">
               <p className="text-lg md:text-xl font-bold text-foreground mb-1">
-                <span className="text-primary">50% Off Setup Fee</span> — Until March 31
+                <span className="text-primary">50% Off Setup Fee</span> — Until April 30
               </p>
               <p className="text-sm text-muted-foreground mb-3">
                 Lock in half-price setup for any plan when you sign up before{" "}
-                <span className="font-semibold text-foreground">March 31, 2026</span>
+                <span className="font-semibold text-foreground">April 30, 2026</span>
               </p>
               <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
@@ -227,8 +231,10 @@ export function PricingSection() {
                   <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
                     Setup (one-time)
                   </span>
-                  <div className="flex items-baseline gap-1 mt-1">
-                    <span className="text-2xl font-bold text-foreground">PKR {tier.setupFee}</span>
+                  <div className="flex items-baseline gap-2 mt-1 flex-wrap">
+                    <span className="text-lg font-medium text-muted-foreground line-through">${tier.setupFee}</span>
+                    <span className="text-2xl font-bold text-emerald-500">${tier.discountedSetupFee}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded-md">50% off</span>
                   </div>
                 </div>
                 <div>
@@ -237,7 +243,7 @@ export function PricingSection() {
                   </span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-3xl font-black text-foreground">
-                      PKR {tier.monthlyFee}
+                      ${tier.monthlyFee}
                     </span>
                     <span className="text-sm text-muted-foreground">/mo</span>
                   </div>
