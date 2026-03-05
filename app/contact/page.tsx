@@ -3,16 +3,24 @@ import ContactClient from "./ContactClient"
 import Script from "next/script"
 
 export const metadata: Metadata = {
-    title: "Contact Us | RapidNexTech",
+    title: "Contact Us — Start Your Project",
     description:
-        "Get in touch with RapidNexTech for your next software project. We respond within 24 hours. Email, WhatsApp, or visit our office in Sheikhupura.",
+        "Get in touch with RapidNexTech for custom software, SaaS, or AI automation projects. We respond within 24 hours. Email, WhatsApp, or visit us in Sheikhupura.",
     alternates: { canonical: "https://rapidnextech.com/contact" },
     openGraph: {
-        title: "Contact RapidNexTech",
+        title: "Contact RapidNexTech — Let's Build Together",
         description:
-            "Ready to start your project? Contact our team for a free consultation.",
+            "Ready to start your project? Reach out for a free consultation on custom software, SaaS, or AI automation.",
         url: "https://rapidnextech.com/contact",
         type: "website",
+        images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Contact RapidNexTech" }],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Contact RapidNexTech — Let's Build Together",
+        description:
+            "Ready to start your project? Reach out for a free consultation on custom software, SaaS, or AI automation.",
+        images: ["/og-image.png"],
     },
 }
 

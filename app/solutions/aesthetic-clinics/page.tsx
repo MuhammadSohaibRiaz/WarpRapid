@@ -11,24 +11,24 @@ import { CTASection } from "@/components/solutions/aesthetic-clinics/cta-section
 import { FAQSection } from "@/components/solutions/aesthetic-clinics/faq-section"
 
 export const metadata: Metadata = {
-  title: "AI Appointment Automation for Aesthetic Clinics",
+  title: "AI WhatsApp Booking Automation for Aesthetic Clinics",
   description:
-    "We build AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
+    "AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
+  alternates: { canonical: "https://rapidnextech.com/solutions/aesthetic-clinics" },
   openGraph: {
-    title: "AI Appointment Automation for Aesthetic Clinics | RapidNexTech",
+    title: "AI WhatsApp Booking Automation for Aesthetic Clinics | RapidNexTech",
     description:
-      "We build AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
+      "AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
     type: "website",
     url: "https://rapidnextech.com/solutions/aesthetic-clinics",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech — AI Booking for Clinics" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Appointment Automation for Aesthetic Clinics | RapidNexTech",
+    title: "AI WhatsApp Booking Automation for Aesthetic Clinics | RapidNexTech",
     description:
-      "We build AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
-  },
-  alternates: {
-    canonical: "https://rapidnextech.com/solutions/aesthetic-clinics",
+      "AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
+    images: ["/og-image.png"],
   },
 }
 

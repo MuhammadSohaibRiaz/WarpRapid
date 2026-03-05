@@ -11,40 +11,30 @@ import SectionHeader from "@/components/careers/SectionHeader"
 import AnimatedSVG from "@/components/careers/AnimatedSVG"
 
 export const metadata = {
-  title: "Careers at RapidNexTech | Join Our Remote Software Team",
+  title: "Careers — Join Our Remote Engineering Team",
   description:
-    "Join RapidNexTech — a remote-first, innovation-driven team building next-gen web, mobile, and AI solutions. Discover open roles, culture, and growth opportunities.",
-  alternates: {
-    canonical: "https://rapidnextech.com/careers",
-  },
+    "Join RapidNexTech - a remote-first team building custom software, SaaS platforms, and AI automation. Discover open roles, culture, and growth opportunities.",
+  alternates: { canonical: "https://rapidnextech.com/careers" },
   openGraph: {
-    title: "Careers at RapidNexTech | Join Our Remote Software Team",
+    title: "Careers at RapidNexTech — Build What Matters",
     description:
-      "Discover how you can grow with RapidNexTech — where technology meets impact.",
+      "Join a remote-first engineering team working on custom software, SaaS, and AI. See open roles and our culture.",
     url: "https://rapidnextech.com/careers",
     type: "website",
-    images: [
-      {
-        url: "https://rapidnextech.com/og-careers.jpg",
-        width: 1200,
-        height: 630,
-        alt: "RapidNexTech Careers",
-      },
-    ],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech Careers" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Careers at RapidNexTech | Join Our Remote Software Team",
+    title: "Careers at RapidNexTech — Build What Matters",
     description:
-      "Be part of RapidNexTech’s remote-first, high-performance engineering team.",
-    images: ["https://rapidnextech.com/og-careers.jpg"],
+      "Join a remote-first engineering team working on custom software, SaaS, and AI. See open roles and our culture.",
+    images: ["/og-image.png"],
   },
 }
 
 export default function CareersPage() {
   return (
     <main className="min-h-screen">
-      {/* 🧭 Hero Section */}
       {/* 🧭 Hero Section */}
       <section id="open-roles" className="relative min-h-[60vh] flex items-center pt-24 pb-12 overflow-hidden">
         {/* Subtle Background */}

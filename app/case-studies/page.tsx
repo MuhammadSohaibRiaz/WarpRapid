@@ -4,35 +4,26 @@ import Script from "next/script"
 import { PortfolioCMS } from "@/lib/supabase-cms"
 
 export const metadata: Metadata = {
-  title: "Software Case Studies | RapidNexTech Portfolio",
+  title: "Case Studies — Real Projects, Real Results",
   description:
-    "We build production-ready products and automation systems that remove operational drag and scale with your business. Explore our real-world software projects.",
+    "See how RapidNexTech delivers custom software, SaaS platforms, and AI automation. Real-world projects with measurable impact.",
+  alternates: { canonical: "https://rapidnextech.com/case-studies" },
   openGraph: {
-    title: "Software Case Studies | RapidNexTech",
+    title: "Case Studies — Real Projects, Real Results | RapidNexTech",
     description:
-      "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidNexTech delivers performance and innovation.",
+      "Real-world software projects built with Next.js, React Native, and AI automation. See how we deliver performance and innovation.",
     url: "https://rapidnextech.com/case-studies",
     siteName: "RapidNexTech",
-    images: [
-      {
-        url: "https://rapidnextech.com/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "RapidNexTech Case Studies",
-      },
-    ],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech Case Studies" }],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Software Case Studies | RapidNexTech",
+    title: "Case Studies — Real Projects, Real Results | RapidNexTech",
     description:
-      "Explore real-world software projects built with Next.js, React Native, and AI automation. See how RapidNexTech delivers performance and innovation.",
-    images: ["https://rapidnextech.com/og-image.jpg"],
-  },
-  alternates: {
-    canonical: "https://rapidnextech.com/case-studies",
+      "Real-world software projects built with Next.js, React Native, and AI automation. See how we deliver performance and innovation.",
+    images: ["/og-image.png"],
   },
 }
 
