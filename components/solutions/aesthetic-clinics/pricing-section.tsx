@@ -73,11 +73,25 @@ const tiers: {
     monthlyFee: "149",
     highlight: false,
     features: [
-      { text: "7 core WhatsApp + Instagram conversation flows" },
-      { text: "Instant inquiry response (24/7)" },
+      {
+        text: "7 core WhatsApp conversation flows",
+        tooltip:
+          "Price inquiry, treatment recommendation, first-time qualification, availability, clinic info, after-hours, and follow-up for unconverted leads.",
+      },
+      {
+        text: "Instagram inquiries redirected to WhatsApp",
+        tooltip:
+          "Instagram API has limited automation. We redirect DM inquiries into WhatsApp where full 24/7 automation runs seamlessly.",
+      },
+      { text: "Instant inquiry response (24/7) via WhatsApp" },
       { text: "Treatment-specific FAQ answers" },
       { text: "Booking link redirect to your platform" },
       { text: "Appointment confirmation reminders" },
+      {
+        text: "Follow-up for unconverted leads",
+        tooltip:
+          "Patient asked about a treatment but didn\u2019t book? Automation sends a next-day reminder with booking link.",
+      },
       {
         text: "Up to 300 messages/mo",
         tooltip:
@@ -100,26 +114,38 @@ const tiers: {
       {
         text: "Multi-practitioner conversation routing",
         tooltip:
-          "Automatically route inquiries to the right practitioner based on treatment type and availability.",
+          "Patient inquiries are automatically routed to the right practitioner flow based on treatment type.",
       },
       {
         text: "Smart lead scoring & prioritisation",
         tooltip:
           "AI ranks incoming leads by intent signals so your team focuses on the hottest prospects first.",
       },
-      { text: "No-show follow-up sequences" },
+      {
+        text: "No-show follow-up sequences",
+        tooltip:
+          "Different from Starter\u2019s lead follow-up. This targets already-booked patients who miss appointments \u2014 sends reminder to reschedule.",
+      },
       {
         text: "Treatment-cycle rebooking automation",
         tooltip:
-          "Automated reminders when treatments are due (e.g., Botox at 3 months, filler at 6 months). Links directly to your booking platform.",
+          "Automated reminders for recurring sessions (e.g., Botox at 3 months, laser packages at 4\u20136 weeks). Links directly to your booking platform.",
       },
-      { text: "Pre-consultation data collection" },
+      {
+        text: "Pre-consultation data collection",
+        tooltip:
+          "Collects patient information before their appointment so staff are fully prepared for the consultation.",
+      },
       {
         text: "Up to 1,500 messages/mo",
         tooltip:
           "Covers up to 1,500 outbound template messages (confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at $0.05 each.",
       },
-      { text: "Conversion analytics dashboard" },
+      {
+        text: "Conversion analytics dashboard",
+        tooltip:
+          "Track inquiries \u2192 bookings \u2192 revenue. See which channels and flows convert best.",
+      },
       { text: "Priority WhatsApp & email support" },
     ],
     cta: "Scale Your Clinic",

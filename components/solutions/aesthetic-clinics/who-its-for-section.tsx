@@ -35,8 +35,9 @@ export function WhoItsForSection() {
   return (
     <section className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Left column */}
+          <div className="lg:sticky lg:top-32">
             <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
               Who This Is For
             </p>
