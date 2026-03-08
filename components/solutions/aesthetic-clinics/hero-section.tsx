@@ -1,7 +1,7 @@
-"use client"
+﻿"use client"
 
 import Link from "next/link"
-import { ArrowRight, Play } from "lucide-react"
+import { ArrowRight, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function AestheticHero() {
@@ -22,59 +22,72 @@ export function AestheticHero() {
         {/* Tag */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/50 text-sm text-muted-foreground mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-          Vertical Solution for Aesthetic Clinics
+          For UK Aesthetic &amp; Skin Clinics
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
-          AI-Powered Appointment{" "}
+          Turn Instagram &amp; WhatsApp Inquiries into{" "}
           <span className="bg-gradient-to-r from-blue-600 via-violet-600 to-purple-600 bg-clip-text text-transparent">
-            Conversion System
+            Booked Appointments
           </span>{" "}
-          for Aesthetic Clinics
+          Automatically
         </h1>
 
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-          Turn Instagram and WhatsApp inquiries into confirmed appointments
-          automatically — without hiring more staff.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
+          Respond instantly, answer patient questions, and guide every inquiry
+          to your existing booking system &mdash; without increasing front desk
+          workload.
+        </p>
+
+        <p className="text-sm text-muted-foreground mb-10">
+          Works with your current platform:{" "}
+          <span className="font-semibold text-foreground">Treatwell</span>
+          {" \u00b7 "}
+          <span className="font-semibold text-foreground">Zenoti</span>
+          {" \u00b7 "}
+          <span className="font-semibold text-foreground">Pabau</span>
+          {" \u00b7 "}
+          <span className="font-semibold text-foreground">Fresha</span>
+          {" & more"}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button asChild size="lg" className="h-12 px-8 text-base font-semibold rounded-xl bg-gradient-to-r from-primary via-purple-600 to-violet-600 text-white shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200">
             <Link href="/contact">
-              Book a Strategy Call
-              <ArrowRight className="ml-2 h-4 w-4" />
+              Get Your Free Inquiry Audit
+              <Search className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="h-12 px-8 text-base font-semibold rounded-xl border-border hover:bg-muted/50 transition-all duration-200">
             <a href="#how-it-works">
-              <Play className="mr-2 h-4 w-4" />
               See How It Works
+              <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </Button>
         </div>
 
-        {/* Abstract UI blocks */}
+        {/* Stat blocks */}
         <div className="mt-16 relative max-w-3xl mx-auto">
           <div className="grid grid-cols-3 gap-3 md:gap-4">
             <div className="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-4 md:p-6 text-left">
               <div className="w-8 h-1.5 rounded-full bg-emerald-500/60 mb-3" />
               <div className="w-full h-2 rounded bg-muted mb-2" />
               <div className="w-3/4 h-2 rounded bg-muted mb-4" />
-              <div className="text-2xl md:text-3xl font-bold text-foreground">87%</div>
-              <div className="text-xs text-muted-foreground mt-1">Response rate</div>
+              <div className="text-2xl md:text-3xl font-bold text-foreground">&lt; 30s</div>
+              <div className="text-xs text-muted-foreground mt-1">Avg. response time</div>
             </div>
             <div className="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-4 md:p-6 text-left">
               <div className="w-8 h-1.5 rounded-full bg-blue-500/60 mb-3" />
               <div className="w-full h-2 rounded bg-muted mb-2" />
               <div className="w-2/3 h-2 rounded bg-muted mb-4" />
-              <div className="text-2xl md:text-3xl font-bold text-foreground">3.2x</div>
-              <div className="text-xs text-muted-foreground mt-1">Booking uplift</div>
+              <div className="text-2xl md:text-3xl font-bold text-foreground">2&ndash;3x</div>
+              <div className="text-xs text-muted-foreground mt-1">Inquiry-to-booking rate</div>
             </div>
             <div className="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-4 md:p-6 text-left">
               <div className="w-8 h-1.5 rounded-full bg-violet-500/60 mb-3" />
               <div className="w-full h-2 rounded bg-muted mb-2" />
               <div className="w-5/6 h-2 rounded bg-muted mb-4" />
-              <div className="text-2xl md:text-3xl font-bold text-foreground">42%</div>
+              <div className="text-2xl md:text-3xl font-bold text-foreground">&darr; 35%</div>
               <div className="text-xs text-muted-foreground mt-1">No-show reduction</div>
             </div>
           </div>

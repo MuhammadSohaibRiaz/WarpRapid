@@ -67,29 +67,29 @@ const tiers: {
 }[] = [
   {
     name: "Starter",
-    tagline: "For solo-practitioner clinics just getting started",
+    tagline: "For single-practitioner clinics ready to stop losing DM leads",
     setupFee: "399",
     discountedSetupFee: "199",
     monthlyFee: "99",
     highlight: false,
     features: [
-      { text: "AI WhatsApp Auto-Responder" },
-      { text: "Appointment Booking via WhatsApp" },
-      { text: "Automated Appointment Reminders" },
-      { text: "Basic Patient Inquiry Qualification" },
-      { text: "Google Calendar Sync" },
+      { text: "Instagram DM + WhatsApp automation" },
+      { text: "Instant inquiry response (24/7)" },
+      { text: "Treatment-specific FAQ answers" },
+      { text: "Booking page redirect to your platform" },
+      { text: "Appointment confirmation reminders" },
       {
         text: "Up to 200 messages/mo",
         tooltip:
-          "Covers up to 200 outbound template messages (booking confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at $0.10 each.",
+          "Covers up to 200 outbound template messages (confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at $0.10 each.",
       },
-      { text: "Email Support" },
+      { text: "Email support" },
     ],
     cta: "Get Started",
   },
   {
     name: "Growth",
-    tagline: "For established clinics ready to scale bookings",
+    tagline: "For established clinics scaling patient conversion & retention",
     setupFee: "799",
     discountedSetupFee: "399",
     monthlyFee: "199",
@@ -98,53 +98,53 @@ const tiers: {
     features: [
       { text: "Everything in Starter, plus:" },
       {
-        text: "Multi-Staff Appointment Routing",
+        text: "Multi-practitioner conversation routing",
         tooltip:
-          "Automatically assign inquiries to the right doctor or aesthetician based on treatment type and availability.",
+          "Automatically route inquiries to the right practitioner based on treatment type and availability.",
       },
       {
-        text: "Smart Lead Scoring & Prioritization",
+        text: "Smart lead scoring & prioritisation",
         tooltip:
           "AI ranks incoming leads by intent signals so your team focuses on the hottest prospects first.",
       },
-      { text: "Automated No-Show Follow-ups" },
+      { text: "No-show follow-up sequences" },
       {
-        text: "Treatment-Based Rebooking Campaigns",
+        text: "Treatment-cycle rebooking automation",
         tooltip:
-          "Automated WhatsApp nudges remind patients to rebook follow-ups (e.g., next Botox session in 3 months).",
+          "Automated reminders when treatments are due (e.g., Botox at 3 months, filler at 6 months). Links directly to your booking platform.",
       },
-      { text: "Custom Booking Flows per Treatment" },
+      { text: "Pre-consultation data collection" },
       {
         text: "Up to 1,000 messages/mo",
         tooltip:
-          "Covers up to 1,000 outbound template messages (booking confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at $0.05 each.",
+          "Covers up to 1,000 outbound template messages (confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at $0.05 each.",
       },
-      { text: "Dashboard & Analytics Portal" },
-      { text: "Priority WhatsApp & Email Support" },
+      { text: "Conversion analytics dashboard" },
+      { text: "Priority WhatsApp & email support" },
     ],
     cta: "Scale Your Clinic",
   },
   {
     name: "Pro",
-    tagline: "For multi-branch clinics & chains with complex workflows",
+    tagline: "For multi-location clinics and aesthetic chains",
     setupFee: "1,599",
     discountedSetupFee: "799",
     monthlyFee: "399",
     highlight: false,
     features: [
       { text: "Everything in Growth, plus:" },
-      { text: "Multi-Branch Management" },
-      { text: "Advanced AI Conversation Flows" },
-      { text: "Instagram & Facebook DM Integration" },
-      { text: "Patient CRM with Treatment History" },
-      { text: "Revenue & Conversion Reporting" },
+      { text: "Multi-branch management" },
+      { text: "Advanced AI conversation flows" },
+      { text: "Facebook Messenger DM integration" },
+      { text: "Website chat widget" },
+      { text: "Campaign broadcast system" },
       {
         text: "Unlimited messages",
-        tooltip: "No caps on outbound template messages or service replies — ideal for high-volume, multi-branch clinics.",
+        tooltip: "No caps on outbound template messages or service replies \u2014 ideal for high-volume, multi-branch operations.",
       },
-      { text: "Custom Integrations (EMR, POS)" },
-      { text: "Dedicated Account Manager" },
-      { text: "Monthly Strategy Reviews" },
+      { text: "Custom integrations (EMR, POS)" },
+      { text: "Dedicated account manager" },
+      { text: "Monthly performance reviews" },
     ],
     cta: "Talk to Us",
   },
@@ -157,14 +157,14 @@ export function PricingSection() {
         {/* Header */}
         <div className="text-center mb-6">
           <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-            Pricing & Packages
+            Pricing &amp; Packages
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
             Simple, Transparent Pricing
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            One-time setup + affordable monthly maintenance. No hidden fees.
-            Cancel the monthly plan anytime.
+            One-time setup + monthly platform fee. No hidden costs.
+            Works alongside your existing booking system.
           </p>
         </div>
 
@@ -178,7 +178,7 @@ export function PricingSection() {
             </div>
             <div className="pt-4">
               <p className="text-lg md:text-xl font-bold text-foreground mb-1">
-                <span className="text-primary">50% Off Setup Fee</span> — Until April 30
+                <span className="text-primary">50% Off Setup Fee</span> &mdash; Until April 30
               </p>
               <p className="text-sm text-muted-foreground mb-3">
                 Lock in half-price setup for any plan when you sign up before{" "}
@@ -193,7 +193,7 @@ export function PricingSection() {
                 </span>
               </div>
               <p className="mt-3 text-xs font-semibold text-primary">
-                🎁 This week only: Free 30-min onboarding strategy call + Instagram flow setup
+                {"\ud83c\udf81"} Free inquiry conversion audit + Instagram flow setup included
               </p>
             </div>
           </div>
@@ -278,12 +278,12 @@ export function PricingSection() {
         {/* Bottom Note */}
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            All plans include WhatsApp Business API setup, staff training, and a 30-day
-            post-launch support period. Need a custom solution?{" "}
+            All plans include WhatsApp Business API setup, staff training, and an
+            onboarding period. Works with Treatwell, Zenoti, Pabau, Fresha, and
+            custom booking pages.{" "}
             <Link href="/contact" className="text-primary font-medium hover:underline">
-              Let&apos;s talk
+              Need a custom plan?
             </Link>
-            .
           </p>
         </div>
       </div>

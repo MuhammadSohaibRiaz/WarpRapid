@@ -1,25 +1,33 @@
-import { CheckCircle2 } from "lucide-react"
+﻿import { CheckCircle2 } from "lucide-react"
 
 const segments = [
   {
-    title: "Premium Aesthetic Clinics",
+    title: "Botox & Injectables Clinics",
+    badge: "Best Fit",
     description:
-      "High-end clinics offering Botox, fillers, facials, and body contouring that need to match their service quality with their booking experience.",
+      "Anti-wrinkle and filler treatments repeat every 3\u20134 months. With average appointment values of \u00a3200\u2013\u00a3350, automated rebooking reminders alone can recover thousands in annual revenue per patient.",
+    economics: "\u00a3800\u2013\u00a31,200 avg. yearly patient value",
   },
   {
-    title: "Dermatology Centers",
+    title: "Laser Hair Removal Clinics",
+    badge: null,
     description:
-      "Medical dermatology practices looking to streamline cosmetic and therapeutic appointment scheduling across multiple providers.",
+      "Multi-session packages (\u00a3600\u2013\u00a31,200 per course) require patients to return 4\u20136 times. Missed sessions destroy results. Automated session reminders keep patients on track and protect your revenue.",
+    economics: "4\u20136 sessions per treatment course",
   },
   {
-    title: "Laser Treatment Clinics",
+    title: "Premium Skin Clinics",
+    badge: null,
     description:
-      "Clinics specializing in laser hair removal, skin resurfacing, and IPL treatments that rely on recurring multi-session bookings.",
+      "Hydrafacials, microneedling, chemical peels, and skin rejuvenation. High Instagram inquiry volume, high ticket prices (\u00a3120\u2013\u00a3450+), and complex treatment suitability questions that automation handles perfectly.",
+    economics: "\u00a3120\u2013\u00a3450+ per treatment session",
   },
   {
-    title: "Cosmetic Procedure Clinics",
+    title: "Multi-Treatment Aesthetic Centres",
+    badge: null,
     description:
-      "Surgical and non-surgical cosmetic centers managing high-value consultations and complex pre-operative booking workflows.",
+      "Clinics offering a range of injectables, laser, and skin treatments across multiple practitioners. The system routes each inquiry to the right treatment flow and manages the full patient conversation lifecycle.",
+    economics: "Multiple treatment lines = compounding rebooking value",
   },
 ]
 
@@ -33,16 +41,19 @@ export function WhoItsForSection() {
               Who This Is For
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-6">
-              Built for Clinics That{" "}
+              Built for Clinics Where{" "}
               <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
-                Take Growth Seriously
+                Treatments Repeat
               </span>
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              This system is designed specifically for aesthetic and
-              dermatological practices that understand the value of operational
-              efficiency and want to scale without proportionally scaling
-              headcount.
+            <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+              The highest ROI comes from clinics with recurring treatments.
+              Every rebooking reminder we send is revenue you would have
+              otherwise lost.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Already using Treatwell, Zenoti, Pabau, or Fresha? Perfect. We
+              handle the conversation layer around your existing calendar.
             </p>
           </div>
 
@@ -54,11 +65,21 @@ export function WhoItsForSection() {
               >
                 <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">
-                    {segment.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-foreground">
+                      {segment.title}
+                    </h3>
+                    {segment.badge && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                        {segment.badge}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-2">
                     {segment.description}
+                  </p>
+                  <p className="text-xs font-medium text-foreground/70">
+                    {segment.economics}
                   </p>
                 </div>
               </div>

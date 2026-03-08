@@ -1,39 +1,77 @@
+﻿"use client"
+
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { Search, MessageCircle, ArrowRight, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function CTASection() {
   return (
     <section className="py-20 md:py-28">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="relative rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-10 md:p-16 text-center overflow-hidden">
-          {/* Subtle background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.03] via-transparent to-violet-500/[0.03] pointer-events-none" />
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-violet-600/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-violet-500/[0.04] to-primary/[0.06] p-10 md:p-16 text-center overflow-hidden">
+          {/* Decorative background */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.08),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(79,70,229,0.06),transparent_60%)]" />
 
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-              Stop Losing High-Intent Inquiries
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+              <Search className="w-4 h-4" />
+              Free Inquiry Conversion Audit
+            </div>
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-6">
+              Find Out How Many Inquiries<br className="hidden md:block" /> Your Clinic Is Losing
             </h2>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
-              Let&apos;s build your AI-powered booking engine. Engineered for
-              your workflows, your team, and your growth targets.
+
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
+              We&apos;ll analyse your Instagram, WhatsApp, and website inquiry flow &mdash;
+              and show you exactly where potential patients are dropping off before they book.
             </p>
-            <Button
-              asChild
-              size="lg"
-              className="h-12 px-8 text-base font-semibold rounded-xl bg-gradient-to-r from-primary via-purple-600 to-violet-600 text-white shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200"
-            >
-              <Link href="/contact">
-                Schedule a Consultation
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <p className="text-xs text-muted-foreground mt-4">
-              No commitment. We will assess your current workflow and recommend a
-              tailored implementation plan.
+
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-10">
+              No obligation. No cost. Just a clear picture of what you&apos;re leaving on the table.
             </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <Button
+                asChild
+                size="lg"
+                className="h-14 px-8 rounded-xl bg-gradient-to-r from-primary via-purple-600 to-violet-600 text-white font-semibold text-base shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200"
+              >
+                <Link href="/contact">
+                  <Search className="mr-2 h-5 w-5" />
+                  Get Your Free Audit
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="h-14 px-8 rounded-xl font-semibold text-base border-border/60 hover:border-primary/30 transition-all duration-200"
+              >
+                <Link href="https://wa.me/447312578740" target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Message Us on WhatsApp
+                </Link>
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5 text-primary" />
+                No obligation
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5 text-primary" />
+                Works with your existing booking system
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5 text-primary" />
+                GDPR compliant
+              </span>
+            </div>
           </div>
         </div>
       </div>

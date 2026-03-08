@@ -9,57 +9,83 @@ import {
 
 const faqs = [
   {
-    question: "Do I need WhatsApp API?",
+    question: "Does this replace my booking system (Treatwell, Zenoti, Pabau, Fresha)?",
     answer:
-      "Yes. The system uses the official WhatsApp Business Cloud API, which requires a verified Meta Business account. We handle the full setup, including business verification, API provisioning, and template approval. If you already have WhatsApp Business API access, we integrate directly with your existing setup.",
+      "No \u2014 and it\u2019s designed not to. We sit on top of your existing booking platform as a conversion and engagement layer. When a potential patient is ready to book, we redirect them straight to your booking page or calendar. Your scheduling, payments, and patient records stay exactly where they are.",
   },
   {
-    question: "Can this integrate with my existing website?",
+    question: "How does the Instagram and Facebook DM automation work?",
     answer:
-      "Absolutely. The system is designed to work alongside your current website or as a replacement. We can embed booking widgets, WhatsApp entry points, and conversion-optimized CTAs into any existing site. If you need a new site, we build one as part of the solution — fully integrated from day one.",
+      "When someone sends your clinic a DM on Instagram or Facebook, our AI responds instantly with helpful, on-brand answers \u2014 treatment pricing, pre-care information, clinic hours, and more. If they\u2019re ready to book, the conversation naturally guides them to your booking link. You can review every conversation, and your team can jump in at any point.",
   },
   {
-    question: "Is this compliant with data privacy regulations?",
+    question: "What happens to my current WhatsApp setup?",
     answer:
-      "Yes. The system is built with data privacy at its core. All patient data is encrypted at rest and in transit. We support GDPR, HIPAA-aligned, and local data protection compliance requirements. Consent management is built into the conversation flow, and data retention policies are configurable per your regulatory needs.",
+      "We set up WhatsApp Business API alongside your current number (or migrate it, depending on your preference). This enables automated responses, appointment confirmations, rebooking reminders, and broadcast campaigns \u2014 features that standard WhatsApp Business can\u2019t do. Your staff can still send personal messages as needed.",
   },
   {
-    question: "Can it handle multiple staff members?",
+    question: "Is this GDPR compliant?",
     answer:
-      "Yes. The system supports multi-staff routing, role-based access, and provider-specific scheduling. Appointments can be assigned to specific practitioners based on treatment type, availability, or patient preference. The admin dashboard provides per-staff performance analytics.",
+      "Yes. All patient data is processed and stored in compliance with UK GDPR and the Data Protection Act 2018. We use end-to-end encryption for conversations, store data on EU-based servers, and never share patient information with third parties. Consent is collected before any automated messaging begins.",
   },
   {
-    question: "Can we scale this later?",
+    question: "How does the rebooking automation know when to message patients?",
     answer:
-      "The architecture is built for scale. Whether you are a single-location clinic or a multi-branch operation, the system supports adding new locations, staff, treatments, and automation rules without re-engineering. API-first design means integration with EHR systems, payment processors, and other tools is straightforward.",
+      "Each treatment type has a clinically appropriate follow-up window (e.g., Botox at 3\u20134 months, lip filler at 6\u20139 months, laser hair removal at 4\u20136 weeks). After a patient\u2019s appointment, we schedule a friendly reminder when their next session is due \u2014 with a direct link to rebook through your existing system.",
+  },
+  {
+    question: "Can I see what the AI is saying to my patients?",
+    answer:
+      "Absolutely. You get a full conversation dashboard showing every interaction across Instagram, WhatsApp, Facebook, and your website. You can review AI responses, see conversion metrics, and adjust the tone or content of automated replies at any time. Nothing goes out without your approval of the conversation flows.",
+  },
+  {
+    question: "How long does setup take?",
+    answer:
+      "Most clinics go live within 5\u201310 business days. Setup includes connecting your social channels, configuring your treatment menu and pricing, building your conversation flows, and training your team. We handle all the technical work \u2014 your staff just needs about 30 minutes for a walkthrough.",
+  },
+  {
+    question: "What if a patient asks something the AI can\u2019t handle?",
+    answer:
+      "The AI is designed to handle common inquiries (pricing, availability, pre/post-care, directions). For clinical questions, complex requests, or complaints, the conversation is smoothly handed over to your team with full context. You\u2019ll get an instant notification so nothing falls through the cracks.",
+  },
+  {
+    question: "Do I need to change anything about how my clinic currently operates?",
+    answer:
+      "No. We integrate around your current workflow. Your booking system, calendar, payment processing, and patient records all stay the same. The only change is that inquiries get answered faster, confirmations go out automatically, and patients get timely rebooking reminders.",
+  },
+  {
+    question: "What channels does this cover?",
+    answer:
+      "Depending on your plan: Instagram DMs, Facebook Messenger, WhatsApp Business, and a website chat widget. All conversations feed into one unified dashboard so your team has a single view of every patient interaction, regardless of where it started.",
   },
 ]
 
 export function FAQSection() {
   return (
-    <section className="py-20 md:py-28 bg-muted/30">
+    <section className="py-20 md:py-28">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-14">
+        {/* Header */}
+        <div className="text-center mb-12">
           <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-            FAQ
+            FAQs
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight leading-tight mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-4">
             Common Questions
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Technical and operational details you should know before getting
-            started.
+          <p className="text-muted-foreground">
+            Everything you need to know about adding a patient conversion layer to your clinic.
           </p>
         </div>
 
-        <Accordion type="single" collapsible className="w-full">
-          {faqs.map((faq, index) => (
+        {/* Accordion */}
+        <Accordion type="single" collapsible className="w-full space-y-3">
+          {faqs.map((faq, i) => (
             <AccordionItem
-              key={index}
-              value={`item-${index}`}
-              className="border-border"
+              key={i}
+              value={`faq-${i}`}
+              className="border border-border/60 rounded-xl px-6 data-[state=open]:border-primary/30 data-[state=open]:bg-primary/[0.02] transition-colors"
             >
-              <AccordionTrigger className="text-left text-base font-semibold text-foreground hover:no-underline py-5">
+              <AccordionTrigger className="text-left text-[15px] font-semibold text-foreground hover:text-primary py-5 [&[data-state=open]>svg]:rotate-180">
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">

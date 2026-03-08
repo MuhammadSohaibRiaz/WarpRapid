@@ -11,23 +11,23 @@ import { CTASection } from "@/components/solutions/aesthetic-clinics/cta-section
 import { FAQSection } from "@/components/solutions/aesthetic-clinics/faq-section"
 
 export const metadata: Metadata = {
-  title: "AI WhatsApp Booking Automation for Aesthetic Clinics",
+  title: "AI Patient Conversion System for Aesthetic Clinics",
   description:
-    "AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
+    "Turn Instagram DMs, WhatsApp messages, and website inquiries into booked appointments automatically. Works with Treatwell, Zenoti, Pabau, and Fresha.",
   alternates: { canonical: "https://rapidnextech.com/solutions/aesthetic-clinics" },
   openGraph: {
-    title: "AI WhatsApp Booking Automation for Aesthetic Clinics | RapidNexTech",
+    title: "AI Patient Conversion System for Aesthetic Clinics | RapidNexTech",
     description:
-      "AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
+      "Turn Instagram DMs, WhatsApp messages, and website inquiries into booked appointments automatically. Works with Treatwell, Zenoti, Pabau, and Fresha.",
     type: "website",
     url: "https://rapidnextech.com/solutions/aesthetic-clinics",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech — AI Booking for Clinics" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech — AI Patient Conversion for Aesthetic Clinics" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI WhatsApp Booking Automation for Aesthetic Clinics | RapidNexTech",
+    title: "AI Patient Conversion System for Aesthetic Clinics | RapidNexTech",
     description:
-      "AI-powered WhatsApp booking systems for aesthetic clinics. Convert more inquiries into confirmed appointments automatically.",
+      "Turn Instagram DMs, WhatsApp messages, and website inquiries into booked appointments automatically. Works with Treatwell, Zenoti, Pabau, and Fresha.",
     images: ["/og-image.png"],
   },
 }
