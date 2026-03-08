@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 export function AestheticHero() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20 md:pt-28 pb-16 theme-transition">
+    <section className="relative min-h-[calc(100dvh-4rem)] flex items-center justify-center overflow-hidden pt-16 md:pt-20 pb-8 md:pb-12 theme-transition">
       {/* Theme glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] theme-glow blur-[120px] opacity-30 rounded-full pointer-events-none theme-transition" />
 
@@ -20,12 +20,12 @@ export function AestheticHero() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         {/* Tag */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/50 text-sm text-muted-foreground mb-8">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/50 text-sm text-muted-foreground mb-5">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" />
           For UK Aesthetic &amp; Skin Clinics
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1] mb-4">
           Turn Instagram &amp; WhatsApp Inquiries into{" "}
           <span className="theme-gradient-text bg-clip-text text-transparent">
             Booked Appointments
@@ -39,7 +39,7 @@ export function AestheticHero() {
           workload.
         </p>
 
-        <p className="text-sm text-muted-foreground mb-10">
+        <p className="text-sm text-muted-foreground mb-6">
           Works with your current platform:{" "}
           <span className="font-semibold text-foreground">Treatwell</span>
           {" \u00b7 "}
@@ -71,7 +71,7 @@ export function AestheticHero() {
         </p>
 
         {/* Stat blocks */}
-        <div className="mt-16 relative max-w-3xl mx-auto">
+        <div className="mt-10 md:mt-12 relative max-w-3xl mx-auto">
           <div className="grid grid-cols-3 gap-3 md:gap-4">
             <div className="rounded-xl border border-border bg-card/50 backdrop-blur-sm p-4 md:p-6 text-left">
               <div className="w-8 h-1.5 rounded-full bg-primary/60 mb-3" />
