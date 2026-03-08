@@ -43,7 +43,7 @@ export function WhoItsForSection() {
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-6">
               Built for Clinics Where{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
+              <span className="theme-gradient-text bg-clip-text text-transparent">
                 Treatments Repeat
               </span>
             </h2>

@@ -29,11 +29,11 @@ function FeatureItem({
           highlight ? "text-primary" : "text-muted-foreground"
         }`}
       />
-      <span className="text-sm text-foreground/80 leading-relaxed inline-flex items-center gap-1.5 flex-wrap">
+      <span className="text-sm text-foreground/80 leading-relaxed">
         {feature.text}
         {feature.tooltip && (
           <span
-            className="relative inline-flex cursor-pointer"
+            className="relative inline-flex align-middle cursor-pointer ml-1"
             onMouseEnter={() => setShowTip(true)}
             onMouseLeave={() => setShowTip(false)}
             onClick={() => setShowTip((v) => !v)}
@@ -74,7 +74,7 @@ const tiers: {
     highlight: false,
     features: [
       {
-        text: "7 core WhatsApp conversation flows",
+        text: "7 core WhatsApp patient conversation flows",
         tooltip:
           "Price inquiry, treatment recommendation, first-time qualification, availability, clinic info, after-hours, and follow-up for unconverted leads.",
       },
@@ -288,7 +288,7 @@ export function PricingSection() {
                 asChild
                 className={`w-full h-12 rounded-xl font-semibold text-base transition-all duration-200 ${
                   tier.highlight
-                    ? "bg-gradient-to-r from-primary via-purple-600 to-violet-600 text-white shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02]"
+                    ? "bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30 hover:scale-[1.02]"
                     : "bg-foreground text-background hover:bg-foreground/90"
                 }`}
               >

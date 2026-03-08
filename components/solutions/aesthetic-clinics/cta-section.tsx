@@ -8,10 +8,10 @@ export function CTASection() {
   return (
     <section className="py-20 md:py-28">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-violet-500/[0.04] to-primary/[0.06] p-10 md:p-16 text-center overflow-hidden">
+        <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-primary/[0.03] to-primary/[0.06] p-10 md:p-16 text-center overflow-hidden">
           {/* Decorative background */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.08),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(79,70,229,0.06),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.08),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--primary)/0.06),transparent_60%)]" />
 
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
@@ -40,7 +40,7 @@ export function CTASection() {
               <Button
                 asChild
                 size="lg"
-                className="h-14 px-8 rounded-xl bg-gradient-to-r from-primary via-purple-600 to-violet-600 text-white font-semibold text-base shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200"
+                className="h-14 px-8 rounded-xl bg-primary text-white font-semibold text-base shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200"
               >
                 <Link href="/contact">
                   <Search className="mr-2 h-5 w-5" />
