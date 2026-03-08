@@ -25,7 +25,7 @@ export function HeaderNav() {
                 {/* About */}
                 <NavigationMenuItem>
                     <Link href="/about" legacyBehavior passHref>
-                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent theme-text hover:bg-primary/10 hover:text-primary data-[active]:text-primary")}>
+                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary data-[active]:text-primary")}>
                             About
                         </NavigationMenuLink>
                     </Link>
@@ -33,7 +33,7 @@ export function HeaderNav() {
 
                 {/* Mega Menu: Services */}
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger className="bg-transparent theme-text hover:bg-primary/10 hover:text-primary data-[active]:text-primary data-[state=open]:text-primary">
+                    <NavigationMenuTrigger className="bg-transparent text-foreground hover:bg-primary/10 hover:text-primary data-[active]:text-primary data-[state=open]:text-primary">
                         What We Do
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
@@ -56,7 +56,7 @@ export function HeaderNav() {
                                                             <NavigationMenuLink asChild>
                                                                 <a className="group flex items-center gap-2 rounded-md px-1.5 py-1.5 leading-none no-underline outline-none transition-colors hover:bg-primary/5">
                                                                     <service.icon className="w-3.5 h-3.5 text-primary/70 group-hover:text-primary transition-colors shrink-0" />
-                                                                    <span className="text-[13px] font-medium theme-text group-hover:text-primary transition-colors whitespace-nowrap">{service.title}</span>
+                                                                    <span className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors whitespace-nowrap">{service.title}</span>
                                                                 </a>
                                                             </NavigationMenuLink>
                                                         </Link>
@@ -78,7 +78,7 @@ export function HeaderNav() {
                                                 <Link key={solution.href} href={solution.href} legacyBehavior passHref>
                                                     <NavigationMenuLink asChild>
                                                         <a className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/5 hover:bg-primary/10 border border-primary/10 hover:border-primary/20 transition-all">
-                                                            <span className="text-[13px] font-medium theme-text group-hover:text-primary transition-colors">{solution.title}</span>
+                                                            <span className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors">{solution.title}</span>
                                                             <ArrowRight className="w-3 h-3 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                                                         </a>
                                                     </NavigationMenuLink>
@@ -102,7 +102,7 @@ export function HeaderNav() {
                 {/* Case Studies */}
                 <NavigationMenuItem>
                     <Link href="/case-studies" legacyBehavior passHref>
-                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent theme-text hover:bg-primary/10 hover:text-primary")}>
+                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary")}>
                             Case Studies
                         </NavigationMenuLink>
                     </Link>
@@ -111,7 +111,7 @@ export function HeaderNav() {
                 {/* Blog */}
                 <NavigationMenuItem>
                     <Link href="/blog" legacyBehavior passHref>
-                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent theme-text hover:bg-primary/10 hover:text-primary")}>
+                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary")}>
                             Insights
                         </NavigationMenuLink>
                     </Link>
@@ -120,7 +120,7 @@ export function HeaderNav() {
                 {/* Careers - ADDED HERE */}
                 <NavigationMenuItem>
                     <Link href="/careers" legacyBehavior passHref>
-                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent theme-text hover:bg-primary/10 hover:text-primary")}>
+                        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary")}>
                             Careers
                         </NavigationMenuLink>
                     </Link>

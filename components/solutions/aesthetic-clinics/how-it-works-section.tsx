@@ -46,14 +46,16 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="py-20 md:py-28">
+    <section id="how-it-works" className="py-20 md:py-28 theme-transition">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
           <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
             How It Works
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-            From Inquiry to Appointment in Minutes
+            From Inquiry to{" "}
+            <span className="theme-gradient-text bg-clip-text text-transparent">Appointment</span>{" "}
+            in Minutes
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             A five-step automated workflow that converts interest into confirmed
@@ -70,8 +72,8 @@ export function HowItWorksSection() {
               <div key={step.number} className="relative flex gap-6 md:gap-8">
                 {/* Step indicator */}
                 <div className="relative z-10 flex-shrink-0">
-                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-border bg-background flex items-center justify-center">
-                    <step.icon className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-primary/30 bg-background flex items-center justify-center">
+                    <step.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                   </div>
                 </div>
 

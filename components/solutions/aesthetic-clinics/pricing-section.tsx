@@ -178,7 +178,7 @@ const tiers: {
 
 export function PricingSection() {
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-20 md:py-28 theme-transition">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-6">
@@ -186,7 +186,7 @@ export function PricingSection() {
             Pricing &amp; Packages
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-            Simple, Transparent Pricing
+            Simple, <span className="theme-gradient-text bg-clip-text text-transparent">Transparent</span> Pricing
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             One-time setup + monthly platform fee. No hidden costs.
@@ -196,9 +196,9 @@ export function PricingSection() {
 
         {/* Launch Deal Banner */}
         <div className="relative max-w-2xl mx-auto mb-16">
-          <div className="relative rounded-2xl border-2 border-primary/30 bg-gradient-to-r from-primary/[0.06] via-violet-500/[0.04] to-primary/[0.06] p-5 md:p-6 text-center overflow-hidden">
+          <div className="relative rounded-2xl border-2 border-primary/30 bg-gradient-to-r from-primary/[0.06] via-primary/[0.03] to-primary/[0.06] p-5 md:p-6 text-center overflow-hidden">
             <div className="absolute -top-1 left-1/2 -translate-x-1/2">
-              <span className="inline-flex items-center gap-1.5 px-4 py-1 bg-primary text-white text-[11px] font-bold uppercase tracking-wider rounded-b-lg">
+              <span className="inline-flex items-center gap-1.5 px-4 py-1 bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider rounded-b-lg">
                 <Sparkles className="w-3.5 h-3.5" /> Launch Offer
               </span>
             </div>
@@ -239,7 +239,7 @@ export function PricingSection() {
               {/* Badge */}
               {tier.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-lg shadow-primary/20">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider rounded-full shadow-lg shadow-primary/20">
                     <Star className="w-3 h-3 fill-current" /> {tier.badge}
                   </span>
                 </div>
@@ -288,7 +288,7 @@ export function PricingSection() {
                 asChild
                 className={`w-full h-12 rounded-xl font-semibold text-base transition-all duration-200 ${
                   tier.highlight
-                    ? "bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30 hover:scale-[1.02]"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30 hover:scale-[1.02]"
                     : "bg-foreground text-background hover:bg-foreground/90"
                 }`}
               >

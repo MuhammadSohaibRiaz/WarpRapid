@@ -92,7 +92,7 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-[15vw] leading-[0.8] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-theme-text/80 to-theme-text/10 select-none pointer-events-none text-center md:text-left drop-shadow-md"
+              className="text-[15vw] leading-[0.8] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-foreground/80 to-foreground/10 select-none pointer-events-none text-center md:text-left drop-shadow-md"
             >
               INSIGHTS
             </motion.h1>
@@ -102,7 +102,7 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
               transition={{ delay: 0.5 }}
               className="md:absolute md:right-0 md:bottom-4 max-w-md text-right ml-auto mt-8 md:mt-0"
             >
-              <p className="text-xl md:text-2xl theme-text font-light leading-relaxed">
+              <p className="text-xl md:text-2xl text-foreground font-light leading-relaxed">
                 Exploring the frontiers of <span className="text-primary font-bold">technology</span>, <span className="text-purple-500 font-bold">design</span>, and <span className="text-blue-500 font-bold">innovation</span>.
               </p>
             </motion.div>

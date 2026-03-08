@@ -32,13 +32,13 @@ export default function CareerPathways() {
           {pathways.map((p) => (
             <div
               key={p.title}
-              className="rounded-2xl border p-5 md:p-8 bg-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out"
+              className="rounded-2xl border border-border p-5 md:p-8 bg-card shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out"
             >
               <div className="flex items-center gap-4 md:gap-5 mb-0 md:mb-5">
-                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-blue-600 flex items-center justify-center text-white flex-shrink-0">
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-primary flex items-center justify-center text-primary-foreground flex-shrink-0">
                   <p.icon className="w-5 h-5 md:w-7 md:h-7" />
                 </div>
-                <div className="font-semibold text-lg md:text-xl theme-text">{p.title}</div>
+                <div className="font-semibold text-lg md:text-xl text-foreground">{p.title}</div>
               </div>
             </div>
           ))}

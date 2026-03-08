@@ -49,14 +49,16 @@ const solutions = [
 
 export function SolutionSection() {
   return (
-    <section className="py-20 md:py-28 bg-muted/30">
+    <section className="py-20 md:py-28 bg-muted/30 theme-transition">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
           <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
             The Solution
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-            AI Patient Inquiry Conversion<br className="hidden md:block" /> &amp; Retention System
+            AI Patient Inquiry{" "}
+            <span className="theme-gradient-text bg-clip-text text-transparent">Conversion</span>
+            <br className="hidden md:block" /> &amp; Retention System
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-3">
             Four integrated systems working together to capture, convert, and

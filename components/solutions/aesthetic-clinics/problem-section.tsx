@@ -41,7 +41,7 @@ const problems = [
 
 export function ProblemSection() {
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-20 md:py-28 theme-transition">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left column */}
@@ -71,8 +71,8 @@ export function ProblemSection() {
                 key={problem.title}
                 className="group flex gap-4 p-5 rounded-xl border border-border bg-card/50 hover:bg-card hover:border-border/80 transition-all duration-200"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                  <problem.icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <problem.icon className="w-5 h-5 text-primary group-hover:text-primary transition-colors" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground mb-1">

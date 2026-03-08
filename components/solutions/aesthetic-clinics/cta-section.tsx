@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 export function CTASection() {
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-20 md:py-28 theme-transition">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-primary/[0.03] to-primary/[0.06] p-10 md:p-16 text-center overflow-hidden">
           {/* Decorative background */}
@@ -40,7 +40,7 @@ export function CTASection() {
               <Button
                 asChild
                 size="lg"
-                className="h-14 px-8 rounded-xl bg-primary text-white font-semibold text-base shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200"
+                className="h-14 px-8 rounded-xl bg-primary text-primary-foreground font-semibold text-base shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30 hover:scale-[1.02] transition-all duration-200"
               >
                 <Link href="/contact">
                   <Search className="mr-2 h-5 w-5" />

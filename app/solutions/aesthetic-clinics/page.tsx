@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function AestheticClinicsPage() {
   return (
-    <main className="bg-background text-foreground">
+    <main className="bg-background text-foreground theme-transition">
       <AestheticHero />
       <ProblemSection />
       <SolutionSection />

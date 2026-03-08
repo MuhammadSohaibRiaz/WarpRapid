@@ -40,18 +40,25 @@ export default function Header() {
     setIsOpen(false)
   }, [pathname])
 
+  const isDark = mode === "dark" || color === "black"
+
   const headerBgClass = isScrolled
-    ? mode === "dark" || color === "black"
-      ? "bg-background/95 shadow-md border-b border-white/5"
-      : "bg-white/95 shadow-md border-b border-gray-100"
-    : "bg-transparent"
+    ? isDark
+      ? "bg-gray-950/95 backdrop-blur-md shadow-md border-b border-white/10"
+      : "bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100"
+    : isDark
+      ? "bg-gray-950/70 backdrop-blur-sm"
+      : "bg-transparent"
 
   const linkClass = (isActive: boolean) =>
-    `text-sm font-medium transition-colors hover:text-primary ${isActive ? "text-primary font-bold" : "theme-text opacity-90"
+    `text-sm font-medium transition-colors hover:text-primary ${isActive ? "text-primary font-bold" : "text-foreground opacity-90"
     }`
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBgClass}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBgClass}`}
+      style={isDark ? { "--foreground": "210 40% 98%", "--muted-foreground": "215 20.2% 65.1%" } as React.CSSProperties : undefined}
+    >
       <nav className={`container mx-auto px-6 flex items-center justify-between transition-all duration-300 ${isScrolled ? "h-16" : "h-20"}`}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
@@ -91,7 +98,7 @@ export default function Header() {
           <ThemeSwitcher />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 theme-text hover:bg-primary/10 rounded-lg transition-colors"
+            className="p-2 text-foreground hover:bg-primary/10 rounded-lg transition-colors"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -106,7 +113,7 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "100vh" }}
             exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden absolute top-20 left-0 right-0 ${mode === "dark" || color === "black" ? "bg-background" : "bg-white"
+            className={`md:hidden absolute top-20 left-0 right-0 ${isDark ? "bg-gray-950" : "bg-white"
               } border-t border-white/10 overflow-hidden`}
           >
             <div className="container mx-auto px-6 py-8 flex flex-col gap-6 h-full">
@@ -114,7 +121,7 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-2xl font-bold ${pathname === item.href ? "text-primary" : "theme-text"
+                  className={`text-2xl font-bold ${pathname === item.href ? "text-primary" : "text-foreground"
                     }`}
                   onClick={() => setIsOpen(false)}
                 >
