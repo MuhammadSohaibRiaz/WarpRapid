@@ -1,7 +1,7 @@
 import {
   Cloud,
   Brain,
-  Database,
+  Link2,
   LayoutDashboard,
   Megaphone,
   BarChart3,
@@ -17,38 +17,38 @@ const features = [
   },
   {
     icon: Brain,
-    title: "Intelligent Intent Detection",
+    title: "7 Core Conversation Flows",
     description:
-      "LLM-ready architecture that understands patient intent from natural-language messages. Routes conversations dynamically — treatment inquiries, pricing questions, scheduling requests — each handled appropriately.",
-    tags: ["NLP", "LLM-Ready", "Dynamic Routing"],
+      "Pre-built automation for the most common patient interactions: price inquiries, treatment recommendations, first-time patient qualification, availability checks, clinic location and hours, after-hours auto-response, and follow-up lead recovery.",
+    tags: ["Price Inquiry", "Qualification", "After-Hours", "Lead Recovery"],
   },
   {
-    icon: Database,
-    title: "Appointment Database",
+    icon: Link2,
+    title: "Booking Platform Integration",
     description:
-      "Centralized appointment management with full patient history, treatment records, and scheduling data. Structured for reporting and integration with external systems.",
-    tags: ["Structured Data", "Patient History", "API-Ready"],
+      "Works alongside your existing calendar and booking software like Treatwell, Zenoti, Pabau, or Fresha. We send patients directly to your booking page \u2014 no migration, no disruption.",
+    tags: ["Treatwell", "Zenoti", "Pabau", "Fresha"],
   },
   {
     icon: LayoutDashboard,
-    title: "Admin Dashboard",
+    title: "Conversation Dashboard",
     description:
-      "A purpose-built dashboard for clinic operators. View bookings, manage conversations, track staff performance, and configure automation rules — all in one interface.",
-    tags: ["Real-Time", "Role-Based Access", "Configurable"],
+      "View every patient interaction across all channels in one place. Monitor AI responses, see which inquiries converted, and let your team jump into any conversation when needed.",
+    tags: ["Real-Time", "Multi-Channel", "Team Handover"],
   },
   {
     icon: Megaphone,
     title: "Campaign Broadcast System",
     description:
       "Send targeted broadcast campaigns to segmented patient lists. Promote seasonal offers, new treatments, or rebooking reminders at scale with compliance built in.",
-    tags: ["Segmentation", "Automated Sends", "Compliance"],
+    tags: ["Segmentation", "Automated Sends", "GDPR Compliance"],
   },
   {
     icon: BarChart3,
-    title: "Analytics & Conversion Tracking",
+    title: "Conversion Analytics",
     description:
-      "End-to-end visibility from inquiry to appointment. Track response times, conversion rates, campaign ROI, and staff performance with detailed reporting.",
-    tags: ["Funnel Metrics", "ROI Tracking", "Custom Reports"],
+      "End-to-end visibility from inquiry to appointment. Track response times, conversion rates, channel performance, and revenue impact with clear, actionable reporting.",
+    tags: ["Funnel Metrics", "Channel Breakdown", "Revenue Tracking"],
   },
 ]
 
@@ -58,14 +58,14 @@ export function FeatureDeepDiveSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
           <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-            Feature Deep Dive
+            Under the Hood
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-            Engineered for Performance
+            Engineered for Patient Conversion
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Every component is purpose-built for healthcare appointment
-            workflows. Here is what powers the system under the hood.
+            Every component is purpose-built for healthcare inquiry workflows.
+            Here is what powers the system.
           </p>
         </div>
 

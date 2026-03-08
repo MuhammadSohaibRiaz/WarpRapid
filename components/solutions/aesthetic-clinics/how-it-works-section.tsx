@@ -1,6 +1,6 @@
 import {
-  MousePointerClick,
   MessageSquare,
+  BrainCircuit,
   CalendarCheck,
   BellRing,
   RefreshCw,
@@ -9,38 +9,38 @@ import {
 const steps = [
   {
     number: "01",
-    icon: MousePointerClick,
-    title: "Visitor clicks Book on Instagram or Website",
+    icon: MessageSquare,
+    title: "Patient sends an inquiry",
     description:
-      "A prospective patient taps the booking link from your Instagram bio, story, ad, or website. They are routed directly into a structured WhatsApp conversation.",
+      "A potential patient messages your clinic via Instagram DM, WhatsApp, Facebook Messenger, or your website chat. The system picks it up instantly.",
   },
   {
     number: "02",
-    icon: MessageSquare,
-    title: "WhatsApp AI qualifies and collects treatment preference",
+    icon: BrainCircuit,
+    title: "AI responds and qualifies",
     description:
-      "The AI assistant asks targeted questions — treatment type, preferred date, prior history — and qualifies the lead without human involvement.",
+      "Within seconds, the AI responds with helpful, on-brand answers \u2014 pricing, treatment info, pre-care guidance. It asks qualifying questions to understand what the patient needs.",
   },
   {
     number: "03",
     icon: CalendarCheck,
-    title: "Appointment is logged and staff notified",
+    title: "Patient is guided to your booking page",
     description:
-      "Confirmed bookings are automatically added to the appointment database. Relevant staff receive instant notification with patient details.",
+      "Once qualified, the AI sends a direct link to book through your existing platform \u2014 Treatwell, Zenoti, Pabau, Fresha, or your own booking page. We never manage your calendar.",
   },
   {
     number: "04",
     icon: BellRing,
-    title: "Automated reminders sent",
+    title: "Confirmation & reminder sent automatically",
     description:
-      "The system sends pre-appointment reminders at configured intervals, reducing no-shows and giving patients a frictionless confirmation experience.",
+      "After booking, the patient receives a WhatsApp confirmation and pre-appointment reminders at configured intervals, reducing no-shows without any staff effort.",
   },
   {
     number: "05",
     icon: RefreshCw,
-    title: "Post-treatment rebooking and review automation",
+    title: "Post-treatment follow-up & rebooking",
     description:
-      "After the appointment, patients receive follow-up messages for reviews and rebooking recommendations based on treatment cycle timelines.",
+      "After their appointment, patients automatically receive follow-up messages and rebooking reminders when their next treatment is due \u2014 based on treatment-specific timelines.",
   },
 ]
 
@@ -57,7 +57,7 @@ export function HowItWorksSection() {
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             A five-step automated workflow that converts interest into confirmed
-            bookings — with zero manual effort.
+            bookings &mdash; with zero manual effort.
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export function HowItWorksSection() {
           <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-border" />
 
           <div className="space-y-8">
-            {steps.map((step, index) => (
+            {steps.map((step) => (
               <div key={step.number} className="relative flex gap-6 md:gap-8">
                 {/* Step indicator */}
                 <div className="relative z-10 flex-shrink-0">
@@ -90,6 +90,34 @@ export function HowItWorksSection() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Clarification banner */}
+        <div className="mt-12 rounded-xl border border-border bg-muted/30 p-5 text-center">
+          <p className="text-sm text-muted-foreground">
+            <span className="font-semibold text-foreground">Important:</span>{" "}
+            We never manage your appointment calendar or compete with your booking software.
+            Patients book directly through your existing platform.
+          </p>
+        </div>
+
+        {/* Visual flow diagram */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2 text-sm">
+          <span className="px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium border border-blue-500/20">
+            Inquiry
+          </span>
+          <span className="text-muted-foreground">&rarr;</span>
+          <span className="px-3 py-1.5 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400 font-medium border border-violet-500/20">
+            AI Conversation
+          </span>
+          <span className="text-muted-foreground">&rarr;</span>
+          <span className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium border border-emerald-500/20">
+            Booking Link Sent
+          </span>
+          <span className="text-muted-foreground">&rarr;</span>
+          <span className="px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 font-medium border border-amber-500/20">
+            Patient Books on Your Platform
+          </span>
         </div>
       </div>
     </section>

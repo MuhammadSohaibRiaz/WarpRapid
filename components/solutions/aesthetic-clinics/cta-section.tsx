@@ -28,8 +28,12 @@ export function CTASection() {
               and show you exactly where potential patients are dropping off before they book.
             </p>
 
-            <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-10">
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-4">
               No obligation. No cost. Just a clear picture of what you&apos;re leaving on the table.
+            </p>
+
+            <p className="text-sm font-medium text-primary max-w-lg mx-auto mb-10">
+              Or try a live WhatsApp flow with your own booking link &mdash; see how it converts leads in real-time.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">

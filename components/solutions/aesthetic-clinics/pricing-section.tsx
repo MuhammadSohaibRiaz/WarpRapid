@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -68,20 +68,20 @@ const tiers: {
   {
     name: "Starter",
     tagline: "For single-practitioner clinics ready to stop losing DM leads",
-    setupFee: "399",
-    discountedSetupFee: "199",
-    monthlyFee: "99",
+    setupFee: "599",
+    discountedSetupFee: "299",
+    monthlyFee: "149",
     highlight: false,
     features: [
-      { text: "Instagram DM + WhatsApp automation" },
+      { text: "7 core WhatsApp + Instagram conversation flows" },
       { text: "Instant inquiry response (24/7)" },
       { text: "Treatment-specific FAQ answers" },
-      { text: "Booking page redirect to your platform" },
+      { text: "Booking link redirect to your platform" },
       { text: "Appointment confirmation reminders" },
       {
-        text: "Up to 200 messages/mo",
+        text: "Up to 300 messages/mo",
         tooltip:
-          "Covers up to 200 outbound template messages (confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at $0.10 each.",
+          "Covers up to 300 outbound template messages (confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at $0.10 each.",
       },
       { text: "Email support" },
     ],
@@ -90,9 +90,9 @@ const tiers: {
   {
     name: "Growth",
     tagline: "For established clinics scaling patient conversion & retention",
-    setupFee: "799",
-    discountedSetupFee: "399",
-    monthlyFee: "199",
+    setupFee: "1,399",
+    discountedSetupFee: "699",
+    monthlyFee: "349",
     highlight: true,
     badge: "Most Popular",
     features: [
@@ -115,9 +115,9 @@ const tiers: {
       },
       { text: "Pre-consultation data collection" },
       {
-        text: "Up to 1,000 messages/mo",
+        text: "Up to 1,500 messages/mo",
         tooltip:
-          "Covers up to 1,000 outbound template messages (confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at $0.05 each.",
+          "Covers up to 1,500 outbound template messages (confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at $0.05 each.",
       },
       { text: "Conversion analytics dashboard" },
       { text: "Priority WhatsApp & email support" },
@@ -127,20 +127,20 @@ const tiers: {
   {
     name: "Pro",
     tagline: "For multi-location clinics and aesthetic chains",
-    setupFee: "1,599",
-    discountedSetupFee: "799",
-    monthlyFee: "399",
+    setupFee: "2,799",
+    discountedSetupFee: "1,399",
+    monthlyFee: "699",
     highlight: false,
     features: [
       { text: "Everything in Growth, plus:" },
       { text: "Multi-branch management" },
       { text: "Advanced AI conversation flows" },
-      { text: "Facebook Messenger DM integration" },
-      { text: "Website chat widget" },
+      { text: "Facebook Messenger + website chat" },
       { text: "Campaign broadcast system" },
       {
         text: "Unlimited messages",
-        tooltip: "No caps on outbound template messages or service replies \u2014 ideal for high-volume, multi-branch operations.",
+        tooltip:
+          "No caps on outbound template messages or service replies \u2014 ideal for high-volume, multi-branch operations.",
       },
       { text: "Custom integrations (EMR, POS)" },
       { text: "Dedicated account manager" },
@@ -193,7 +193,7 @@ export function PricingSection() {
                 </span>
               </div>
               <p className="mt-3 text-xs font-semibold text-primary">
-                {"\ud83c\udf81"} Free inquiry conversion audit + Instagram flow setup included
+                {"\ud83c\udf81"} Free live flow simulation + 30-min inquiry audit included
               </p>
             </div>
           </div>

@@ -59,12 +59,16 @@ export function AestheticHero() {
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="h-12 px-8 text-base font-semibold rounded-xl border-border hover:bg-muted/50 transition-all duration-200">
-            <a href="#how-it-works">
-              See How It Works
+            <Link href="/contact?demo=live-flow">
+              Try a Live WhatsApp Flow
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
+            </Link>
           </Button>
         </div>
+
+        <p className="mt-4 text-xs text-muted-foreground max-w-lg mx-auto">
+          See how it converts leads in real-time &mdash; using your own booking link.
+        </p>
 
         {/* Stat blocks */}
         <div className="mt-16 relative max-w-3xl mx-auto">
