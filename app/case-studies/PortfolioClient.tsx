@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { ArrowUpRight, Search, X, CheckCircle2, MessageSquare, Workflow, HelpCircle, ChevronRight, Layout, Zap, Eye, Clock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,7 +12,7 @@ import { slugify } from "@/lib/utils"
 import Link from "next/link"
 import { ProjectCTA } from "@/components/shared/ProjectCTA"
 
-const categories = ["All", "Web Development", "App Development", "UI/UX Design", "E-commerce", "Enterprise Software"]
+const defaultCategories = ["All", "Web Development", "App Development", "UI/UX Design", "E-commerce", "Enterprise Software"]
 
 interface PortfolioClientProps {
   initialProjects?: ProjectDetail[]
@@ -20,10 +20,32 @@ interface PortfolioClientProps {
 
 export default function PortfolioClient({ initialProjects = [] }: PortfolioClientProps) {
   const { mode, getGradient } = useThemeContext()
-  const [projects] = useState<ProjectDetail[]>(initialProjects)
+  const [projects, setProjects] = useState<ProjectDetail[]>(initialProjects)
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [searchTerm, setSearchTerm] = useState("")
   const [quickViewProject, setQuickViewProject] = useState<ProjectDetail | null>(null)
+
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const { PortfolioCMS } = await import("@/lib/supabase-cms")
+        const data = await PortfolioCMS.getPublishedProjects()
+        setProjects(data)
+      } catch (error) {
+        console.error("Failed to load projects", error)
+      }
+    }
+    loadProjects()
+  }, [])
+
+  // Build categories list dynamically from projects
+  const categories = useMemo(() => {
+    const custom = projects
+      .map(p => p.category)
+      .filter(c => c && !defaultCategories.includes(c))
+      .filter((c, i, arr) => arr.indexOf(c) === i)
+    return [...defaultCategories, ...custom]
+  }, [projects])
 
   // Sorting: Featured first, then Newest Updated
   const sortedProjects = useMemo(() => {

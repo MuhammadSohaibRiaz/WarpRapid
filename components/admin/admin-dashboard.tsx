@@ -82,6 +82,7 @@ export default function AdminDashboard() {
 
   // Upload UX states
   const [techSearchTerm, setTechSearchTerm] = useState("")
+  const [customTechInput, setCustomTechInput] = useState("")
 
   // AI Blog Generation states
   const [isAIModalOpen, setIsAIModalOpen] = useState(false)
@@ -853,7 +854,11 @@ export default function AdminDashboard() {
                         exit={{ opacity: 0, y: -10 }}
                         className={`absolute top-full left-0 right-0 mt-1 ${theme.dropdownBg} backdrop-blur-md rounded-md shadow-lg border z-[100] max-h-60 overflow-y-auto`}
                       >
-                        {["All", ...CATEGORIES].map((category) => (
+                        {["All", ...CATEGORIES, ...projects
+                          .map(p => p.category)
+                          .filter(c => c && !CATEGORIES.includes(c as any))
+                          .filter((c, i, arr) => arr.indexOf(c) === i)
+                        ].map((category) => (
                           <button
                             key={category}
                             onClick={() => {
@@ -1468,8 +1473,14 @@ export default function AdminDashboard() {
                   <div>
                     <label className="block text-sm font-medium theme-text mb-2 theme-transition">Category *</label>
                     <select
-                      value={projectFormData.category || ""}
-                      onChange={(e) => setProjectFormData((prev) => ({ ...prev, category: e.target.value }))}
+                      value={CATEGORIES.includes(projectFormData.category as any) ? projectFormData.category : "__custom__"}
+                      onChange={(e) => {
+                        if (e.target.value === "__custom__") {
+                          setProjectFormData((prev) => ({ ...prev, category: "" }))
+                        } else {
+                          setProjectFormData((prev) => ({ ...prev, category: e.target.value }))
+                        }
+                      }}
                       className={`w-full px-3 py-2 rounded-md border ${mode === "dark" || color === "black"
                         ? "border-gray-600 bg-gray-800/50"
                         : "border-gray-300 bg-white/50"
@@ -1481,7 +1492,16 @@ export default function AdminDashboard() {
                           {category}
                         </option>
                       ))}
+                      <option value="__custom__">✏️ Custom category...</option>
                     </select>
+                    {(!CATEGORIES.includes(projectFormData.category as any) || projectFormData.category === "") && (
+                      <Input
+                        value={projectFormData.category === "__custom__" ? "" : projectFormData.category || ""}
+                        onChange={(e) => setProjectFormData((prev) => ({ ...prev, category: e.target.value }))}
+                        placeholder="e.g. AI & Automation / Customer Experience"
+                        className="mt-2 theme-text bg-transparent"
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -1499,6 +1519,61 @@ export default function AdminDashboard() {
                       />
                     </div>
                   </div>
+                  {/* Custom tech input */}
+                  <div className="flex gap-2 mb-2">
+                    <Input
+                      value={customTechInput}
+                      onChange={(e) => setCustomTechInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && customTechInput.trim()) {
+                          e.preventDefault()
+                          const val = customTechInput.trim()
+                          if (!projectFormData.technology?.includes(val)) {
+                            setProjectFormData((prev) => ({ ...prev, technology: [...(prev.technology || []), val] }))
+                          }
+                          setCustomTechInput("")
+                        }
+                      }}
+                      placeholder="Add custom tech (e.g. n8n, Make.com)..."
+                      className="h-8 text-xs bg-transparent theme-text"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="bg-transparent h-8 text-xs whitespace-nowrap"
+                      disabled={!customTechInput.trim()}
+                      onClick={() => {
+                        const val = customTechInput.trim()
+                        if (val && !projectFormData.technology?.includes(val)) {
+                          setProjectFormData((prev) => ({ ...prev, technology: [...(prev.technology || []), val] }))
+                        }
+                        setCustomTechInput("")
+                      }}
+                    >
+                      <Plus className="w-3 h-3 mr-1" /> Add
+                    </Button>
+                  </div>
+                  {/* Selected custom techs (not in TECHNOLOGIES list) */}
+                  {projectFormData.technology?.filter(t => !TECHNOLOGIES.includes(t as any)).length ? (
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {projectFormData.technology.filter(t => !TECHNOLOGIES.includes(t as any)).map((tech) => (
+                        <span key={tech} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
+                          {tech}
+                          <button
+                            type="button"
+                            onClick={() => setProjectFormData((prev) => ({
+                              ...prev,
+                              technology: (prev.technology || []).filter(t => t !== tech)
+                            }))}
+                            className="hover:text-red-500 transition-colors ml-0.5"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto p-2 border rounded-md bg-black/5 dark:bg-white/5">
                     {TECHNOLOGIES.filter((tech) =>
                       tech.toLowerCase().includes(techSearchTerm.toLowerCase()) ||
