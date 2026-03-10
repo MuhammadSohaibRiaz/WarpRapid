@@ -94,8 +94,16 @@ export function ImageManager({ images, onImagesChange, bucketName, placeholder }
     }
 
     if (newImages.length > 0) {
-      onImagesChange([...images, ...newImages])
-      setNeedsMetadata(newNeedsMetadata)
+      // Remove any empty placeholder rows (no URL) before appending uploaded images
+      const existingWithContent = images.filter(img => img.url.trim() !== "")
+      const merged = [...existingWithContent, ...newImages]
+      // Recalculate metadata indices based on merged array
+      const finalMetadata = new Set<number>()
+      merged.forEach((img, idx) => {
+        if (idx >= existingWithContent.length) finalMetadata.add(idx)
+      })
+      onImagesChange(merged)
+      setNeedsMetadata(finalMetadata)
     }
     setBulkUploading(false)
   }, [images, needsMetadata, bucketName])
