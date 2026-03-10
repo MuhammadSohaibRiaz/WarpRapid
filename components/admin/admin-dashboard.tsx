@@ -21,7 +21,6 @@ import {
   Briefcase,
   MessageSquare,
   MessageCircle,
-  UploadCloud,
   Star,
   FileEdit,
   Sparkles,
@@ -31,7 +30,7 @@ import {
 } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { useSupabaseCMS } from "@/lib/supabase-cms"
-import type { ProjectDetail, BlogPost, BlogComment, ClientReview, ProjectImage, TrustedPartner } from "@/lib/supabase"
+import type { ProjectDetail, BlogPost, BlogComment, ClientReview, TrustedPartner } from "@/lib/supabase"
 import { PartnerFormModal } from "@/components/admin/partners/partner-form-modal"
 import { PartnerCard } from "@/components/admin/partners/partner-card"
 import { slugify } from "@/lib/utils"
@@ -40,6 +39,7 @@ import { BlogFormModal } from "@/components/admin/blog/blog-form-modal"
 import { TestimonialCard } from "@/components/admin/testimonials/testimonial-card"
 import { TestimonialFormModal } from "@/components/admin/testimonials/testimonial-form-modal"
 import { AdminControls } from "@/components/admin/shared/AdminControls"
+import { ImageManager } from "@/components/admin/shared/ImageManager"
 import { CATEGORIES, TECHNOLOGIES, BLOG_TAGS } from "@/lib/constants"
 import { getThemeClasses } from "@/lib/theme-utils"
 import { useAdminToast } from "@/hooks/use-admin-toast"
@@ -81,9 +81,6 @@ export default function AdminDashboard() {
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false)
 
   // Upload UX states
-  const [uploadingImageIndex, setUploadingImageIndex] = useState<number | null>(null)
-  const [bulkUploading, setBulkUploading] = useState(false)
-  const [uploadError, setUploadError] = useState<string | null>(null)
   const [techSearchTerm, setTechSearchTerm] = useState("")
 
   // AI Blog Generation states
@@ -693,87 +690,6 @@ export default function AdminDashboard() {
       ...prev,
       [field]: (prev[field] || []).filter((_, i) => i !== index),
     }))
-  }
-
-  // Images helpers
-  const addImage = () => {
-    const newId = Math.max(...(projectFormData.images?.map((img) => img.id) || [0])) + 1
-    setProjectFormData((prev) => ({
-      ...prev,
-      images: [...(prev.images || []), { id: newId, url: "", alt: "", caption: "" }],
-    }))
-  }
-
-  const updateImage = (index: number, field: keyof ProjectImage, value: string) => {
-    setProjectFormData((prev) => ({
-      ...prev,
-      images: (prev.images || []).map((img, i) => (i === index ? { ...img, [field]: value } : img)),
-    }))
-  }
-
-  const removeImage = (index: number) => {
-    setProjectFormData((prev) => ({
-      ...prev,
-      images: (prev.images || []).filter((_, i) => i !== index),
-    }))
-  }
-
-  // Upload handlers
-  const handleUploadImage = async (index: number, file: File) => {
-    try {
-      setUploadingImageIndex(index)
-      setUploadError(null)
-      const publicUrl = await cms.uploadImage(file)
-      if (!publicUrl) {
-        throw new Error("Upload failed. Please try again.")
-      }
-      setProjectFormData((prev) => {
-        const images = [...(prev.images || [])]
-        const current = images[index]
-        images[index] = {
-          ...current,
-          url: publicUrl,
-          alt: current?.alt || file.name.replace(/\.[^/.]+$/, ""),
-          caption: current?.caption || "",
-        }
-        return { ...prev, images }
-      })
-    } catch (e: any) {
-      setUploadError(e?.message || "Upload failed")
-    } finally {
-      setUploadingImageIndex(null)
-    }
-  }
-
-  const handleBulkUpload = async (fileList: FileList | null) => {
-    if (!fileList || fileList.length === 0) return
-    setBulkUploading(true)
-    setUploadError(null)
-    try {
-      let nextId = Math.max(...(projectFormData.images?.map((i) => i.id) || [0])) + 1
-      const toAppend: ProjectImage[] = []
-      for (const file of Array.from(fileList)) {
-        const url = await cms.uploadImage(file)
-        if (url) {
-          toAppend.push({
-            id: nextId++,
-            url,
-            alt: file.name.replace(/\.[^/.]+$/, ""),
-            caption: "",
-          })
-        }
-      }
-      if (toAppend.length) {
-        setProjectFormData((prev) => ({
-          ...prev,
-          images: [...(prev.images || []), ...toAppend],
-        }))
-      }
-    } catch (e: any) {
-      setUploadError(e?.message || "Bulk upload failed")
-    } finally {
-      setBulkUploading(false)
-    }
   }
 
   if (isLoading) {
@@ -1940,129 +1856,11 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Images with Upload Support */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium theme-text theme-transition">Project Images</label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        id="bulkUploadInput"
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        className="hidden"
-                        onChange={(e) => {
-                          handleBulkUpload(e.target.files)
-                          e.currentTarget.value = ""
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => document.getElementById("bulkUploadInput")?.click()}
-                        className="bg-transparent"
-                        disabled={bulkUploading}
-                      >
-                        <UploadCloud className="w-4 h-4 mr-2" />
-                        {bulkUploading ? "Uploading..." : "Upload image(s)"}
-                      </Button>
-                      <Button type="button" variant="outline" onClick={addImage} className="bg-transparent">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add empty row
-                      </Button>
-                    </div>
-                  </div>
-                  {uploadError && <p className="text-sm text-red-600 mb-2">{uploadError}</p>}
-                  <div className="space-y-3">
-                    {projectFormData.images?.map((image, index) => (
-                      <div key={image.id} className="grid grid-cols-1 md:grid-cols-12 gap-3 p-3 border rounded-md">
-                        {/* Preview */}
-                        <div className="md:col-span-2 flex items-center justify-center">
-                          <div className="relative w-full aspect-video max-h-24 overflow-hidden rounded bg-muted">
-                            {image.url ? (
-                              <img
-                                src={image.url || "/placeholder.svg"}
-                                alt={image.alt || "Preview"}
-                                className="w-full h-full object-cover"
-                                loading="lazy"
-                              />
-                            ) : (
-                              <img
-                                src="/no-image-selected.jpg"
-                                alt="No image"
-                                className="w-full h-full object-cover"
-                              />
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Fields */}
-                        <div className="md:col-span-4">
-                          <Input
-                            placeholder="Alt text"
-                            value={image.alt}
-                            onChange={(e) => updateImage(index, "alt", e.target.value)}
-                            className="theme-text bg-transparent"
-                          />
-                        </div>
-                        <div className="md:col-span-3">
-                          <Input
-                            placeholder="Caption (optional)"
-                            value={image.caption || ""}
-                            onChange={(e) => updateImage(index, "caption", e.target.value)}
-                            className="theme-text bg-transparent"
-                          />
-                        </div>
-
-                        {/* URL Field (optional manual override) + Per-image Upload */}
-                        <div className="md:col-span-3 flex gap-2 items-center">
-                          <Input
-                            placeholder="Image URL"
-                            value={image.url}
-                            onChange={(e) => updateImage(index, "url", e.target.value)}
-                            className="theme-text bg-transparent"
-                          />
-                          <input
-                            id={`upload-input-${image.id}`}
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0]
-                              if (file) {
-                                handleUploadImage(index, file)
-                              }
-                              e.currentTarget.value = ""
-                            }}
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => document.getElementById(`upload-input-${image.id}`)?.click()}
-                            disabled={uploadingImageIndex === index || bulkUploading}
-                            className="bg-transparent whitespace-nowrap"
-                          >
-                            {uploadingImageIndex === index ? "Uploading..." : "Upload"}
-                          </Button>
-                        </div>
-
-                        <div className="md:col-span-12 flex items-center gap-2 justify-end">
-                          {projectFormData.images && projectFormData.images.length > 1 && (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => removeImage(index)}
-                              className="text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <ImageManager
+                  images={projectFormData.images || []}
+                  onImagesChange={(images) => setProjectFormData((prev) => ({ ...prev, images }))}
+                  bucketName="project-images"
+                />
 
                 {/* Publish & Featured Status */}
                 <div className="flex items-center gap-6">
